@@ -1,0 +1,58 @@
+{
+  "id": "1514961",
+  "name": "vue-kline",
+  "font_family": "iconfont",
+  "css_prefix_text": "kline",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "257499",
+      "name": "clock",
+      "font_class": "clock",
+      "unicode": "e621",
+      "unicode_decimal": 58913
+    },
+    {
+      "icon_id": "1091356",
+      "name": "关机",
+      "font_class": "guanji",
+      "unicode": "e6ca",
+      "unicode_decimal": 59082
+    },
+    {
+      "icon_id": "4284619",
+      "name": "light",
+      "font_class": "light",
+      "unicode": "e60f",
+      "unicode_decimal": 58895
+    },
+    {
+      "icon_id": "6496562",
+      "name": "Date",
+      "font_class": "Date",
+      "unicode": "e856",
+      "unicode_decimal": 59478
+    },
+    {
+      "icon_id": "7727818",
+      "name": "documents",
+      "font_class": "wendang",
+      "unicode": "e77b",
+      "unicode_decimal": 59259
+    },
+    {
+      "icon_id": "10111830",
+      "name": "message",
+      "font_class": "message",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "10160899",
+      "name": "fire",
+      "font_class": "fire",
+      "unicode": "e69d",
+      "unicode_decimal": 59037
+    }
+  ]
+}
