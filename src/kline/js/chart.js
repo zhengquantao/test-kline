@@ -161,10 +161,13 @@ export class Chart {
             */
             let index = 1;
             let areaName = ChartManager.instance.getIndicatorAreaName('frame0.k0', index);
+            console.log("---------", indicName)
             if (areaName === '') {
 
-                Template.createIndicatorChartComps('frame0.k0', indicName);
-                Template.createNewIndicatorChartComps('frame0.k0', indicName);
+              Template.createIndicatorChartComps('frame0.k0', indicName);
+              Template.createNewIndicatorChartComps1('frame0.k0', 'MACD');
+              Template.createNewIndicatorChartComps3('frame0.k0', 'BOLL');
+              Template.createNewIndicatorChartComps2('frame0.k0', 'VOLUME');
             } else {
                 ChartManager.instance.setIndicator(areaName, indicName);
             }
