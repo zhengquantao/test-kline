@@ -161,13 +161,28 @@ export class Chart {
             */
             let index = 1;
             let areaName = ChartManager.instance.getIndicatorAreaName('frame0.k0', index);
-            console.log("---------", indicName)
+            let title = ['VOLUME', 'MACD', 'KDJ', 'StochRSI', 'RSI', 'DMI', 'OBV', 'BOLL', 'DMA', 'TRIX', 'BRAR', 'VR', 'EMV', 'WR', 'ROC', 'MTM', 'PSY'];
             if (areaName === '') {
 
               Template.createIndicatorChartComps('frame0.k0', indicName);
-              Template.createNewIndicatorChartComps1('frame0.k0', 'MACD');
-              Template.createNewIndicatorChartComps3('frame0.k0', 'BOLL');
-              Template.createNewIndicatorChartComps2('frame0.k0', 'VOLUME');
+              Template.createIndicatorChartCompsMACD('frame0.k0', 'MACD');
+              Template.createIndicatorChartCompsBOLL('frame0.k0', 'BOLL');
+              Template.createIndicatorChartCompsVOLUME('frame0.k0', 'VOLUME');
+              Template.createIndicatorChartCompsKDJ('frame0.k0', 'KDJ');
+              Template.createIndicatorChartCompsStochRSI('frame0.k0', 'StochRSI');
+              Template.createIndicatorChartCompsRSI('frame0.k0', 'RSI');
+              Template.createIndicatorChartCompsDMI('frame0.k0', 'DMI');
+              Template.createIndicatorChartCompsOBV('frame0.k0', 'OBV');
+              Template.createIndicatorChartCompsBOLL('frame0.k0', 'BOLL');
+              Template.createIndicatorChartCompsDMA('frame0.k0', 'DMA');
+              Template.createIndicatorChartCompsTRIX('frame0.k0', 'TRIX');
+              Template.createIndicatorChartCompsBRAR('frame0.k0', 'BRAR');
+              Template.createIndicatorChartCompsVR('frame0.k0', 'VR');
+              Template.createIndicatorChartCompsEMV('frame0.k0', 'EMV');
+              Template.createIndicatorChartCompsWR('frame0.k0', 'WR');
+              Template.createIndicatorChartCompsROC('frame0.k0', 'ROC');
+              Template.createIndicatorChartCompsMTM('frame0.k0', 'MTM');
+              Template.createIndicatorChartCompsPSY('frame0.k0', 'PSY');
             } else {
                 ChartManager.instance.setIndicator(areaName, indicName);
             }

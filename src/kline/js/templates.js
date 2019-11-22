@@ -9,6 +9,9 @@ import { CName } from './cname'
 import * as layouts from './layouts'
 import * as themes from './themes'
 import * as ranges from './ranges'
+import Kline from './kline'
+
+
 
 export class Template {
 
@@ -122,8 +125,9 @@ export class Template {
 
     }
 
-    static createNewIndicatorChartComps3(dsName, indicName) {
+    static createIndicatorChartCompsVOLUME(dsName, indicName) {
         let mgr = ChartManager.instance;
+        let isShow = Kline.instance.indicator.VOLUME;
         let tableLayout = mgr.getArea(dsName + ".charts");
         let areaName = dsName + ".indic" + tableLayout.getNextRowId();
         let rangeAreaName = areaName + "Range";
@@ -147,7 +151,7 @@ export class Template {
         tableLayout.addArea(rangeArea);
         let dp = new data_providers.IndicatorDataProvider(areaName + ".secondary");
         mgr.setDataProvider(dp.getName(), dp);
-        if (mgr.setIndicator(areaName, indicName) === false) {
+        if (mgr.setIndicator(areaName, indicName) === isShow) {
             mgr.removeIndicator(areaName);
             return;
         }
@@ -156,7 +160,7 @@ export class Template {
         // plotter = new plotters.CGridPlotter(areaName + ".grid");
         // mgr.setPlotter(plotter.getName(), plotter);
         //指标线
-        plotter = new plotters.IndicatorPlotter3(areaName + ".secondary");
+        plotter = new plotters.IndicatorPlotterVOLUME(areaName + ".secondary");
         mgr.setPlotter(plotter.getName(), plotter);
         //左上显示
         // plotter = new plotters.IndicatorInfoPlotter(areaName + ".info");
@@ -176,8 +180,9 @@ export class Template {
 
     }
 
-    static createNewIndicatorChartComps1(dsName, indicName) {
+    static createIndicatorChartCompsMACD(dsName, indicName) {
         let mgr = ChartManager.instance;
+        let isShow = Kline.instance.indicator.MACD;
         let tableLayout = mgr.getArea(dsName + ".charts");
         let areaName = dsName + ".indic" + tableLayout.getNextRowId();
         let rangeAreaName = areaName + "Range";
@@ -201,7 +206,7 @@ export class Template {
         tableLayout.addArea(rangeArea);
         let dp = new data_providers.IndicatorDataProvider(areaName + ".secondary");
         mgr.setDataProvider(dp.getName(), dp);
-        if (mgr.setIndicator(areaName, indicName) === false) {
+        if (mgr.setIndicator(areaName, indicName) === isShow) {
             mgr.removeIndicator(areaName);
             return;
         }
@@ -210,11 +215,11 @@ export class Template {
         // plotter = new plotters.CGridPlotter(areaName + ".grid");
         // mgr.setPlotter(plotter.getName(), plotter);
         //指标线
-        plotter = new plotters.IndicatorPlotter1(areaName + ".secondary");
+        plotter = new plotters.IndicatorPlotterMACD(areaName + ".secondary");
         mgr.setPlotter(plotter.getName(), plotter);
         //左上显示
-        // plotter = new plotters.IndicatorInfoPlotter(areaName + ".info");
-        // mgr.setPlotter(plotter.getName(), plotter);
+        plotter = new plotters.IndicatorInfoPlotterMACD (areaName + ".info");
+        mgr.setPlotter(plotter.getName(), plotter);
         //游标显示
         plotter = new plotters.SelectionPlotter(areaName + ".selection");
         mgr.setPlotter(plotter.getName(), plotter);
@@ -230,8 +235,9 @@ export class Template {
 
     }
 
-    static createNewIndicatorChartComps2(dsName, indicName) {
+    static createIndicatorChartCompsKDJ(dsName, indicName) {
         let mgr = ChartManager.instance;
+        let isShow = Kline.instance.indicator.KDJ;
         let tableLayout = mgr.getArea(dsName + ".charts");
         let areaName = dsName + ".indic" + tableLayout.getNextRowId();
         let rangeAreaName = areaName + "Range";
@@ -255,7 +261,7 @@ export class Template {
         tableLayout.addArea(rangeArea);
         let dp = new data_providers.IndicatorDataProvider(areaName + ".secondary");
         mgr.setDataProvider(dp.getName(), dp);
-        if (mgr.setIndicator(areaName, indicName) === false) {
+        if (mgr.setIndicator(areaName, indicName) === isShow) {
             mgr.removeIndicator(areaName);
             return;
         }
@@ -264,11 +270,836 @@ export class Template {
         // plotter = new plotters.CGridPlotter(areaName + ".grid");
         // mgr.setPlotter(plotter.getName(), plotter);
         //指标线
-        plotter = new plotters.IndicatorPlotter2(areaName + ".secondary");
+        plotter = new plotters.IndicatorPlotterKDJ(areaName + ".secondary");
         mgr.setPlotter(plotter.getName(), plotter);
         //左上显示
-        // plotter = new plotters.IndicatorInfoPlotter(areaName + ".info");
+        plotter = new plotters.IndicatorInfoPlotterKDJ(areaName + ".info");
+        mgr.setPlotter(plotter.getName(), plotter);
+        //游标显示
+        plotter = new plotters.SelectionPlotter(areaName + ".selection");
+        mgr.setPlotter(plotter.getName(), plotter);
+        //右边数字变
+        plotter = new plotters.RangeAreaBackgroundPlotter(areaName + "Range.background");
+        mgr.setPlotter(plotter.getName(), plotter);
+        // 滑动的  和 底部指标名字
+        plotter = new plotters.RangePlotter(areaName + "Range.main");
+        mgr.setPlotter(plotter.getName(), plotter);
+        // plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
         // mgr.setPlotter(plotter.getName(), plotter);
+
+
+    }
+
+    static createIndicatorChartCompsStochRSI(dsName, indicName) {
+        let mgr = ChartManager.instance;
+        let isShow = Kline.instance.indicator.StochRSI;
+        let tableLayout = mgr.getArea(dsName + ".charts");
+        let areaName = dsName + ".indic" + tableLayout.getNextRowId();
+        let rangeAreaName = areaName + "Range";
+        let area = new areas.IndicatorArea(areaName);
+        mgr.setArea(areaName, area);
+        tableLayout.addArea(area);
+        // let rowIndex = tableLayout.getAreaCount() >> 1;
+        // let heights = ChartSettings.get().charts.areaHeight;
+        // if (heights.length > rowIndex) {
+        //     let a, i;
+        //     for (i = 0; i < rowIndex; i++) {
+        //         a = tableLayout.getAreaAt(i << 1);
+        //         a.setTop(0);
+        //         a.setBottom(heights[i]);
+        //     }
+        //     area.setTop(0);
+        //     area.setBottom(heights[rowIndex]);
+        // }
+        let rangeArea = new areas.IndicatorRangeArea(rangeAreaName);
+        mgr.setArea(rangeAreaName, rangeArea);
+        tableLayout.addArea(rangeArea);
+        let dp = new data_providers.IndicatorDataProvider(areaName + ".secondary");
+        mgr.setDataProvider(dp.getName(), dp);
+        if (mgr.setIndicator(areaName, indicName) === isShow) {
+            mgr.removeIndicator(areaName);
+            return;
+        }
+        let plotter = new plotters.MainAreaBackgroundPlotter(areaName + ".background");
+        mgr.setPlotter(plotter.getName(), plotter); // plotter.getName()
+        // plotter = new plotters.CGridPlotter(areaName + ".grid");
+        // mgr.setPlotter(plotter.getName(), plotter);
+        //指标线
+        plotter = new plotters.IndicatorPlotterStochRSI(areaName + ".secondary");
+        mgr.setPlotter(plotter.getName(), plotter);
+        //左上显示
+        plotter = new plotters.IndicatorInfoPlotterStochRSI(areaName + ".info");
+        mgr.setPlotter(plotter.getName(), plotter);
+        //游标显示
+        plotter = new plotters.SelectionPlotter(areaName + ".selection");
+        mgr.setPlotter(plotter.getName(), plotter);
+        //右边数字变
+        plotter = new plotters.RangeAreaBackgroundPlotter(areaName + "Range.background");
+        mgr.setPlotter(plotter.getName(), plotter);
+        // 滑动的  和 底部指标名字
+        plotter = new plotters.RangePlotter(areaName + "Range.main");
+        mgr.setPlotter(plotter.getName(), plotter);
+        // plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
+        // mgr.setPlotter(plotter.getName(), plotter);
+
+
+    }
+
+    static createIndicatorChartCompsRSI(dsName, indicName) {
+        let mgr = ChartManager.instance;
+        let isShow = Kline.instance.indicator.RSI;
+        let tableLayout = mgr.getArea(dsName + ".charts");
+        let areaName = dsName + ".indic" + tableLayout.getNextRowId();
+        let rangeAreaName = areaName + "Range";
+        let area = new areas.IndicatorArea(areaName);
+        mgr.setArea(areaName, area);
+        tableLayout.addArea(area);
+        // let rowIndex = tableLayout.getAreaCount() >> 1;
+        // let heights = ChartSettings.get().charts.areaHeight;
+        // if (heights.length > rowIndex) {
+        //     let a, i;
+        //     for (i = 0; i < rowIndex; i++) {
+        //         a = tableLayout.getAreaAt(i << 1);
+        //         a.setTop(0);
+        //         a.setBottom(heights[i]);
+        //     }
+        //     area.setTop(0);
+        //     area.setBottom(heights[rowIndex]);
+        // }
+        let rangeArea = new areas.IndicatorRangeArea(rangeAreaName);
+        mgr.setArea(rangeAreaName, rangeArea);
+        tableLayout.addArea(rangeArea);
+        let dp = new data_providers.IndicatorDataProvider(areaName + ".secondary");
+        mgr.setDataProvider(dp.getName(), dp);
+        if (mgr.setIndicator(areaName, indicName) === isShow) {
+            mgr.removeIndicator(areaName);
+            return;
+        }
+        let plotter = new plotters.MainAreaBackgroundPlotter(areaName + ".background");
+        mgr.setPlotter(plotter.getName(), plotter); // plotter.getName()
+        // plotter = new plotters.CGridPlotter(areaName + ".grid");
+        // mgr.setPlotter(plotter.getName(), plotter);
+        //指标线
+        plotter = new plotters.IndicatorPlotterRSI(areaName + ".secondary");
+        mgr.setPlotter(plotter.getName(), plotter);
+        //左上显示
+        plotter = new plotters.IndicatorInfoPlotterRSI(areaName + ".info");
+        mgr.setPlotter(plotter.getName(), plotter);
+        //游标显示
+        plotter = new plotters.SelectionPlotter(areaName + ".selection");
+        mgr.setPlotter(plotter.getName(), plotter);
+        //右边数字变
+        plotter = new plotters.RangeAreaBackgroundPlotter(areaName + "Range.background");
+        mgr.setPlotter(plotter.getName(), plotter);
+        // 滑动的  和 底部指标名字
+        plotter = new plotters.RangePlotter(areaName + "Range.main");
+        mgr.setPlotter(plotter.getName(), plotter);
+        // plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
+        // mgr.setPlotter(plotter.getName(), plotter);
+
+
+    }
+
+    static createIndicatorChartCompsDMI(dsName, indicName) {
+        let mgr = ChartManager.instance;
+        let isShow = Kline.instance.indicator.DMI;
+        let tableLayout = mgr.getArea(dsName + ".charts");
+        let areaName = dsName + ".indic" + tableLayout.getNextRowId();
+        let rangeAreaName = areaName + "Range";
+        let area = new areas.IndicatorArea(areaName);
+        mgr.setArea(areaName, area);
+        tableLayout.addArea(area);
+        // let rowIndex = tableLayout.getAreaCount() >> 1;
+        // let heights = ChartSettings.get().charts.areaHeight;
+        // if (heights.length > rowIndex) {
+        //     let a, i;
+        //     for (i = 0; i < rowIndex; i++) {
+        //         a = tableLayout.getAreaAt(i << 1);
+        //         a.setTop(0);
+        //         a.setBottom(heights[i]);
+        //     }
+        //     area.setTop(0);
+        //     area.setBottom(heights[rowIndex]);
+        // }
+        let rangeArea = new areas.IndicatorRangeArea(rangeAreaName);
+        mgr.setArea(rangeAreaName, rangeArea);
+        tableLayout.addArea(rangeArea);
+        let dp = new data_providers.IndicatorDataProvider(areaName + ".secondary");
+        mgr.setDataProvider(dp.getName(), dp);
+        if (mgr.setIndicator(areaName, indicName) === isShow) {
+            mgr.removeIndicator(areaName);
+            return;
+        }
+        let plotter = new plotters.MainAreaBackgroundPlotter(areaName + ".background");
+        mgr.setPlotter(plotter.getName(), plotter); // plotter.getName()
+        // plotter = new plotters.CGridPlotter(areaName + ".grid");
+        // mgr.setPlotter(plotter.getName(), plotter);
+        //指标线
+        plotter = new plotters.IndicatorPlotterDMI(areaName + ".secondary");
+        mgr.setPlotter(plotter.getName(), plotter);
+        //左上显示
+        plotter = new plotters.IndicatorInfoPlotterDMI(areaName + ".info");
+        mgr.setPlotter(plotter.getName(), plotter);
+        //游标显示
+        plotter = new plotters.SelectionPlotter(areaName + ".selection");
+        mgr.setPlotter(plotter.getName(), plotter);
+        //右边数字变
+        plotter = new plotters.RangeAreaBackgroundPlotter(areaName + "Range.background");
+        mgr.setPlotter(plotter.getName(), plotter);
+        // 滑动的  和 底部指标名字
+        plotter = new plotters.RangePlotter(areaName + "Range.main");
+        mgr.setPlotter(plotter.getName(), plotter);
+        // plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
+        // mgr.setPlotter(plotter.getName(), plotter);
+
+
+    }
+
+    static createIndicatorChartCompsOBV(dsName, indicName) {
+        let mgr = ChartManager.instance;
+        let isShow = Kline.instance.indicator.OBV;
+        let tableLayout = mgr.getArea(dsName + ".charts");
+        let areaName = dsName + ".indic" + tableLayout.getNextRowId();
+        let rangeAreaName = areaName + "Range";
+        let area = new areas.IndicatorArea(areaName);
+        mgr.setArea(areaName, area);
+        tableLayout.addArea(area);
+        // let rowIndex = tableLayout.getAreaCount() >> 1;
+        // let heights = ChartSettings.get().charts.areaHeight;
+        // if (heights.length > rowIndex) {
+        //     let a, i;
+        //     for (i = 0; i < rowIndex; i++) {
+        //         a = tableLayout.getAreaAt(i << 1);
+        //         a.setTop(0);
+        //         a.setBottom(heights[i]);
+        //     }
+        //     area.setTop(0);
+        //     area.setBottom(heights[rowIndex]);
+        // }
+        let rangeArea = new areas.IndicatorRangeArea(rangeAreaName);
+        mgr.setArea(rangeAreaName, rangeArea);
+        tableLayout.addArea(rangeArea);
+        let dp = new data_providers.IndicatorDataProvider(areaName + ".secondary");
+        mgr.setDataProvider(dp.getName(), dp);
+        if (mgr.setIndicator(areaName, indicName) === isShow) {
+            mgr.removeIndicator(areaName);
+            return;
+        }
+        let plotter = new plotters.MainAreaBackgroundPlotter(areaName + ".background");
+        mgr.setPlotter(plotter.getName(), plotter); // plotter.getName()
+        // plotter = new plotters.CGridPlotter(areaName + ".grid");
+        // mgr.setPlotter(plotter.getName(), plotter);
+        //指标线
+        plotter = new plotters.IndicatorPlotterOBV(areaName + ".secondary");
+        mgr.setPlotter(plotter.getName(), plotter);
+        //左上显示
+        plotter = new plotters.IndicatorInfoPlotterOBV(areaName + ".info");
+        mgr.setPlotter(plotter.getName(), plotter);
+        //游标显示
+        plotter = new plotters.SelectionPlotter(areaName + ".selection");
+        mgr.setPlotter(plotter.getName(), plotter);
+        //右边数字变
+        plotter = new plotters.RangeAreaBackgroundPlotter(areaName + "Range.background");
+        mgr.setPlotter(plotter.getName(), plotter);
+        // 滑动的  和 底部指标名字
+        plotter = new plotters.RangePlotter(areaName + "Range.main");
+        mgr.setPlotter(plotter.getName(), plotter);
+        // plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
+        // mgr.setPlotter(plotter.getName(), plotter);
+
+
+    }
+
+    static createIndicatorChartCompsBOLL(dsName, indicName) {
+        let mgr = ChartManager.instance;
+        let isShow = Kline.instance.indicator.BOLL;
+        let tableLayout = mgr.getArea(dsName + ".charts");
+        let areaName = dsName + ".indic" + tableLayout.getNextRowId();
+        let rangeAreaName = areaName + "Range";
+        let area = new areas.IndicatorArea(areaName);
+        mgr.setArea(areaName, area);
+        tableLayout.addArea(area);
+        // let rowIndex = tableLayout.getAreaCount() >> 1;
+        // let heights = ChartSettings.get().charts.areaHeight;
+        // if (heights.length > rowIndex) {
+        //     let a, i;
+        //     for (i = 0; i < rowIndex; i++) {
+        //         a = tableLayout.getAreaAt(i << 1);
+        //         a.setTop(0);
+        //         a.setBottom(heights[i]);
+        //     }
+        //     area.setTop(0);
+        //     area.setBottom(heights[rowIndex]);
+        // }
+        let rangeArea = new areas.IndicatorRangeArea(rangeAreaName);
+        mgr.setArea(rangeAreaName, rangeArea);
+        tableLayout.addArea(rangeArea);
+        let dp = new data_providers.IndicatorDataProvider(areaName + ".secondary");
+        mgr.setDataProvider(dp.getName(), dp);
+        if (mgr.setIndicator(areaName, indicName) === isShow) {
+            mgr.removeIndicator(areaName);
+            return;
+        }
+        let plotter = new plotters.MainAreaBackgroundPlotter(areaName + ".background");
+        mgr.setPlotter(plotter.getName(), plotter); // plotter.getName()
+        // plotter = new plotters.CGridPlotter(areaName + ".grid");
+        // mgr.setPlotter(plotter.getName(), plotter);
+        //指标线
+        plotter = new plotters.IndicatorPlotterBOLL(areaName + ".secondary");
+        mgr.setPlotter(plotter.getName(), plotter);
+        //左上显示
+        plotter = new plotters.IndicatorInfoPlotterBOLL(areaName + ".info");
+        mgr.setPlotter(plotter.getName(), plotter);
+        //游标显示
+        plotter = new plotters.SelectionPlotter(areaName + ".selection");
+        mgr.setPlotter(plotter.getName(), plotter);
+        //右边数字变
+        plotter = new plotters.RangeAreaBackgroundPlotter(areaName + "Range.background");
+        mgr.setPlotter(plotter.getName(), plotter);
+        // 滑动的  和 底部指标名字
+        plotter = new plotters.RangePlotter(areaName + "Range.main");
+        mgr.setPlotter(plotter.getName(), plotter);
+        // plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
+        // mgr.setPlotter(plotter.getName(), plotter);
+
+
+    }
+
+    static createIndicatorChartCompsSAR(dsName, indicName) {
+        let mgr = ChartManager.instance;
+        let isShow = Kline.instance.indicator.SAR;
+        let tableLayout = mgr.getArea(dsName + ".charts");
+        let areaName = dsName + ".indic" + tableLayout.getNextRowId();
+        let rangeAreaName = areaName + "Range";
+        let area = new areas.IndicatorArea(areaName);
+        mgr.setArea(areaName, area);
+        tableLayout.addArea(area);
+        // let rowIndex = tableLayout.getAreaCount() >> 1;
+        // let heights = ChartSettings.get().charts.areaHeight;
+        // if (heights.length > rowIndex) {
+        //     let a, i;
+        //     for (i = 0; i < rowIndex; i++) {
+        //         a = tableLayout.getAreaAt(i << 1);
+        //         a.setTop(0);
+        //         a.setBottom(heights[i]);
+        //     }
+        //     area.setTop(0);
+        //     area.setBottom(heights[rowIndex]);
+        // }
+        let rangeArea = new areas.IndicatorRangeArea(rangeAreaName);
+        mgr.setArea(rangeAreaName, rangeArea);
+        tableLayout.addArea(rangeArea);
+        let dp = new data_providers.IndicatorDataProvider(areaName + ".secondary");
+        mgr.setDataProvider(dp.getName(), dp);
+        if (mgr.setIndicator(areaName, indicName) === isShow) {
+            mgr.removeIndicator(areaName);
+            return;
+        }
+        let plotter = new plotters.MainAreaBackgroundPlotter(areaName + ".background");
+        mgr.setPlotter(plotter.getName(), plotter); // plotter.getName()
+        // plotter = new plotters.CGridPlotter(areaName + ".grid");
+        // mgr.setPlotter(plotter.getName(), plotter);
+        //指标线
+        plotter = new plotters.IndicatorPlotterSAR(areaName + ".secondary");
+        mgr.setPlotter(plotter.getName(), plotter);
+        //左上显示
+        plotter = new plotters.IndicatorInfoPlotterSAR(areaName + ".info");
+        mgr.setPlotter(plotter.getName(), plotter);
+        //游标显示
+        plotter = new plotters.SelectionPlotter(areaName + ".selection");
+        mgr.setPlotter(plotter.getName(), plotter);
+        //右边数字变
+        plotter = new plotters.RangeAreaBackgroundPlotter(areaName + "Range.background");
+        mgr.setPlotter(plotter.getName(), plotter);
+        // 滑动的  和 底部指标名字
+        plotter = new plotters.RangePlotter(areaName + "Range.main");
+        mgr.setPlotter(plotter.getName(), plotter);
+        // plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
+        // mgr.setPlotter(plotter.getName(), plotter);
+
+
+    }
+
+    static createIndicatorChartCompsDMA(dsName, indicName) {
+        let mgr = ChartManager.instance;
+        let isShow = Kline.instance.indicator.DMA;
+        let tableLayout = mgr.getArea(dsName + ".charts");
+        let areaName = dsName + ".indic" + tableLayout.getNextRowId();
+        let rangeAreaName = areaName + "Range";
+        let area = new areas.IndicatorArea(areaName);
+        mgr.setArea(areaName, area);
+        tableLayout.addArea(area);
+        // let rowIndex = tableLayout.getAreaCount() >> 1;
+        // let heights = ChartSettings.get().charts.areaHeight;
+        // if (heights.length > rowIndex) {
+        //     let a, i;
+        //     for (i = 0; i < rowIndex; i++) {
+        //         a = tableLayout.getAreaAt(i << 1);
+        //         a.setTop(0);
+        //         a.setBottom(heights[i]);
+        //     }
+        //     area.setTop(0);
+        //     area.setBottom(heights[rowIndex]);
+        // }
+        let rangeArea = new areas.IndicatorRangeArea(rangeAreaName);
+        mgr.setArea(rangeAreaName, rangeArea);
+        tableLayout.addArea(rangeArea);
+        let dp = new data_providers.IndicatorDataProvider(areaName + ".secondary");
+        mgr.setDataProvider(dp.getName(), dp);
+        if (mgr.setIndicator(areaName, indicName) === isShow) {
+            mgr.removeIndicator(areaName);
+            return;
+        }
+        let plotter = new plotters.MainAreaBackgroundPlotter(areaName + ".background");
+        mgr.setPlotter(plotter.getName(), plotter); // plotter.getName()
+        // plotter = new plotters.CGridPlotter(areaName + ".grid");
+        // mgr.setPlotter(plotter.getName(), plotter);
+        //指标线
+        plotter = new plotters.IndicatorPlotterDMA(areaName + ".secondary");
+        mgr.setPlotter(plotter.getName(), plotter);
+        //左上显示
+        plotter = new plotters.IndicatorInfoPlotterDMA(areaName + ".info");
+        mgr.setPlotter(plotter.getName(), plotter);
+        //游标显示
+        plotter = new plotters.SelectionPlotter(areaName + ".selection");
+        mgr.setPlotter(plotter.getName(), plotter);
+        //右边数字变
+        plotter = new plotters.RangeAreaBackgroundPlotter(areaName + "Range.background");
+        mgr.setPlotter(plotter.getName(), plotter);
+        // 滑动的  和 底部指标名字
+        plotter = new plotters.RangePlotter(areaName + "Range.main");
+        mgr.setPlotter(plotter.getName(), plotter);
+        // plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
+        // mgr.setPlotter(plotter.getName(), plotter);
+
+
+    }
+
+    static createIndicatorChartCompsTRIX(dsName, indicName) {
+        let mgr = ChartManager.instance;
+        let isShow = Kline.instance.indicator.TRIX;
+        let tableLayout = mgr.getArea(dsName + ".charts");
+        let areaName = dsName + ".indic" + tableLayout.getNextRowId();
+        let rangeAreaName = areaName + "Range";
+        let area = new areas.IndicatorArea(areaName);
+        mgr.setArea(areaName, area);
+        tableLayout.addArea(area);
+        // let rowIndex = tableLayout.getAreaCount() >> 1;
+        // let heights = ChartSettings.get().charts.areaHeight;
+        // if (heights.length > rowIndex) {
+        //     let a, i;
+        //     for (i = 0; i < rowIndex; i++) {
+        //         a = tableLayout.getAreaAt(i << 1);
+        //         a.setTop(0);
+        //         a.setBottom(heights[i]);
+        //     }
+        //     area.setTop(0);
+        //     area.setBottom(heights[rowIndex]);
+        // }
+        let rangeArea = new areas.IndicatorRangeArea(rangeAreaName);
+        mgr.setArea(rangeAreaName, rangeArea);
+        tableLayout.addArea(rangeArea);
+        let dp = new data_providers.IndicatorDataProvider(areaName + ".secondary");
+        mgr.setDataProvider(dp.getName(), dp);
+        if (mgr.setIndicator(areaName, indicName) === isShow) {
+            mgr.removeIndicator(areaName);
+            return;
+        }
+        let plotter = new plotters.MainAreaBackgroundPlotter(areaName + ".background");
+        mgr.setPlotter(plotter.getName(), plotter); // plotter.getName()
+        // plotter = new plotters.CGridPlotter(areaName + ".grid");
+        // mgr.setPlotter(plotter.getName(), plotter);
+        //指标线
+        plotter = new plotters.IndicatorPlotterTRIX(areaName + ".secondary");
+        mgr.setPlotter(plotter.getName(), plotter);
+        //左上显示
+        plotter = new plotters.IndicatorInfoPlotterTRIX(areaName + ".info");
+        mgr.setPlotter(plotter.getName(), plotter);
+        //游标显示
+        plotter = new plotters.SelectionPlotter(areaName + ".selection");
+        mgr.setPlotter(plotter.getName(), plotter);
+        //右边数字变
+        plotter = new plotters.RangeAreaBackgroundPlotter(areaName + "Range.background");
+        mgr.setPlotter(plotter.getName(), plotter);
+        // 滑动的  和 底部指标名字
+        plotter = new plotters.RangePlotter(areaName + "Range.main");
+        mgr.setPlotter(plotter.getName(), plotter);
+        // plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
+        // mgr.setPlotter(plotter.getName(), plotter);
+
+
+    }
+
+    static createIndicatorChartCompsBRAR(dsName, indicName) {
+        let mgr = ChartManager.instance;
+        let isShow = Kline.instance.indicator.BRAR;
+        let tableLayout = mgr.getArea(dsName + ".charts");
+        let areaName = dsName + ".indic" + tableLayout.getNextRowId();
+        let rangeAreaName = areaName + "Range";
+        let area = new areas.IndicatorArea(areaName);
+        mgr.setArea(areaName, area);
+        tableLayout.addArea(area);
+        // let rowIndex = tableLayout.getAreaCount() >> 1;
+        // let heights = ChartSettings.get().charts.areaHeight;
+        // if (heights.length > rowIndex) {
+        //     let a, i;
+        //     for (i = 0; i < rowIndex; i++) {
+        //         a = tableLayout.getAreaAt(i << 1);
+        //         a.setTop(0);
+        //         a.setBottom(heights[i]);
+        //     }
+        //     area.setTop(0);
+        //     area.setBottom(heights[rowIndex]);
+        // }
+        let rangeArea = new areas.IndicatorRangeArea(rangeAreaName);
+        mgr.setArea(rangeAreaName, rangeArea);
+        tableLayout.addArea(rangeArea);
+        let dp = new data_providers.IndicatorDataProvider(areaName + ".secondary");
+        mgr.setDataProvider(dp.getName(), dp);
+        if (mgr.setIndicator(areaName, indicName) === isShow) {
+            mgr.removeIndicator(areaName);
+            return;
+        }
+        let plotter = new plotters.MainAreaBackgroundPlotter(areaName + ".background");
+        mgr.setPlotter(plotter.getName(), plotter); // plotter.getName()
+        // plotter = new plotters.CGridPlotter(areaName + ".grid");
+        // mgr.setPlotter(plotter.getName(), plotter);
+        //指标线
+        plotter = new plotters.IndicatorPlotterBRAR(areaName + ".secondary");
+        mgr.setPlotter(plotter.getName(), plotter);
+        //左上显示
+        plotter = new plotters.IndicatorInfoPlotterBRAR(areaName + ".info");
+        mgr.setPlotter(plotter.getName(), plotter);
+        //游标显示
+        plotter = new plotters.SelectionPlotter(areaName + ".selection");
+        mgr.setPlotter(plotter.getName(), plotter);
+        //右边数字变
+        plotter = new plotters.RangeAreaBackgroundPlotter(areaName + "Range.background");
+        mgr.setPlotter(plotter.getName(), plotter);
+        // 滑动的  和 底部指标名字
+        plotter = new plotters.RangePlotter(areaName + "Range.main");
+        mgr.setPlotter(plotter.getName(), plotter);
+        // plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
+        // mgr.setPlotter(plotter.getName(), plotter);
+
+
+    }
+
+    static createIndicatorChartCompsVR(dsName, indicName) {
+        let mgr = ChartManager.instance;
+        let isShow = Kline.instance.indicator.VR;
+        let tableLayout = mgr.getArea(dsName + ".charts");
+        let areaName = dsName + ".indic" + tableLayout.getNextRowId();
+        let rangeAreaName = areaName + "Range";
+        let area = new areas.IndicatorArea(areaName);
+        mgr.setArea(areaName, area);
+        tableLayout.addArea(area);
+        // let rowIndex = tableLayout.getAreaCount() >> 1;
+        // let heights = ChartSettings.get().charts.areaHeight;
+        // if (heights.length > rowIndex) {
+        //     let a, i;
+        //     for (i = 0; i < rowIndex; i++) {
+        //         a = tableLayout.getAreaAt(i << 1);
+        //         a.setTop(0);
+        //         a.setBottom(heights[i]);
+        //     }
+        //     area.setTop(0);
+        //     area.setBottom(heights[rowIndex]);
+        // }
+        let rangeArea = new areas.IndicatorRangeArea(rangeAreaName);
+        mgr.setArea(rangeAreaName, rangeArea);
+        tableLayout.addArea(rangeArea);
+        let dp = new data_providers.IndicatorDataProvider(areaName + ".secondary");
+        mgr.setDataProvider(dp.getName(), dp);
+        if (mgr.setIndicator(areaName, indicName) === isShow) {
+            mgr.removeIndicator(areaName);
+            return;
+        }
+        let plotter = new plotters.MainAreaBackgroundPlotter(areaName + ".background");
+        mgr.setPlotter(plotter.getName(), plotter); // plotter.getName()
+        // plotter = new plotters.CGridPlotter(areaName + ".grid");
+        // mgr.setPlotter(plotter.getName(), plotter);
+        //指标线
+        plotter = new plotters.IndicatorPlotterVR(areaName + ".secondary");
+        mgr.setPlotter(plotter.getName(), plotter);
+        //左上显示
+        plotter = new plotters.IndicatorInfoPlotterVR(areaName + ".info");
+        mgr.setPlotter(plotter.getName(), plotter);
+        //游标显示
+        plotter = new plotters.SelectionPlotter(areaName + ".selection");
+        mgr.setPlotter(plotter.getName(), plotter);
+        //右边数字变
+        plotter = new plotters.RangeAreaBackgroundPlotter(areaName + "Range.background");
+        mgr.setPlotter(plotter.getName(), plotter);
+        // 滑动的  和 底部指标名字
+        plotter = new plotters.RangePlotter(areaName + "Range.main");
+        mgr.setPlotter(plotter.getName(), plotter);
+        // plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
+        // mgr.setPlotter(plotter.getName(), plotter);
+
+
+    }
+
+    static createIndicatorChartCompsEMV(dsName, indicName) {
+        let mgr = ChartManager.instance;
+        let isShow = Kline.instance.indicator.EMV;
+        let tableLayout = mgr.getArea(dsName + ".charts");
+        let areaName = dsName + ".indic" + tableLayout.getNextRowId();
+        let rangeAreaName = areaName + "Range";
+        let area = new areas.IndicatorArea(areaName);
+        mgr.setArea(areaName, area);
+        tableLayout.addArea(area);
+        // let rowIndex = tableLayout.getAreaCount() >> 1;
+        // let heights = ChartSettings.get().charts.areaHeight;
+        // if (heights.length > rowIndex) {
+        //     let a, i;
+        //     for (i = 0; i < rowIndex; i++) {
+        //         a = tableLayout.getAreaAt(i << 1);
+        //         a.setTop(0);
+        //         a.setBottom(heights[i]);
+        //     }
+        //     area.setTop(0);
+        //     area.setBottom(heights[rowIndex]);
+        // }
+        let rangeArea = new areas.IndicatorRangeArea(rangeAreaName);
+        mgr.setArea(rangeAreaName, rangeArea);
+        tableLayout.addArea(rangeArea);
+        let dp = new data_providers.IndicatorDataProvider(areaName + ".secondary");
+        mgr.setDataProvider(dp.getName(), dp);
+        if (mgr.setIndicator(areaName, indicName) === isShow) {
+            mgr.removeIndicator(areaName);
+            return;
+        }
+        let plotter = new plotters.MainAreaBackgroundPlotter(areaName + ".background");
+        mgr.setPlotter(plotter.getName(), plotter); // plotter.getName()
+        // plotter = new plotters.CGridPlotter(areaName + ".grid");
+        // mgr.setPlotter(plotter.getName(), plotter);
+        //指标线
+        plotter = new plotters.IndicatorPlotterEMV(areaName + ".secondary");
+        mgr.setPlotter(plotter.getName(), plotter);
+        //左上显示
+        plotter = new plotters.IndicatorInfoPlotterEMV(areaName + ".info");
+        mgr.setPlotter(plotter.getName(), plotter);
+        //游标显示
+        plotter = new plotters.SelectionPlotter(areaName + ".selection");
+        mgr.setPlotter(plotter.getName(), plotter);
+        //右边数字变
+        plotter = new plotters.RangeAreaBackgroundPlotter(areaName + "Range.background");
+        mgr.setPlotter(plotter.getName(), plotter);
+        // 滑动的  和 底部指标名字
+        plotter = new plotters.RangePlotter(areaName + "Range.main");
+        mgr.setPlotter(plotter.getName(), plotter);
+        // plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
+        // mgr.setPlotter(plotter.getName(), plotter);
+
+
+    }
+
+    static createIndicatorChartCompsWR(dsName, indicName) {
+        let mgr = ChartManager.instance;
+        let isShow = Kline.instance.indicator.WR;
+        let tableLayout = mgr.getArea(dsName + ".charts");
+        let areaName = dsName + ".indic" + tableLayout.getNextRowId();
+        let rangeAreaName = areaName + "Range";
+        let area = new areas.IndicatorArea(areaName);
+        mgr.setArea(areaName, area);
+        tableLayout.addArea(area);
+        // let rowIndex = tableLayout.getAreaCount() >> 1;
+        // let heights = ChartSettings.get().charts.areaHeight;
+        // if (heights.length > rowIndex) {
+        //     let a, i;
+        //     for (i = 0; i < rowIndex; i++) {
+        //         a = tableLayout.getAreaAt(i << 1);
+        //         a.setTop(0);
+        //         a.setBottom(heights[i]);
+        //     }
+        //     area.setTop(0);
+        //     area.setBottom(heights[rowIndex]);
+        // }
+        let rangeArea = new areas.IndicatorRangeArea(rangeAreaName);
+        mgr.setArea(rangeAreaName, rangeArea);
+        tableLayout.addArea(rangeArea);
+        let dp = new data_providers.IndicatorDataProvider(areaName + ".secondary");
+        mgr.setDataProvider(dp.getName(), dp);
+        if (mgr.setIndicator(areaName, indicName) === isShow) {
+            mgr.removeIndicator(areaName);
+            return;
+        }
+        let plotter = new plotters.MainAreaBackgroundPlotter(areaName + ".background");
+        mgr.setPlotter(plotter.getName(), plotter); // plotter.getName()
+        // plotter = new plotters.CGridPlotter(areaName + ".grid");
+        // mgr.setPlotter(plotter.getName(), plotter);
+        //指标线
+        plotter = new plotters.IndicatorPlotterWR(areaName + ".secondary");
+        mgr.setPlotter(plotter.getName(), plotter);
+        //左上显示
+        plotter = new plotters.IndicatorInfoPlotterWR(areaName + ".info");
+        mgr.setPlotter(plotter.getName(), plotter);
+        //游标显示
+        plotter = new plotters.SelectionPlotter(areaName + ".selection");
+        mgr.setPlotter(plotter.getName(), plotter);
+        //右边数字变
+        plotter = new plotters.RangeAreaBackgroundPlotter(areaName + "Range.background");
+        mgr.setPlotter(plotter.getName(), plotter);
+        // 滑动的  和 底部指标名字
+        plotter = new plotters.RangePlotter(areaName + "Range.main");
+        mgr.setPlotter(plotter.getName(), plotter);
+        // plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
+        // mgr.setPlotter(plotter.getName(), plotter);
+
+
+    }
+
+    static createIndicatorChartCompsROC(dsName, indicName) {
+        let mgr = ChartManager.instance;
+        let isShow = Kline.instance.indicator.ROC;
+        let tableLayout = mgr.getArea(dsName + ".charts");
+        let areaName = dsName + ".indic" + tableLayout.getNextRowId();
+        let rangeAreaName = areaName + "Range";
+        let area = new areas.IndicatorArea(areaName);
+        mgr.setArea(areaName, area);
+        tableLayout.addArea(area);
+        // let rowIndex = tableLayout.getAreaCount() >> 1;
+        // let heights = ChartSettings.get().charts.areaHeight;
+        // if (heights.length > rowIndex) {
+        //     let a, i;
+        //     for (i = 0; i < rowIndex; i++) {
+        //         a = tableLayout.getAreaAt(i << 1);
+        //         a.setTop(0);
+        //         a.setBottom(heights[i]);
+        //     }
+        //     area.setTop(0);
+        //     area.setBottom(heights[rowIndex]);
+        // }
+        let rangeArea = new areas.IndicatorRangeArea(rangeAreaName);
+        mgr.setArea(rangeAreaName, rangeArea);
+        tableLayout.addArea(rangeArea);
+        let dp = new data_providers.IndicatorDataProvider(areaName + ".secondary");
+        mgr.setDataProvider(dp.getName(), dp);
+        if (mgr.setIndicator(areaName, indicName) === isShow) {
+            mgr.removeIndicator(areaName);
+            return;
+        }
+        let plotter = new plotters.MainAreaBackgroundPlotter(areaName + ".background");
+        mgr.setPlotter(plotter.getName(), plotter); // plotter.getName()
+        // plotter = new plotters.CGridPlotter(areaName + ".grid");
+        // mgr.setPlotter(plotter.getName(), plotter);
+        //指标线
+        plotter = new plotters.IndicatorPlotterROC(areaName + ".secondary");
+        mgr.setPlotter(plotter.getName(), plotter);
+        //左上显示
+        plotter = new plotters.IndicatorInfoPlotterROC(areaName + ".info");
+        mgr.setPlotter(plotter.getName(), plotter);
+        //游标显示
+        plotter = new plotters.SelectionPlotter(areaName + ".selection");
+        mgr.setPlotter(plotter.getName(), plotter);
+        //右边数字变
+        plotter = new plotters.RangeAreaBackgroundPlotter(areaName + "Range.background");
+        mgr.setPlotter(plotter.getName(), plotter);
+        // 滑动的  和 底部指标名字
+        plotter = new plotters.RangePlotter(areaName + "Range.main");
+        mgr.setPlotter(plotter.getName(), plotter);
+        // plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
+        // mgr.setPlotter(plotter.getName(), plotter);
+
+
+    }
+
+    static createIndicatorChartCompsMTM(dsName, indicName) {
+        let mgr = ChartManager.instance;
+        let isShow = Kline.instance.indicator.MTM;
+        let tableLayout = mgr.getArea(dsName + ".charts");
+        let areaName = dsName + ".indic" + tableLayout.getNextRowId();
+        let rangeAreaName = areaName + "Range";
+        let area = new areas.IndicatorArea(areaName);
+        mgr.setArea(areaName, area);
+        tableLayout.addArea(area);
+        // let rowIndex = tableLayout.getAreaCount() >> 1;
+        // let heights = ChartSettings.get().charts.areaHeight;
+        // if (heights.length > rowIndex) {
+        //     let a, i;
+        //     for (i = 0; i < rowIndex; i++) {
+        //         a = tableLayout.getAreaAt(i << 1);
+        //         a.setTop(0);
+        //         a.setBottom(heights[i]);
+        //     }
+        //     area.setTop(0);
+        //     area.setBottom(heights[rowIndex]);
+        // }
+        let rangeArea = new areas.IndicatorRangeArea(rangeAreaName);
+        mgr.setArea(rangeAreaName, rangeArea);
+        tableLayout.addArea(rangeArea);
+        let dp = new data_providers.IndicatorDataProvider(areaName + ".secondary");
+        mgr.setDataProvider(dp.getName(), dp);
+        if (mgr.setIndicator(areaName, indicName) === isShow) {
+            mgr.removeIndicator(areaName);
+            return;
+        }
+        let plotter = new plotters.MainAreaBackgroundPlotter(areaName + ".background");
+        mgr.setPlotter(plotter.getName(), plotter); // plotter.getName()
+        // plotter = new plotters.CGridPlotter(areaName + ".grid");
+        // mgr.setPlotter(plotter.getName(), plotter);
+        //指标线
+        plotter = new plotters.IndicatorPlotterMTM(areaName + ".secondary");
+        mgr.setPlotter(plotter.getName(), plotter);
+        //左上显示
+        plotter = new plotters.IndicatorInfoPlotterMTM(areaName + ".info");
+        mgr.setPlotter(plotter.getName(), plotter);
+        //游标显示
+        plotter = new plotters.SelectionPlotter(areaName + ".selection");
+        mgr.setPlotter(plotter.getName(), plotter);
+        //右边数字变
+        plotter = new plotters.RangeAreaBackgroundPlotter(areaName + "Range.background");
+        mgr.setPlotter(plotter.getName(), plotter);
+        // 滑动的  和 底部指标名字
+        plotter = new plotters.RangePlotter(areaName + "Range.main");
+        mgr.setPlotter(plotter.getName(), plotter);
+        // plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
+        // mgr.setPlotter(plotter.getName(), plotter);
+
+
+    }
+
+    static createIndicatorChartCompsPSY(dsName, indicName) {
+        let mgr = ChartManager.instance;
+        let isShow = Kline.instance.indicator.PSY;
+        let tableLayout = mgr.getArea(dsName + ".charts");
+        let areaName = dsName + ".indic" + tableLayout.getNextRowId();
+        let rangeAreaName = areaName + "Range";
+        let area = new areas.IndicatorArea(areaName);
+        mgr.setArea(areaName, area);
+        tableLayout.addArea(area);
+        // let rowIndex = tableLayout.getAreaCount() >> 1;
+        // let heights = ChartSettings.get().charts.areaHeight;
+        // if (heights.length > rowIndex) {
+        //     let a, i;
+        //     for (i = 0; i < rowIndex; i++) {
+        //         a = tableLayout.getAreaAt(i << 1);
+        //         a.setTop(0);
+        //         a.setBottom(heights[i]);
+        //     }
+        //     area.setTop(0);
+        //     area.setBottom(heights[rowIndex]);
+        // }
+        let rangeArea = new areas.IndicatorRangeArea(rangeAreaName);
+        mgr.setArea(rangeAreaName, rangeArea);
+        tableLayout.addArea(rangeArea);
+        let dp = new data_providers.IndicatorDataProvider(areaName + ".secondary");
+        mgr.setDataProvider(dp.getName(), dp);
+        if (mgr.setIndicator(areaName, indicName) === isShow) {
+            mgr.removeIndicator(areaName);
+            return;
+        }
+        let plotter = new plotters.MainAreaBackgroundPlotter(areaName + ".background");
+        mgr.setPlotter(plotter.getName(), plotter); // plotter.getName()
+        // plotter = new plotters.CGridPlotter(areaName + ".grid");
+        // mgr.setPlotter(plotter.getName(), plotter);
+        //指标线
+        plotter = new plotters.IndicatorPlotterPSY(areaName + ".secondary");
+        mgr.setPlotter(plotter.getName(), plotter);
+        //左上显示
+        plotter = new plotters.IndicatorInfoPlotterPSY(areaName + ".info");
+        mgr.setPlotter(plotter.getName(), plotter);
         //游标显示
         plotter = new plotters.SelectionPlotter(areaName + ".selection");
         mgr.setPlotter(plotter.getName(), plotter);
