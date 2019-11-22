@@ -661,6 +661,7 @@ body {
     height: 100%;
     list-style: none;
     padding: 0 0 0 4px;
+    text-align: center;
 }
 
 #chart_tabbar li {

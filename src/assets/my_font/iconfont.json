@@ -53,6 +53,13 @@
       "font_class": "fire",
       "unicode": "e69d",
       "unicode_decimal": 59037
+    },
+    {
+      "icon_id": "11074563",
+      "name": "add",
+      "font_class": "plus",
+      "unicode": "e601",
+      "unicode_decimal": 58881
     }
   ]
 }

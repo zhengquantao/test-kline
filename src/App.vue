@@ -68,7 +68,11 @@
               <span class="icon iconfont klinelight"></span>
               <span class="tip" v-show="tipFlag=='LWSB'">LWSB</span>
             </li>
-            <li @click="addIndicator" @mouseenter="tipFlag='添加指标'" @mouseleave="tipFlag=false">
+            <li
+              @click="dialogVisible = true"
+              @mouseenter="tipFlag='添加指标'"
+              @mouseleave="tipFlag=false"
+            >
               <span class="icon iconfont klineplus"></span>
               <span class="tip" v-show="tipFlag=='添加指标'">添加指标</span>
             </li>
@@ -94,6 +98,22 @@
         </div>
       </div>
     </div>
+
+    <!-- 弹出框 -->
+    <el-dialog title="请选择需要添加的指标" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+      <el-select v-model="value" filterable placeholder="请选择">
+        <el-option
+          v-for="item in options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        ></el-option>
+      </el-select>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -110,6 +130,7 @@ export default {
       meg: "first vue-cli test, welcome you coming",
       flag: false,
       tipFlag: true,
+      dialogVisible: false,
       screenWidth: document.body.clientWidth,
       screenHeight: document.body.clientHeight + 300,
       klineParams: {
@@ -123,7 +144,83 @@ export default {
         intervalTime: 1000,
         depthWidth: 50
       },
-      klineData: data
+      klineData: data,
+
+      options: [
+        {
+          value: "VOLUME",
+          label: "VOLUME"
+        },
+        {
+          value: "MACD",
+          label: "MACD"
+        },
+        {
+          value: "KDJ",
+          label: "KDJ"
+        },
+        {
+          value: "StochRSI",
+          label: "StochRSI"
+        },
+        {
+          value: "RSI",
+          label: "RSI"
+        },
+        {
+          value: "DMI",
+          label: "DMI"
+        },
+        {
+          value: "OBV",
+          label: "OBV"
+        },
+        {
+          value: "BOLL",
+          label: "BOLL"
+        },
+        {
+          value: "SAR",
+          label: "SAR"
+        },
+        {
+          value: "DMA",
+          label: "DMA"
+        },
+        {
+          value: "TRIX",
+          label: "TRIX"
+        },
+        {
+          value: "BRAR",
+          label: "BRAR"
+        },
+        {
+          value: "VR",
+          label: "VR"
+        },
+        {
+          value: "EMV",
+          label: "EMV"
+        },
+        {
+          value: "WR",
+          label: "WR"
+        },
+        {
+          value: "ROC",
+          label: "ROC"
+        },
+        {
+          value: "MTM",
+          label: "MTM"
+        },
+        {
+          value: "PSY",
+          label: "PSY"
+        },
+      ],
+      value: ""
     };
   },
   watch: {
@@ -217,6 +314,13 @@ export default {
               );
         })();
       };
+    },
+    handleClose(done) {
+      this.$confirm("确认关闭？")
+        .then(_ => {
+          done();
+        })
+        .catch(_ => {});
     }
   },
   computed: {},
@@ -234,6 +338,14 @@ export default {
 html,
 body {
   height: 100%;
+  padding-right: 0px !important ;
+  box-sizing: border-box;
+  .el-popup-parent--hidden {
+    overflow-y: auto;
+  }
+  .el-select{
+    width: 100%;
+  }
 }
 .home {
   .sidebar {
