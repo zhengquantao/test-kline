@@ -77,25 +77,6 @@ export default class Kline {
       "1m": "01m",
       "line": "line"
     };
-    this.indicator = {
-      //"VOLUME": true,
-      "MACD": true,
-      "KDJ": true,
-      "StochRSI": true,
-      "RSI": true,
-      "DMI": true,
-      "OBV":true,
-      "BOLL": true,
-      "SAR": true,
-      "DMA": true,
-      "TRIX": true,
-      "VR": true,
-      "EMV": true,
-      "WR": true,
-      "ROC": true,
-      "MTM":true,
-      "PSY": true
-    };
     //事件
     this.onResize = null;
     this.onLangChange = null;
