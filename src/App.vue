@@ -100,7 +100,7 @@
     </div>
 
     <!-- 弹出框 -->
-    <el-dialog title="请选择需要添加的指标" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+    <el-dialog title="请选择需要添加的指标" :visible.sync="dialogVisible" width="25%">
       <el-select v-model="value" filterable placeholder="请选择">
         <el-option
           v-for="item in options"
@@ -117,401 +117,341 @@
   </div>
 </template>
 <script>
-    import VueKline from "./kline/kline";
-    import data from "@/assets/data";
-    import axios from "axios";
+import VueKline from "./kline/kline";
+import data from "@/assets/data";
+import axios from "axios";
+export default {
+  name: "HelloWorld",
+  components: {
+    VueKline
+  },
+  data() {
+    return {
+      h: 100,
+      w: 50,
+      meg: "first vue-cli test, welcome you coming",
+      flag: false,
+      tipFlag: true,
+      dialogVisible: false,
+      screenWidth: document.body.clientWidth,
+      screenHeight: document.body.clientHeight,
+      klineParams: {
+        width: document.body.clientWidth - 68,
+        height: document.body.clientHeight + 500,
+        theme: "dark",
+        language: "zh-cn",
+        ranges: ["1w", "1d", "1h", "30m", "15m", "5m", "1m", "line"],
+        symbol: "BTC",
+        symbolName: "BTC/USD",
+        intervalTime: 1000,
+        depthWidth: 50
+      },
+      klineData: data,
 
-    export default {
-        name: "HelloWorld",
-        components: {
-            VueKline
+      options: [
+        {
+          value: "VOLUME",
+          label: "VOLUME"
         },
-        data() {
-            return {
-                meg: "first vue-cli test, welcome you coming",
-                flag: false,
-                tipFlag: true,
-                dialogVisible: false,
-                screenWidth: document.body.clientWidth,
-                screenHeight: document.body.clientHeight + 300,
-                klineParams: {
-                    width: document.body.clientWidth - 68,
-                    height: document.body.clientHeight + 300,
-                    theme: "dark",
-                    indicator: {
-                        "VOLUME": true,
-                        "MACD": true,
-                        "KDJ": true,
-                        "StochRSI": true,
-                        "RSI": true,
-                        "DMI": true,
-                        "OBV": true,
-                        "BOLL": true,
-                        "SAR": true,
-                        "DMA": true,
-                        "TRIX": true,
-                        "BRAR": true,
-                        "VR": true,
-                        "EMV": true,
-                        "WR": true,
-                        "ROC": true,
-                        "MTM": true,
-                        "PSY": true
-                    },
-                    language: "zh-cn",
-                    ranges: ["1w", "1d", "1h", "30m", "15m", "5m", "1m", "line"],
-                    symbol: "BTC",
-                    symbolName: "BTC/USD",
-                    intervalTime: 1000,
-                    depthWidth: 50
-                },
-                klineData: data,
-
-                options: [
-                    {
-                        value: "VOLUME",
-                        label: "VOLUME"
-                    },
-                    {
-                        value: "MACD",
-                        label: "MACD"
-                    },
-                    {
-                        value: "KDJ",
-                        label: "KDJ"
-                    },
-                    {
-                        value: "StochRSI",
-                        label: "StochRSI"
-                    },
-                    {
-                        value: "RSI",
-                        label: "RSI"
-                    },
-                    {
-                        value: "DMI",
-                        label: "DMI"
-                    },
-                    {
-                        value: "OBV",
-                        label: "OBV"
-                    },
-                    {
-                        value: "BOLL",
-                        label: "BOLL"
-                    },
-                    {
-                        value: "SAR",
-                        label: "SAR"
-                    },
-                    {
-                        value: "DMA",
-                        label: "DMA"
-                    },
-                    {
-                        value: "TRIX",
-                        label: "TRIX"
-                    },
-                    {
-                        value: "BRAR",
-                        label: "BRAR"
-                    },
-                    {
-                        value: "VR",
-                        label: "VR"
-                    },
-                    {
-                        value: "EMV",
-                        label: "EMV"
-                    },
-                    {
-                        value: "WR",
-                        label: "WR"
-                    },
-                    {
-                        value: "ROC",
-                        label: "ROC"
-                    },
-                    {
-                        value: "MTM",
-                        label: "MTM"
-                    },
-                    {
-                        value: "PSY",
-                        label: "PSY"
-                    },
-                ],
-                value: ""
-            };
+        {
+          value: "MACD",
+          label: "MACD"
         },
-        watch: {
-            flag(val) {
-                val !== false
-                    ? this.$refs.callMethods.resize(
-                    this.screenWidth - 50 - 280,
-                    this.screenHeight + 300
-                    )
-                    : this.$refs.callMethods.resize(
-                    this.screenWidth - 50,
-                    this.screenHeight + 300
-                    );
-            },
-            value(name){
-                if (this.klineParams.indicator[name]){
-                    this.klineParams.indicator[name] = false
-                }else{
-                    this.klineParams.indicator[name] = true
-                }
-            }
+        {
+          value: "KDJ",
+          label: "KDJ"
         },
-        methods: {
-            requestDatas(url) {
-                this.$axios
-                    .get("http://127.0.0.1:5000/test?name=" + url + ".json")
-                    .then(ret => {
-                        this.klineData = ret.data;
-                        // if(!this.klineData.hasOwnProperty('data')){
-                        //     this.klineData = ret.data;
-                        // }else{
-                        this.$refs.callMethods.kline.chartMgr
-                            .getChart()
-                            .updateDataAndDisplay(ret.data.data.lines);
-                        // }
-
-                        // if(this.load){
-                        //      location.reload()
-                        // }
-                        // this.load = true
-                    });
-            },
-            refreshKlineData(option) {
-                // console.log(option);
-                if (option > 3600000) {
-                    // 周, 日 (两年)
-                    console.log("天-周 197");
-                    const url = "ag1912";
-                    this.requestDatas(url);
-                } else if (option > 900000) {
-                    // 1小时, 30分钟
-                    console.log("1时--30分 198");
-                    const url = "ag1910";
-                    this.requestDatas(url);
-                } else {
-                    // 15, 5, 1分钟
-                    console.log("1-15分钟 941");
-                    const url = "ag1911";
-                    this.requestDatas(url);
-                }
-            },
-            addIndicator() {
-                this.$prompt("请输入邮箱", "提示", {
-                    confirmButtonText: "确定",
-                    cancelButtonText: "取消",
-                    inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
-                    inputErrorMessage: "邮箱格式不正确"
-                })
-                    .then(({value}) => {
-                        this.$message({
-                            type: "success",
-                            message: "你的邮箱是: " + value
-                        });
-                    })
-                    .catch(() => {
-                        this.$message({
-                            type: "info",
-                            message: "取消输入"
-                        });
-                    });
-            },
-            setSize() {
-                this.screenWidth = document.body.clientWidth;
-                this.screenHeight = document.body.clientHeight;
-                let that = this;
-                window.onresize = () => {
-                    return (() => {
-                        this.screenWidth = document.body.clientWidth;
-                        this.screenHeight = document.body.clientHeight;
-                        that.flag !== false
-                            ? this.$refs.callMethods.resize(
-                            this.screenWidth - 50 - 280,
-                            this.screenHeight + 300
-                            )
-                            : this.$refs.callMethods.resize(
-                            this.screenWidth - 50,
-                            this.screenHeight + 300
-                            );
-                    })();
-                };
-            },
-            handleClose(done) {
-                this.$confirm("确认关闭？")
-                    .then(_ => {
-                        done();
-                    })
-                    .catch(_ => {
-                    });
-            }
+        {
+          value: "StochRSI",
+          label: "StochRSI"
         },
-        computed: {},
-        mounted() {
-            this.setSize();
-            this.$refs.sidebar.style.height = window.innerHeight + 300 + "px";
-            let arr = document.getElementsByClassName("content");
-            for (let i = 0; i < arr.length; i++) {
-                arr[i].style.height = window.innerHeight + 300 + "px";
-            }
+        {
+          value: "RSI",
+          label: "RSI"
+        },
+        {
+          value: "DMI",
+          label: "DMI"
+        },
+        {
+          value: "OBV",
+          label: "OBV"
+        },
+        {
+          value: "BOLL",
+          label: "BOLL"
+        },
+        {
+          value: "SAR",
+          label: "SAR"
+        },
+        {
+          value: "DMA",
+          label: "DMA"
+        },
+        {
+          value: "TRIX",
+          label: "TRIX"
+        },
+        {
+          value: "BRAR",
+          label: "BRAR"
+        },
+        {
+          value: "VR",
+          label: "VR"
+        },
+        {
+          value: "EMV",
+          label: "EMV"
+        },
+        {
+          value: "WR",
+          label: "WR"
+        },
+        {
+          value: "ROC",
+          label: "ROC"
+        },
+        {
+          value: "MTM",
+          label: "MTM"
+        },
+        {
+          value: "PSY",
+          label: "PSY"
         }
+      ],
+      value: ""
     };
+  },
+  watch: {
+    flag(val) {
+      val !== false
+        ? this.$refs.callMethods.resize(
+            this.screenWidth - 68 - 280,
+            this.screenHeight + 500
+          )
+        : this.$refs.callMethods.resize(
+            this.screenWidth - 68,
+            this.screenHeight + 500
+          );
+    }
+  },
+  methods: {
+    // requestDatas(url) {
+    //   this.$axios
+    //     .get("http://127.0.0.1:5000/test?name=" + url + ".json")
+    //     .then(ret => {
+    //       this.klineData = ret.data;
+    //       // if(!this.klineData.hasOwnProperty('data')){
+    //       //     this.klineData = ret.data;
+    //       // }else{
+    //       this.$refs.callMethods.kline.chartMgr
+    //         .getChart()
+    //         .updateDataAndDisplay(ret.data.data.lines);
+    //       // }
+
+    //       // if(this.load){
+    //       //      location.reload()
+    //       // }
+    //       // this.load = true
+    //     });
+    // },
+    refreshKlineData(option) {
+      // console.log(option);
+      if (option > 3600000) {
+        // 周, 日 (两年)
+        console.log("天-周 197");
+        const url = "ag1912";
+        // this.requestDatas(url);
+      } else if (option > 900000) {
+        // 1小时, 30分钟
+        console.log("1时--30分 198");
+        const url = "ag1910";
+        // this.requestDatas(url);
+      } else {
+        // 15, 5, 1分钟
+        console.log("1-15分钟 941");
+        const url = "ag1911";
+        // this.requestDatas(url);
+      }
+    },
+    addIndicator() {
+      this.$prompt("请输入邮箱", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
+        inputErrorMessage: "邮箱格式不正确"
+      })
+        .then(({ value }) => {
+          this.$message({
+            type: "success",
+            message: "你的邮箱是: " + value
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "取消输入"
+          });
+        });
+    },
+    setSize() {
+      window.onresize = () => {
+        return (() => {
+          this.screenWidth = document.body.clientWidth;
+          this.screenHeight = document.body.clientHeight;
+          this.flag !== false
+            ? this.$refs.callMethods.resize(
+                this.screenWidth - 50 - 280,
+                this.screenHeight + 500
+              )
+            : this.$refs.callMethods.resize(
+                this.screenWidth - 50,
+                this.screenHeight + 500
+              );
+        })();
+      };
+    }
+  },
+  computed: {},
+  mounted() {
+    this.setSize();
+    this.$refs.sidebar.style.height = window.innerHeight + 500 + "px";
+    let arr = document.getElementsByClassName("content");
+    for (let i = 0; i < arr.length; i++) {
+      arr[i].style.height = window.innerHeight + 500 + "px";
+    }
+  }
+};
 </script>
-<style lang='less'>
-  html,
-  body {
+<style  lang='less'>
+html,
+body {
+  height: 100%;
+  padding-right: 0px !important ;
+  box-sizing: border-box;
+  .el-popup-parent--hidden {
+    overflow-y: auto;
+  }
+  .el-select {
+    width: 100%;
+  }
+}
+.home {
+  .sidebar {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50px;
+    z-index: 999;
     height: 100%;
-    padding-right: 0px !important;
-    box-sizing: border-box;
-
-    .el-popup-parent--hidden {
-      overflow-y: auto;
-    }
-
-    .el-select {
-      width: 100%;
-    }
-  }
-
-  .home {
-    .sidebar {
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 50px;
-      z-index: 999;
-      height: 100%;
-
-      ul {
-        list-style: none;
-        margin: 0;
-        cursor: pointer;
-        padding: 0px;
-        box-sizing: border-box;
-
-        li {
-          width: 50px;
-          height: 55px;
-          line-height: 55px;
-          position: relative;
-          text-align: center;
-
-          .icon {
-            font-size: 22px;
-          }
-
-          .tip {
-            height: 22px;
-            padding: 2px 10px;
-            border-radius: 4px;
-            line-height: 22px;
-            font-size: 12px;
-            display: inline-block;
-            white-space: nowrap;
-            position: absolute;
-            top: 16px;
-            right: 51px;
-            z-index: 999;
-          }
-        }
-      }
-    }
-
-    .content {
-      width: 280px;
-      height: 100%;
-      position: absolute;
-      top: 0;
-      right: 51px;
-      z-index: 99;
-      border-left: 1px solid #ccc;
-      padding: 2px;
+    ul {
+      list-style: none;
+      margin: 0;
+      cursor: pointer;
+      padding: 0px;
       box-sizing: border-box;
-
-      .contentTitle {
-        width: 100%;
-        height: 35px;
-        line-height: 35px;
-        border-radius: 2px;
-        font-size: 14px;
-        text-align: left;
-        padding-left: 10px;
-        box-sizing: border-box;
-      }
-    }
-  }
-
-  .light {
-    .sidebar {
-      background-color: #fff;
-      border-left: 1px solid #ccc;
-
-      ul li .icon {
-        color: #333;
-      }
-
-      .tip {
-        background-color: #262b3e;
-        color: #fff;
-      }
-
-      .select {
-        background-color: #eee;
-
+      li {
+        width: 50px;
+        height: 55px;
+        line-height: 55px;
+        position: relative;
+        text-align: center;
         .icon {
-          color: #2196f3;
+          font-size: 22px;
+        }
+        .tip {
+          height: 22px;
+          padding: 2px 10px;
+          border-radius: 4px;
+          line-height: 22px;
+          font-size: 12px;
+          display: inline-block;
+          white-space: nowrap;
+          position: absolute;
+          top: 16px;
+          right: 51px;
+          z-index: 999;
         }
       }
     }
-
-    .content {
-      background-color: #fff;
-
-      .contentTitle {
-        background-color: #eee;
-        color: #000;
+  }
+  .content {
+    width: 280px;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    right: 51px;
+    z-index: 99;
+    border-left: 1px solid #ccc;
+    padding: 2px;
+    box-sizing: border-box;
+    .contentTitle {
+      width: 100%;
+      height: 35px;
+      line-height: 35px;
+      border-radius: 2px;
+      font-size: 14px;
+      text-align: left;
+      padding-left: 10px;
+      box-sizing: border-box;
+    }
+  }
+}
+.light {
+  .sidebar {
+    background-color: #fff;
+    border-left: 1px solid #ccc;
+    ul li .icon {
+      color: #333;
+    }
+    .tip {
+      background-color: #262b3e;
+      color: #fff;
+    }
+    .select {
+      background-color: #eee;
+      .icon {
+        color: #2196f3;
       }
     }
   }
-
-  .dark {
-    .sidebar {
-      background-color: #131722;
-      border-left: 1px solid #404040;
-
-      ul li .icon {
-        color: #72757f;
-      }
-
-      .tip {
-        background-color: #4f5966;
-        color: #fff;
-      }
-
-      .select {
-        background-color: #000;
-
-        .icon {
-          color: #2196f3;
-        }
-      }
+  .content {
+    background-color: #fff;
+    .contentTitle {
+      background-color: #eee;
+      color: #000;
     }
-
-    .content {
-      background-color: #131722;
-      border-left: 1px solid #404040;
-
-      .contentTitle {
-        background-color: #262b3e;
-        color: #fff;
+  }
+}
+.dark {
+  .sidebar {
+    background-color: #131722;
+    border-left: 1px solid #404040;
+    ul li .icon {
+      color: #72757f;
+    }
+    .tip {
+      background-color: #4f5966;
+      color: #fff;
+    }
+    .select {
+      background-color: #000;
+      .icon {
+        color: #2196f3;
       }
     }
   }
+  .content {
+    background-color: #131722;
+    border-left: 1px solid #404040;
+    .contentTitle {
+      background-color: #262b3e;
+      color: #fff;
+    }
+  }
+}
 </style>
 
