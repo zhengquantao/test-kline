@@ -1,12 +1,7 @@
 <template>
   <div id="app" class="home">
     <div>
-      <Vue-kline
-        :klineParams="klineParams"
-        :klineData="klineData"
-        @refreshKlineData="refreshKlineData"
-        ref="callMethods"
-      ></Vue-kline>
+      <Vue-kline :klineParams="klineParams" :klineData="klineData" ref="callMethods"></Vue-kline>
       <div id="sidebarTheme">
         <div class="sidebar" ref="sidebar">
           <ul>
@@ -111,7 +106,7 @@
       </el-select>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+        <el-button type="primary" @click="addIndicator(value)">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -133,6 +128,7 @@ export default {
       flag: false,
       tipFlag: true,
       dialogVisible: false,
+      indicatorNameCoordinate: {},
       screenWidth: document.body.clientWidth,
       screenHeight: document.body.clientHeight,
       klineParams: {
@@ -140,79 +136,79 @@ export default {
         height: document.body.clientHeight + 500,
         theme: "dark",
         indicator: {
-      "VOLUME": {
-        "show": true,
-        "init": false
-      },
-      "MACD": {
-        "show": true,
-        "init": false
-      },
-      "KDJ": {
-        "show": true,
-        "init": true
-      },
-      "StochRSI": {
-        "show": true,
-        "init": false
-      },
-      "RSI": {
-        "show": true,
-        "init": false
-      },
-      "DMI": {
-        "show": true,
-        "init": false
-      },
-      "OBV":{
-        "show": true,
-        "init": false
-      },
-      "BOLL":{
-        "show": true,
-        "init": false
-      },
-      "SAR": {
-        "show": true,
-        "init": false
-      },
-      "DMA": {
-        "show": true,
-        "init": false
-      },
-      "TRIX": {
-        "show": true,
-        "init": false
-      },
-      "BRAR":{
-        "show": true,
-        "init": false
-      },
-      "VR": {
-        "show": true,
-        "init": false
-      },
-      "EMV": {
-        "show": true,
-        "init": false
-      },
-      "WR": {
-        "show": true,
-        "init": false
-      },
-      "ROC": {
-        "show": true,
-        "init": false
-      },
-      "MTM":{
-        "show": true,
-        "init": false
-      },
-      "PSY": {
-        "show": true,
-        "init": false
-      }
-    },
+          VOLUME: {
+            show: true,
+            init: false
+          },
+          MACD: {
+            show: true,
+            init: false
+          },
+          KDJ: {
+            show: true,
+            init: false
+          },
+          StochRSI: {
+            show: true,
+            init: false
+          },
+          RSI: {
+            show: true,
+            init: false
+          },
+          DMI: {
+            show: true,
+            init: false
+          },
+          OBV: {
+            show: true,
+            init: false
+          },
+          BOLL: {
+            show: true,
+            init: false
+          },
+          SAR: {
+            show: true,
+            init: false
+          },
+          DMA: {
+            show: true,
+            init: false
+          },
+          TRIX: {
+            show: true,
+            init: false
+          },
+          BRAR: {
+            show: true,
+            init: false
+          },
+          VR: {
+            show: true,
+            init: false
+          },
+          EMV: {
+            show: true,
+            init: false
+          },
+          WR: {
+            show: true,
+            init: false
+          },
+          ROC: {
+            show: true,
+            init: false
+          },
+          MTM: {
+            show: true,
+            init: false
+          },
+          PSY: {
+            show: true,
+            init: false
+          }
+        },
         language: "zh-cn",
         ranges: ["1w", "1d", "1h", "30m", "15m", "5m", "1m", "line"],
         symbol: "BTC",
@@ -310,78 +306,23 @@ export default {
             this.screenWidth - 68,
             this.screenHeight + 500
           );
-    },
-   value(name){
-            if (!this.klineParams.indicator[name].init){
-               if (this.klineParams.indicator[name].show){
-                    this.klineParams.indicator[name].show = false;
-                }
-                this.$refs.callMethods.onIndicatorChange()
-            }
-   }
+    }
   },
   methods: {
-    // requestDatas(url) {
-    //   this.$axios
-    //     .get("http://127.0.0.1:5000/test?name=" + url + ".json")
-    //     .then(ret => {
-    //       this.klineData = ret.data;
-    //       // if(!this.klineData.hasOwnProperty('data')){
-    //       //     this.klineData = ret.data;
-    //       // }else{
-    //       this.$refs.callMethods.kline.chartMgr
-    //         .getChart()
-    //         .updateDataAndDisplay(ret.data.data.lines);
-    //       // }
-
-    //       // if(this.load){
-    //       //      location.reload()
-    //       // }
-    //       // this.load = true
-    //     });
-    // },
-    refreshKlineData(option) {
-      // console.log(option);
-      if (option > 3600000) {
-        // 周, 日 (两年)
-        console.log("天-周 197");
-        const url = "ag1912";
-        // this.requestDatas(url);
-      } else if (option > 900000) {
-        // 1小时, 30分钟
-        console.log("1时--30分 198");
-        const url = "ag1910";
-        // this.requestDatas(url);
-      } else {
-        // 15, 5, 1分钟
-        console.log("1-15分钟 941");
-        const url = "ag1911";
-        // this.requestDatas(url);
+    addIndicator(name) {
+      if (!this.klineParams.indicator[name].init) {
+        if (this.klineParams.indicator[name].show) {
+          this.klineParams.indicator[name].show = false;
+        }
+        this.$refs.callMethods.onIndicatorChange();
       }
-    },
-    addIndicator() {
-      this.$prompt("请输入邮箱", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
-        inputErrorMessage: "邮箱格式不正确"
-      })
-        .then(({ value }) => {
-          this.$message({
-            type: "success",
-            message: "你的邮箱是: " + value
-          });
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "取消输入"
-          });
-        });
+      this.dialogVisible = false;
     },
     setSize() {
       window.onresize = () => {
         return (() => {
+          document.getElementsByClassName("btn")[0].style.left =
+            this.indicatorNameCoordinate["VOLUME"].x + "px";
           this.screenWidth = document.body.clientWidth;
           this.screenHeight = document.body.clientHeight;
           this.flag !== false
@@ -395,11 +336,29 @@ export default {
               );
         })();
       };
+    },
+    closeBtn() {
+      this.indicatorNameCoordinate = this.$refs.callMethods.kline.indicatorNameCoordinate;
+      let btn = document.createElement("button");
+      btn.innerHTML = "关闭";
+      btn.classList.add("btn");
+      btn.style.position = "absolute";
+      btn.style.top = this.indicatorNameCoordinate["VOLUME"].y + 55 + "px";
+      btn.style.left = this.indicatorNameCoordinate["VOLUME"].x + "px";
+      let name = "VOLUME";
+      let that=this;
+      function add(name) {
+        return function(ev) {
+          that.klineParams.indicator[name].show = false;
+        };
+      }
+      btn.onclick = add(name);
+      document.getElementById("sidebarTheme").append(btn);
     }
   },
-  computed: {},
   mounted() {
     this.setSize();
+    this.closeBtn();
     this.$refs.sidebar.style.height = window.innerHeight + 500 + "px";
     let arr = document.getElementsByClassName("content");
     for (let i = 0; i < arr.length; i++) {
@@ -422,6 +381,17 @@ body {
   }
 }
 .home {
+  .btn {
+    width: 50px;
+    height: 30px;
+    background-color: #f56c6c;
+    border-radius: 5px;
+    outline: none;
+    border: 1px solid #f56c6c;
+    color: white;
+    cursor: pointer;
+    padding: 0;
+  }
   .sidebar {
     position: absolute;
     top: 0;

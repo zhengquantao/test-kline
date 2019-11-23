@@ -1,14 +1,23 @@
 import Kline from './kline'
-import { NamedObject } from './named_object'
-import { ChartManager } from './chart_manager'
-import { Util } from './util'
-import { CPoint } from './cpoint'
+import {
+    NamedObject
+} from './named_object'
+import {
+    ChartManager
+} from './chart_manager'
+import {
+    Util
+} from './util'
+import {
+    CPoint
+} from './cpoint'
 import * as exprs from './exprs'
 import * as themes from './themes'
 import * as data_providers from './data_providers'
 import * as data_sources from './data_sources'
 import * as ctools from './ctools'
 
+export let indicatorNameCoordinate = {};
 export class Plotter extends NamedObject {
 
     constructor(name) {
@@ -95,8 +104,17 @@ export class Plotter extends NamedObject {
             context.lineTo(points[i].x + 0.5, points[i].y + 0.5);
         context.closePath();
     }
-
+    
     static drawString(context, str, rect) {
+        let indicatorNameArr = ["VOLUME", "MACD", "KDJ", "StochRSI", "RSI", "DMI", "OBV", "BOLL", "SAR", "DMA", "TRIX", "BRAR", "VR", "EMV", "WR", "ROC", "MTM", "PSY"];
+        let reg=/[\(()][^\))]+[\))]$/;
+        let indicatorName = str.replace(reg, "");
+        if (indicatorNameArr.includes(indicatorName)){
+            indicatorNameCoordinate[indicatorName] = {
+                x:rect.close_x,
+                y:rect.y
+            }
+        }
         let w = context.measureText(str).width;
         if (rect.w < w) {
             return false;
@@ -292,37 +310,77 @@ export class CandlestickPlotter extends NamedObject {
                 let bottom = range.toY(open);
                 let iH = Math.max(bottom - top, 1);
                 if (iH > 1 && iW > 1 && dark)
-                    strokePosRects.push({ x: left + 0.5, y: top + 0.5, w: iW - 1, h: iH - 1 });
+                    strokePosRects.push({
+                        x: left + 0.5,
+                        y: top + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 else
-                    fillPosRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillPosRects.push({
+                        x: left,
+                        y: top,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
                 if (data.high > close) {
                     high = Math.min(high, top - 1);
-                    fillPosRects.push({ x: center, y: high, w: 1, h: top - high });
+                    fillPosRects.push({
+                        x: center,
+                        y: high,
+                        w: 1,
+                        h: top - high
+                    });
                 }
                 if (open > data.low) {
                     low = Math.max(low, bottom + 1);
-                    fillPosRects.push({ x: center, y: bottom, w: 1, h: low - bottom });
+                    fillPosRects.push({
+                        x: center,
+                        y: bottom,
+                        w: 1,
+                        h: low - bottom
+                    });
                 }
             } else if (close === open) {
                 let top = range.toY(close);
-                fillUchRects.push({ x: left, y: top, w: Math.max(iW, 1), h: 1 });
+                fillUchRects.push({
+                    x: left,
+                    y: top,
+                    w: Math.max(iW, 1),
+                    h: 1
+                });
                 if (data.high > close)
                     high = Math.min(high, top - 1);
                 if (open > data.low)
                     low = Math.max(low, top + 1);
                 if (high < low)
-                    fillUchRects.push({ x: center, y: high, w: 1, h: low - high });
+                    fillUchRects.push({
+                        x: center,
+                        y: high,
+                        w: 1,
+                        h: low - high
+                    });
             } else {
                 let top = range.toY(open);
                 let bottom = range.toY(close);
                 let iH = Math.max(bottom - top, 1);
-                fillNegRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                fillNegRects.push({
+                    x: left,
+                    y: top,
+                    w: Math.max(iW, 1),
+                    h: Math.max(iH, 1)
+                });
                 if (data.high > open)
                     high = Math.min(high, top - 1);
                 if (close > data.low)
                     low = Math.max(low, bottom + 1);
                 if (high < low)
-                    fillNegRects.push({ x: center, y: high, w: 1, h: low - high });
+                    fillNegRects.push({
+                        x: center,
+                        y: high,
+                        w: 1,
+                        h: low - high
+                    });
             }
             left += cW;
             center += cW;
@@ -401,21 +459,46 @@ export class CandlestickHLCPlotter extends Plotter {
                 let bottom = range.toY(open);
                 let iH = Math.max(bottom - top, 1);
                 if (iH > 1 && iW > 1 && dark) {
-                    strokePosRects.push({ x: left + 0.5, y: top + 0.5, w: iW - 1, h: iH - 1 });
+                    strokePosRects.push({
+                        x: left + 0.5,
+                        y: top + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 } else {
-                    fillPosRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillPosRects.push({
+                        x: left,
+                        y: top,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
                 }
                 if (data.high > close) {
                     high = Math.min(high, top - 1);
-                    fillPosRects.push({ x: center, y: high, w: 1, h: top - high });
+                    fillPosRects.push({
+                        x: center,
+                        y: high,
+                        w: 1,
+                        h: top - high
+                    });
                 }
                 if (open > data.low) {
                     low = Math.max(low, bottom + 1);
-                    fillPosRects.push({ x: center, y: bottom, w: 1, h: low - bottom });
+                    fillPosRects.push({
+                        x: center,
+                        y: bottom,
+                        w: 1,
+                        h: low - bottom
+                    });
                 }
             } else if (close === open) {
                 let top = range.toY(close);
-                fillUchRects.push({ x: left, y: top, w: Math.max(iW, 1), h: 1 });
+                fillUchRects.push({
+                    x: left,
+                    y: top,
+                    w: Math.max(iW, 1),
+                    h: 1
+                });
                 if (data.high > close) {
                     high = Math.min(high, top - 1);
                 }
@@ -423,13 +506,23 @@ export class CandlestickHLCPlotter extends Plotter {
                     low = Math.max(low, top + 1);
                 }
                 if (high < low) {
-                    fillUchRects.push({ x: center, y: high, w: 1, h: low - high });
+                    fillUchRects.push({
+                        x: center,
+                        y: high,
+                        w: 1,
+                        h: low - high
+                    });
                 }
             } else {
                 let top = range.toY(open);
                 let bottom = range.toY(close);
                 let iH = Math.max(bottom - top, 1);
-                fillNegRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                fillNegRects.push({
+                    x: left,
+                    y: top,
+                    w: Math.max(iW, 1),
+                    h: Math.max(iH, 1)
+                });
                 if (data.high > open) {
                     high = Math.min(high, top - 1);
                 }
@@ -437,7 +530,12 @@ export class CandlestickHLCPlotter extends Plotter {
                     low = Math.max(low, bottom + 1);
                 }
                 if (high < low) {
-                    fillNegRects.push({ x: center, y: high, w: 1, h: low - high });
+                    fillNegRects.push({
+                        x: center,
+                        y: high,
+                        w: 1,
+                        h: low - high
+                    });
                 }
             }
             left += cW;
@@ -473,7 +571,7 @@ export class OHLCPlotter extends Plotter {
         super(name);
     }
 
-  Draw(context) {
+    Draw(context) {
 
         let mgr = ChartManager.instance;
         let ds = mgr.getDataSource(this.getDataSourceName());
@@ -511,20 +609,65 @@ export class OHLCPlotter extends Plotter {
             if (data.close > data.open) {
                 let top = range.toY(data.close);
                 let bottom = range.toY(data.open);
-                fillPosRects.push({ x: center, y: high, w: 1, h: iH });
-                fillPosRects.push({ x: left, y: top, w: iW, h: 1 });
-                fillPosRects.push({ x: center, y: bottom, w: iW, h: 1 });
+                fillPosRects.push({
+                    x: center,
+                    y: high,
+                    w: 1,
+                    h: iH
+                });
+                fillPosRects.push({
+                    x: left,
+                    y: top,
+                    w: iW,
+                    h: 1
+                });
+                fillPosRects.push({
+                    x: center,
+                    y: bottom,
+                    w: iW,
+                    h: 1
+                });
             } else if (data.close === data.open) {
                 let y = range.toY(data.close);
-                fillUchRects.push({ x: center, y: high, w: 1, h: iH });
-                fillUchRects.push({ x: left, y: y, w: iW, h: 1 });
-                fillUchRects.push({ x: center, y: y, w: iW, h: 1 });
+                fillUchRects.push({
+                    x: center,
+                    y: high,
+                    w: 1,
+                    h: iH
+                });
+                fillUchRects.push({
+                    x: left,
+                    y: y,
+                    w: iW,
+                    h: 1
+                });
+                fillUchRects.push({
+                    x: center,
+                    y: y,
+                    w: iW,
+                    h: 1
+                });
             } else {
                 let top = range.toY(data.open);
                 let bottom = range.toY(data.close);
-                fillNegRects.push({ x: center, y: high, w: 1, h: iH });
-                fillNegRects.push({ x: left, y: top, w: iW, h: 1 });
-                fillNegRects.push({ x: center, y: bottom, w: iW, h: 1 });
+                fillNegRects.push({
+                    x: center,
+                    y: high,
+                    w: 1,
+                    h: iH
+                });
+                fillNegRects.push({
+                    x: left,
+                    y: top,
+                    w: iW,
+                    h: 1
+                });
+                fillNegRects.push({
+                    x: center,
+                    y: bottom,
+                    w: iW,
+                    h: 1
+                });
             }
             left += cW;
             center += cW;
@@ -571,6 +714,7 @@ export class MainInfoPlotter extends Plotter {
             w: area.getWidth() - 8,
             h: 20
         };
+
         let selIndex = timeline.getSelectedIndex();
         if (selIndex < 0)
             return;
@@ -699,11 +843,12 @@ export class MainInfoPlotter extends Plotter {
             let color = out.getColor();
             if (color === undefined) {
                 color = themes.Theme.Color.Indicator0 + n;
-            }
+            };
             context.fillStyle = theme.getColor(color);
             if (!Plotter.drawString(context, info, rect)) {
                 return;
             }
+
         }
     }
 
@@ -715,7 +860,7 @@ export class IndicatorPlotter extends NamedObject {
         super(name);
     }
 
-  Draw(context) {
+    Draw(context) {
         let mgr = ChartManager.instance;
         let area = mgr.getArea(this.getAreaName());
         let timeline = mgr.getTimeline(this.getDataSourceName());
@@ -767,12 +912,18 @@ export class IndicatorPlotter extends NamedObject {
                 if (start > first) {
                     v = out.execute(start - 1);
                     if (isNaN(v) === false)
-                        points.push({ "x": x - cW, "y": range.toY(v) });
+                        points.push({
+                            "x": x - cW,
+                            "y": range.toY(v)
+                        });
                 }
-                for (let i = start; i < last; i++ , x += cW) {
+                for (let i = start; i < last; i++, x += cW) {
                     v = out.execute(i);
                     if (isNaN(v) === false)
-                        points.push({ "x": x, "y": range.toY(v) });
+                        points.push({
+                            "x": x,
+                            "y": range.toY(v)
+                        });
                 }
                 if (points.length > 0) {
                     let color = out.getColor();
@@ -786,7 +937,7 @@ export class IndicatorPlotter extends NamedObject {
         context.restore();
     }
     //成交量
-  drawVolumeStick(context, theme, ds, first, last, startX, cW, iW, range) {
+    drawVolumeStick(context, theme, ds, first, last, startX, cW, iW, range) {
         let dark = Util.isInstance(theme, themes.DarkTheme);
         let left = startX;
         let bottom = range.toY(0);
@@ -799,22 +950,52 @@ export class IndicatorPlotter extends NamedObject {
             let iH = range.toHeight(data.volume);
             if (data.close > data.open) {
                 if (iH > 1 && iW > 1 && dark) {
-                    strokePosRects.push({ x: left + 0.5, y: top + 0.5, w: iW - 1, h: iH - 1 });
+                    strokePosRects.push({
+                        x: left + 0.5,
+                        y: top + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 } else {
-                    fillPosRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillPosRects.push({
+                        x: left,
+                        y: top,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
                 }
             } else if (data.close === data.open) {
                 if (i > 0 && data.close >= ds.getDataAt(i - 1).close) {
                     if (iH > 1 && iW > 1 && dark) {
-                        strokePosRects.push({ x: left + 0.5, y: top + 0.5, w: iW - 1, h: iH - 1 });
+                        strokePosRects.push({
+                            x: left + 0.5,
+                            y: top + 0.5,
+                            w: iW - 1,
+                            h: iH - 1
+                        });
                     } else {
-                        fillPosRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                        fillPosRects.push({
+                            x: left,
+                            y: top,
+                            w: Math.max(iW, 1),
+                            h: Math.max(iH, 1)
+                        });
                     }
                 } else {
-                    fillNegRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillNegRects.push({
+                        x: left,
+                        y: top,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
                 }
             } else {
-                fillNegRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                fillNegRects.push({
+                    x: left,
+                    y: top,
+                    w: Math.max(iW, 1),
+                    h: Math.max(iH, 1)
+                });
             }
             left += cW;
         }
@@ -835,7 +1016,7 @@ export class IndicatorPlotter extends NamedObject {
         }
     }
 
-  drawMACDStick(context, theme, output, first, last, startX, cW, iW, range) {
+    drawMACDStick(context, theme, output, first, last, startX, cW, iW, range) {
         let left = startX;
         let middle = range.toY(0);
         let strokePosRects = [];
@@ -848,15 +1029,35 @@ export class IndicatorPlotter extends NamedObject {
             if (MACD >= 0) {
                 let iH = range.toHeight(MACD);
                 if ((i === 0 || MACD >= prevMACD) && iH > 1 && iW > 1)
-                    strokePosRects.push({ x: left + 0.5, y: middle - iH + 0.5, w: iW - 1, h: iH - 1 });
+                    strokePosRects.push({
+                        x: left + 0.5,
+                        y: middle - iH + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 else
-                    fillPosRects.push({ x: left, y: middle - iH, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillPosRects.push({
+                        x: left,
+                        y: middle - iH,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
             } else {
                 let iH = range.toHeight(-MACD);
                 if ((i === 0 || MACD >= prevMACD) && iH > 1 && iW > 1)
-                    strokeNegRects.push({ x: left + 0.5, y: middle + 0.5, w: iW - 1, h: iH - 1 });
+                    strokeNegRects.push({
+                        x: left + 0.5,
+                        y: middle + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 else
-                    fillNegRects.push({ x: left, y: middle, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillNegRects.push({
+                        x: left,
+                        y: middle,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
             }
             prevMACD = MACD;
             left += cW;
@@ -915,7 +1116,7 @@ export class IndicatorPlotterVOLUME extends NamedObject {
         super(name);
     }
 
-  Draw(context) {
+    Draw(context) {
         let mgr = ChartManager.instance;
         let area = mgr.getArea(this.getAreaName());
         let timeline = mgr.getTimeline(this.getDataSourceName());
@@ -957,6 +1158,7 @@ export class IndicatorPlotterVOLUME extends NamedObject {
         let center = timeline.toItemCenter(start);
         context.save();
         context.rect(left, area.getTop(), area.getRight() - left, area.getHeight());
+
         context.clip();
         context.translate(0.5, 0.5);
         for (n = 0; n < outCount; n++) {
@@ -967,12 +1169,18 @@ export class IndicatorPlotterVOLUME extends NamedObject {
                 if (start > first) {
                     v = out.execute(start - 1);
                     if (isNaN(v) === false)
-                        points.push({ "x": x - cW, "y": range.toY(v) });
+                        points.push({
+                            "x": x - cW,
+                            "y": range.toY(v)
+                        });
                 }
-                for (let i = start; i < last; i++ , x += cW) {
+                for (let i = start; i < last; i++, x += cW) {
                     v = out.execute(i);
                     if (isNaN(v) === false)
-                        points.push({ "x": x, "y": range.toY(v) });
+                        points.push({
+                            "x": x,
+                            "y": range.toY(v)
+                        });
                 }
                 if (points.length > 0) {
                     let color = out.getColor();
@@ -986,7 +1194,7 @@ export class IndicatorPlotterVOLUME extends NamedObject {
         context.restore();
     }
     //成交量
-  drawVolumeStick(context, theme, ds, first, last, startX, cW, iW, range) {
+    drawVolumeStick(context, theme, ds, first, last, startX, cW, iW, range) {
         let dark = Util.isInstance(theme, themes.DarkTheme);
         let left = startX;
         let bottom = range.toY(0);
@@ -999,22 +1207,52 @@ export class IndicatorPlotterVOLUME extends NamedObject {
             let iH = range.toHeight(data.volume);
             if (data.close > data.open) {
                 if (iH > 1 && iW > 1 && dark) {
-                    strokePosRects.push({ x: left + 0.5, y: top + 0.5, w: iW - 1, h: iH - 1 });
+                    strokePosRects.push({
+                        x: left + 0.5,
+                        y: top + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 } else {
-                    fillPosRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillPosRects.push({
+                        x: left,
+                        y: top,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
                 }
             } else if (data.close === data.open) {
                 if (i > 0 && data.close >= ds.getDataAt(i - 1).close) {
                     if (iH > 1 && iW > 1 && dark) {
-                        strokePosRects.push({ x: left + 0.5, y: top + 0.5, w: iW - 1, h: iH - 1 });
+                        strokePosRects.push({
+                            x: left + 0.5,
+                            y: top + 0.5,
+                            w: iW - 1,
+                            h: iH - 1
+                        });
                     } else {
-                        fillPosRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                        fillPosRects.push({
+                            x: left,
+                            y: top,
+                            w: Math.max(iW, 1),
+                            h: Math.max(iH, 1)
+                        });
                     }
                 } else {
-                    fillNegRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillNegRects.push({
+                        x: left,
+                        y: top,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
                 }
             } else {
-                fillNegRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                fillNegRects.push({
+                    x: left,
+                    y: top,
+                    w: Math.max(iW, 1),
+                    h: Math.max(iH, 1)
+                });
             }
             left += cW;
         }
@@ -1035,7 +1273,7 @@ export class IndicatorPlotterVOLUME extends NamedObject {
         }
     }
 
-  drawMACDStick(context, theme, output, first, last, startX, cW, iW, range) {
+    drawMACDStick(context, theme, output, first, last, startX, cW, iW, range) {
         let left = startX;
         let middle = range.toY(0);
         let strokePosRects = [];
@@ -1048,15 +1286,35 @@ export class IndicatorPlotterVOLUME extends NamedObject {
             if (MACD >= 0) {
                 let iH = range.toHeight(MACD);
                 if ((i === 0 || MACD >= prevMACD) && iH > 1 && iW > 1)
-                    strokePosRects.push({ x: left + 0.5, y: middle - iH + 0.5, w: iW - 1, h: iH - 1 });
+                    strokePosRects.push({
+                        x: left + 0.5,
+                        y: middle - iH + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 else
-                    fillPosRects.push({ x: left, y: middle - iH, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillPosRects.push({
+                        x: left,
+                        y: middle - iH,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
             } else {
                 let iH = range.toHeight(-MACD);
                 if ((i === 0 || MACD >= prevMACD) && iH > 1 && iW > 1)
-                    strokeNegRects.push({ x: left + 0.5, y: middle + 0.5, w: iW - 1, h: iH - 1 });
+                    strokeNegRects.push({
+                        x: left + 0.5,
+                        y: middle + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 else
-                    fillNegRects.push({ x: left, y: middle, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillNegRects.push({
+                        x: left,
+                        y: middle,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
             }
             prevMACD = MACD;
             left += cW;
@@ -1114,7 +1372,7 @@ export class IndicatorPlotterMACD extends NamedObject {
         super(name);
     }
 
-  Draw(context) {
+    Draw(context) {
         let mgr = ChartManager.instance;
         let area = mgr.getArea(this.getAreaName());
         let timeline = mgr.getTimeline(this.getDataSourceName());
@@ -1166,12 +1424,18 @@ export class IndicatorPlotterMACD extends NamedObject {
                 if (start > first) {
                     v = out.execute(start - 1);
                     if (isNaN(v) === false)
-                        points.push({ "x": x - cW, "y": range.toY(v) });
+                        points.push({
+                            "x": x - cW,
+                            "y": range.toY(v)
+                        });
                 }
-                for (let i = start; i < last; i++ , x += cW) {
+                for (let i = start; i < last; i++, x += cW) {
                     v = out.execute(i);
                     if (isNaN(v) === false)
-                        points.push({ "x": x, "y": range.toY(v) });
+                        points.push({
+                            "x": x,
+                            "y": range.toY(v)
+                        });
                 }
                 if (points.length > 0) {
                     let color = out.getColor();
@@ -1185,7 +1449,7 @@ export class IndicatorPlotterMACD extends NamedObject {
         context.restore();
     }
     //成交量
-  drawVolumeStick(context, theme, ds, first, last, startX, cW, iW, range) {
+    drawVolumeStick(context, theme, ds, first, last, startX, cW, iW, range) {
         let dark = Util.isInstance(theme, themes.DarkTheme);
         let left = startX;
         let bottom = range.toY(0);
@@ -1198,22 +1462,52 @@ export class IndicatorPlotterMACD extends NamedObject {
             let iH = range.toHeight(data.volume);
             if (data.close > data.open) {
                 if (iH > 1 && iW > 1 && dark) {
-                    strokePosRects.push({ x: left + 0.5, y: top + 0.5, w: iW - 1, h: iH - 1 });
+                    strokePosRects.push({
+                        x: left + 0.5,
+                        y: top + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 } else {
-                    fillPosRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillPosRects.push({
+                        x: left,
+                        y: top,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
                 }
             } else if (data.close === data.open) {
                 if (i > 0 && data.close >= ds.getDataAt(i - 1).close) {
                     if (iH > 1 && iW > 1 && dark) {
-                        strokePosRects.push({ x: left + 0.5, y: top + 0.5, w: iW - 1, h: iH - 1 });
+                        strokePosRects.push({
+                            x: left + 0.5,
+                            y: top + 0.5,
+                            w: iW - 1,
+                            h: iH - 1
+                        });
                     } else {
-                        fillPosRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                        fillPosRects.push({
+                            x: left,
+                            y: top,
+                            w: Math.max(iW, 1),
+                            h: Math.max(iH, 1)
+                        });
                     }
                 } else {
-                    fillNegRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillNegRects.push({
+                        x: left,
+                        y: top,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
                 }
             } else {
-                fillNegRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                fillNegRects.push({
+                    x: left,
+                    y: top,
+                    w: Math.max(iW, 1),
+                    h: Math.max(iH, 1)
+                });
             }
             left += cW;
         }
@@ -1234,7 +1528,7 @@ export class IndicatorPlotterMACD extends NamedObject {
         }
     }
 
-  drawMACDStick(context, theme, output, first, last, startX, cW, iW, range) {
+    drawMACDStick(context, theme, output, first, last, startX, cW, iW, range) {
         let left = startX;
         let middle = range.toY(0);
         let strokePosRects = [];
@@ -1247,15 +1541,35 @@ export class IndicatorPlotterMACD extends NamedObject {
             if (MACD >= 0) {
                 let iH = range.toHeight(MACD);
                 if ((i === 0 || MACD >= prevMACD) && iH > 1 && iW > 1)
-                    strokePosRects.push({ x: left + 0.5, y: middle - iH + 0.5, w: iW - 1, h: iH - 1 });
+                    strokePosRects.push({
+                        x: left + 0.5,
+                        y: middle - iH + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 else
-                    fillPosRects.push({ x: left, y: middle - iH, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillPosRects.push({
+                        x: left,
+                        y: middle - iH,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
             } else {
                 let iH = range.toHeight(-MACD);
                 if ((i === 0 || MACD >= prevMACD) && iH > 1 && iW > 1)
-                    strokeNegRects.push({ x: left + 0.5, y: middle + 0.5, w: iW - 1, h: iH - 1 });
+                    strokeNegRects.push({
+                        x: left + 0.5,
+                        y: middle + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 else
-                    fillNegRects.push({ x: left, y: middle, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillNegRects.push({
+                        x: left,
+                        y: middle,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
             }
             prevMACD = MACD;
             left += cW;
@@ -1313,7 +1627,7 @@ export class IndicatorPlotterKDJ extends NamedObject {
         super(name);
     }
 
-  Draw(context) {
+    Draw(context) {
         let mgr = ChartManager.instance;
         let area = mgr.getArea(this.getAreaName());
         let timeline = mgr.getTimeline(this.getDataSourceName());
@@ -1365,12 +1679,18 @@ export class IndicatorPlotterKDJ extends NamedObject {
                 if (start > first) {
                     v = out.execute(start - 1);
                     if (isNaN(v) === false)
-                        points.push({ "x": x - cW, "y": range.toY(v) });
+                        points.push({
+                            "x": x - cW,
+                            "y": range.toY(v)
+                        });
                 }
-                for (let i = start; i < last; i++ , x += cW) {
+                for (let i = start; i < last; i++, x += cW) {
                     v = out.execute(i);
                     if (isNaN(v) === false)
-                        points.push({ "x": x, "y": range.toY(v) });
+                        points.push({
+                            "x": x,
+                            "y": range.toY(v)
+                        });
                 }
                 if (points.length > 0) {
                     let color = out.getColor();
@@ -1384,7 +1704,7 @@ export class IndicatorPlotterKDJ extends NamedObject {
         context.restore();
     }
     //成交量
-  drawVolumeStick(context, theme, ds, first, last, startX, cW, iW, range) {
+    drawVolumeStick(context, theme, ds, first, last, startX, cW, iW, range) {
         let dark = Util.isInstance(theme, themes.DarkTheme);
         let left = startX;
         let bottom = range.toY(0);
@@ -1397,22 +1717,52 @@ export class IndicatorPlotterKDJ extends NamedObject {
             let iH = range.toHeight(data.volume);
             if (data.close > data.open) {
                 if (iH > 1 && iW > 1 && dark) {
-                    strokePosRects.push({ x: left + 0.5, y: top + 0.5, w: iW - 1, h: iH - 1 });
+                    strokePosRects.push({
+                        x: left + 0.5,
+                        y: top + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 } else {
-                    fillPosRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillPosRects.push({
+                        x: left,
+                        y: top,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
                 }
             } else if (data.close === data.open) {
                 if (i > 0 && data.close >= ds.getDataAt(i - 1).close) {
                     if (iH > 1 && iW > 1 && dark) {
-                        strokePosRects.push({ x: left + 0.5, y: top + 0.5, w: iW - 1, h: iH - 1 });
+                        strokePosRects.push({
+                            x: left + 0.5,
+                            y: top + 0.5,
+                            w: iW - 1,
+                            h: iH - 1
+                        });
                     } else {
-                        fillPosRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                        fillPosRects.push({
+                            x: left,
+                            y: top,
+                            w: Math.max(iW, 1),
+                            h: Math.max(iH, 1)
+                        });
                     }
                 } else {
-                    fillNegRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillNegRects.push({
+                        x: left,
+                        y: top,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
                 }
             } else {
-                fillNegRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                fillNegRects.push({
+                    x: left,
+                    y: top,
+                    w: Math.max(iW, 1),
+                    h: Math.max(iH, 1)
+                });
             }
             left += cW;
         }
@@ -1433,7 +1783,7 @@ export class IndicatorPlotterKDJ extends NamedObject {
         }
     }
 
-  drawMACDStick(context, theme, output, first, last, startX, cW, iW, range) {
+    drawMACDStick(context, theme, output, first, last, startX, cW, iW, range) {
         let left = startX;
         let middle = range.toY(0);
         let strokePosRects = [];
@@ -1446,15 +1796,35 @@ export class IndicatorPlotterKDJ extends NamedObject {
             if (MACD >= 0) {
                 let iH = range.toHeight(MACD);
                 if ((i === 0 || MACD >= prevMACD) && iH > 1 && iW > 1)
-                    strokePosRects.push({ x: left + 0.5, y: middle - iH + 0.5, w: iW - 1, h: iH - 1 });
+                    strokePosRects.push({
+                        x: left + 0.5,
+                        y: middle - iH + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 else
-                    fillPosRects.push({ x: left, y: middle - iH, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillPosRects.push({
+                        x: left,
+                        y: middle - iH,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
             } else {
                 let iH = range.toHeight(-MACD);
                 if ((i === 0 || MACD >= prevMACD) && iH > 1 && iW > 1)
-                    strokeNegRects.push({ x: left + 0.5, y: middle + 0.5, w: iW - 1, h: iH - 1 });
+                    strokeNegRects.push({
+                        x: left + 0.5,
+                        y: middle + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 else
-                    fillNegRects.push({ x: left, y: middle, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillNegRects.push({
+                        x: left,
+                        y: middle,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
             }
             prevMACD = MACD;
             left += cW;
@@ -1512,7 +1882,7 @@ export class IndicatorPlotterStochRSI extends NamedObject {
         super(name);
     }
 
-  Draw(context) {
+    Draw(context) {
         let mgr = ChartManager.instance;
         let area = mgr.getArea(this.getAreaName());
         let timeline = mgr.getTimeline(this.getDataSourceName());
@@ -1564,12 +1934,18 @@ export class IndicatorPlotterStochRSI extends NamedObject {
                 if (start > first) {
                     v = out.execute(start - 1);
                     if (isNaN(v) === false)
-                        points.push({ "x": x - cW, "y": range.toY(v) });
+                        points.push({
+                            "x": x - cW,
+                            "y": range.toY(v)
+                        });
                 }
-                for (let i = start; i < last; i++ , x += cW) {
+                for (let i = start; i < last; i++, x += cW) {
                     v = out.execute(i);
                     if (isNaN(v) === false)
-                        points.push({ "x": x, "y": range.toY(v) });
+                        points.push({
+                            "x": x,
+                            "y": range.toY(v)
+                        });
                 }
                 if (points.length > 0) {
                     let color = out.getColor();
@@ -1583,7 +1959,7 @@ export class IndicatorPlotterStochRSI extends NamedObject {
         context.restore();
     }
     //成交量
-  drawVolumeStick(context, theme, ds, first, last, startX, cW, iW, range) {
+    drawVolumeStick(context, theme, ds, first, last, startX, cW, iW, range) {
         let dark = Util.isInstance(theme, themes.DarkTheme);
         let left = startX;
         let bottom = range.toY(0);
@@ -1596,22 +1972,52 @@ export class IndicatorPlotterStochRSI extends NamedObject {
             let iH = range.toHeight(data.volume);
             if (data.close > data.open) {
                 if (iH > 1 && iW > 1 && dark) {
-                    strokePosRects.push({ x: left + 0.5, y: top + 0.5, w: iW - 1, h: iH - 1 });
+                    strokePosRects.push({
+                        x: left + 0.5,
+                        y: top + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 } else {
-                    fillPosRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillPosRects.push({
+                        x: left,
+                        y: top,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
                 }
             } else if (data.close === data.open) {
                 if (i > 0 && data.close >= ds.getDataAt(i - 1).close) {
                     if (iH > 1 && iW > 1 && dark) {
-                        strokePosRects.push({ x: left + 0.5, y: top + 0.5, w: iW - 1, h: iH - 1 });
+                        strokePosRects.push({
+                            x: left + 0.5,
+                            y: top + 0.5,
+                            w: iW - 1,
+                            h: iH - 1
+                        });
                     } else {
-                        fillPosRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                        fillPosRects.push({
+                            x: left,
+                            y: top,
+                            w: Math.max(iW, 1),
+                            h: Math.max(iH, 1)
+                        });
                     }
                 } else {
-                    fillNegRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillNegRects.push({
+                        x: left,
+                        y: top,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
                 }
             } else {
-                fillNegRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                fillNegRects.push({
+                    x: left,
+                    y: top,
+                    w: Math.max(iW, 1),
+                    h: Math.max(iH, 1)
+                });
             }
             left += cW;
         }
@@ -1632,7 +2038,7 @@ export class IndicatorPlotterStochRSI extends NamedObject {
         }
     }
 
-  drawMACDStick(context, theme, output, first, last, startX, cW, iW, range) {
+    drawMACDStick(context, theme, output, first, last, startX, cW, iW, range) {
         let left = startX;
         let middle = range.toY(0);
         let strokePosRects = [];
@@ -1645,15 +2051,35 @@ export class IndicatorPlotterStochRSI extends NamedObject {
             if (MACD >= 0) {
                 let iH = range.toHeight(MACD);
                 if ((i === 0 || MACD >= prevMACD) && iH > 1 && iW > 1)
-                    strokePosRects.push({ x: left + 0.5, y: middle - iH + 0.5, w: iW - 1, h: iH - 1 });
+                    strokePosRects.push({
+                        x: left + 0.5,
+                        y: middle - iH + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 else
-                    fillPosRects.push({ x: left, y: middle - iH, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillPosRects.push({
+                        x: left,
+                        y: middle - iH,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
             } else {
                 let iH = range.toHeight(-MACD);
                 if ((i === 0 || MACD >= prevMACD) && iH > 1 && iW > 1)
-                    strokeNegRects.push({ x: left + 0.5, y: middle + 0.5, w: iW - 1, h: iH - 1 });
+                    strokeNegRects.push({
+                        x: left + 0.5,
+                        y: middle + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 else
-                    fillNegRects.push({ x: left, y: middle, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillNegRects.push({
+                        x: left,
+                        y: middle,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
             }
             prevMACD = MACD;
             left += cW;
@@ -1711,7 +2137,7 @@ export class IndicatorPlotterRSI extends NamedObject {
         super(name);
     }
 
-  Draw(context) {
+    Draw(context) {
         let mgr = ChartManager.instance;
         let area = mgr.getArea(this.getAreaName());
         let timeline = mgr.getTimeline(this.getDataSourceName());
@@ -1763,12 +2189,18 @@ export class IndicatorPlotterRSI extends NamedObject {
                 if (start > first) {
                     v = out.execute(start - 1);
                     if (isNaN(v) === false)
-                        points.push({ "x": x - cW, "y": range.toY(v) });
+                        points.push({
+                            "x": x - cW,
+                            "y": range.toY(v)
+                        });
                 }
-                for (let i = start; i < last; i++ , x += cW) {
+                for (let i = start; i < last; i++, x += cW) {
                     v = out.execute(i);
                     if (isNaN(v) === false)
-                        points.push({ "x": x, "y": range.toY(v) });
+                        points.push({
+                            "x": x,
+                            "y": range.toY(v)
+                        });
                 }
                 if (points.length > 0) {
                     let color = out.getColor();
@@ -1782,7 +2214,7 @@ export class IndicatorPlotterRSI extends NamedObject {
         context.restore();
     }
     //成交量
-  drawVolumeStick(context, theme, ds, first, last, startX, cW, iW, range) {
+    drawVolumeStick(context, theme, ds, first, last, startX, cW, iW, range) {
         let dark = Util.isInstance(theme, themes.DarkTheme);
         let left = startX;
         let bottom = range.toY(0);
@@ -1795,22 +2227,52 @@ export class IndicatorPlotterRSI extends NamedObject {
             let iH = range.toHeight(data.volume);
             if (data.close > data.open) {
                 if (iH > 1 && iW > 1 && dark) {
-                    strokePosRects.push({ x: left + 0.5, y: top + 0.5, w: iW - 1, h: iH - 1 });
+                    strokePosRects.push({
+                        x: left + 0.5,
+                        y: top + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 } else {
-                    fillPosRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillPosRects.push({
+                        x: left,
+                        y: top,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
                 }
             } else if (data.close === data.open) {
                 if (i > 0 && data.close >= ds.getDataAt(i - 1).close) {
                     if (iH > 1 && iW > 1 && dark) {
-                        strokePosRects.push({ x: left + 0.5, y: top + 0.5, w: iW - 1, h: iH - 1 });
+                        strokePosRects.push({
+                            x: left + 0.5,
+                            y: top + 0.5,
+                            w: iW - 1,
+                            h: iH - 1
+                        });
                     } else {
-                        fillPosRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                        fillPosRects.push({
+                            x: left,
+                            y: top,
+                            w: Math.max(iW, 1),
+                            h: Math.max(iH, 1)
+                        });
                     }
                 } else {
-                    fillNegRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillNegRects.push({
+                        x: left,
+                        y: top,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
                 }
             } else {
-                fillNegRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                fillNegRects.push({
+                    x: left,
+                    y: top,
+                    w: Math.max(iW, 1),
+                    h: Math.max(iH, 1)
+                });
             }
             left += cW;
         }
@@ -1831,7 +2293,7 @@ export class IndicatorPlotterRSI extends NamedObject {
         }
     }
 
-  drawMACDStick(context, theme, output, first, last, startX, cW, iW, range) {
+    drawMACDStick(context, theme, output, first, last, startX, cW, iW, range) {
         let left = startX;
         let middle = range.toY(0);
         let strokePosRects = [];
@@ -1844,15 +2306,35 @@ export class IndicatorPlotterRSI extends NamedObject {
             if (MACD >= 0) {
                 let iH = range.toHeight(MACD);
                 if ((i === 0 || MACD >= prevMACD) && iH > 1 && iW > 1)
-                    strokePosRects.push({ x: left + 0.5, y: middle - iH + 0.5, w: iW - 1, h: iH - 1 });
+                    strokePosRects.push({
+                        x: left + 0.5,
+                        y: middle - iH + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 else
-                    fillPosRects.push({ x: left, y: middle - iH, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillPosRects.push({
+                        x: left,
+                        y: middle - iH,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
             } else {
                 let iH = range.toHeight(-MACD);
                 if ((i === 0 || MACD >= prevMACD) && iH > 1 && iW > 1)
-                    strokeNegRects.push({ x: left + 0.5, y: middle + 0.5, w: iW - 1, h: iH - 1 });
+                    strokeNegRects.push({
+                        x: left + 0.5,
+                        y: middle + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 else
-                    fillNegRects.push({ x: left, y: middle, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillNegRects.push({
+                        x: left,
+                        y: middle,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
             }
             prevMACD = MACD;
             left += cW;
@@ -1910,7 +2392,7 @@ export class IndicatorPlotterDMI extends NamedObject {
         super(name);
     }
 
-  Draw(context) {
+    Draw(context) {
         let mgr = ChartManager.instance;
         let area = mgr.getArea(this.getAreaName());
         let timeline = mgr.getTimeline(this.getDataSourceName());
@@ -1962,12 +2444,18 @@ export class IndicatorPlotterDMI extends NamedObject {
                 if (start > first) {
                     v = out.execute(start - 1);
                     if (isNaN(v) === false)
-                        points.push({ "x": x - cW, "y": range.toY(v) });
+                        points.push({
+                            "x": x - cW,
+                            "y": range.toY(v)
+                        });
                 }
-                for (let i = start; i < last; i++ , x += cW) {
+                for (let i = start; i < last; i++, x += cW) {
                     v = out.execute(i);
                     if (isNaN(v) === false)
-                        points.push({ "x": x, "y": range.toY(v) });
+                        points.push({
+                            "x": x,
+                            "y": range.toY(v)
+                        });
                 }
                 if (points.length > 0) {
                     let color = out.getColor();
@@ -1981,7 +2469,7 @@ export class IndicatorPlotterDMI extends NamedObject {
         context.restore();
     }
     //成交量
-  drawVolumeStick(context, theme, ds, first, last, startX, cW, iW, range) {
+    drawVolumeStick(context, theme, ds, first, last, startX, cW, iW, range) {
         let dark = Util.isInstance(theme, themes.DarkTheme);
         let left = startX;
         let bottom = range.toY(0);
@@ -1994,22 +2482,52 @@ export class IndicatorPlotterDMI extends NamedObject {
             let iH = range.toHeight(data.volume);
             if (data.close > data.open) {
                 if (iH > 1 && iW > 1 && dark) {
-                    strokePosRects.push({ x: left + 0.5, y: top + 0.5, w: iW - 1, h: iH - 1 });
+                    strokePosRects.push({
+                        x: left + 0.5,
+                        y: top + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 } else {
-                    fillPosRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillPosRects.push({
+                        x: left,
+                        y: top,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
                 }
             } else if (data.close === data.open) {
                 if (i > 0 && data.close >= ds.getDataAt(i - 1).close) {
                     if (iH > 1 && iW > 1 && dark) {
-                        strokePosRects.push({ x: left + 0.5, y: top + 0.5, w: iW - 1, h: iH - 1 });
+                        strokePosRects.push({
+                            x: left + 0.5,
+                            y: top + 0.5,
+                            w: iW - 1,
+                            h: iH - 1
+                        });
                     } else {
-                        fillPosRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                        fillPosRects.push({
+                            x: left,
+                            y: top,
+                            w: Math.max(iW, 1),
+                            h: Math.max(iH, 1)
+                        });
                     }
                 } else {
-                    fillNegRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillNegRects.push({
+                        x: left,
+                        y: top,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
                 }
             } else {
-                fillNegRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                fillNegRects.push({
+                    x: left,
+                    y: top,
+                    w: Math.max(iW, 1),
+                    h: Math.max(iH, 1)
+                });
             }
             left += cW;
         }
@@ -2030,7 +2548,7 @@ export class IndicatorPlotterDMI extends NamedObject {
         }
     }
 
-  drawMACDStick(context, theme, output, first, last, startX, cW, iW, range) {
+    drawMACDStick(context, theme, output, first, last, startX, cW, iW, range) {
         let left = startX;
         let middle = range.toY(0);
         let strokePosRects = [];
@@ -2043,15 +2561,35 @@ export class IndicatorPlotterDMI extends NamedObject {
             if (MACD >= 0) {
                 let iH = range.toHeight(MACD);
                 if ((i === 0 || MACD >= prevMACD) && iH > 1 && iW > 1)
-                    strokePosRects.push({ x: left + 0.5, y: middle - iH + 0.5, w: iW - 1, h: iH - 1 });
+                    strokePosRects.push({
+                        x: left + 0.5,
+                        y: middle - iH + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 else
-                    fillPosRects.push({ x: left, y: middle - iH, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillPosRects.push({
+                        x: left,
+                        y: middle - iH,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
             } else {
                 let iH = range.toHeight(-MACD);
                 if ((i === 0 || MACD >= prevMACD) && iH > 1 && iW > 1)
-                    strokeNegRects.push({ x: left + 0.5, y: middle + 0.5, w: iW - 1, h: iH - 1 });
+                    strokeNegRects.push({
+                        x: left + 0.5,
+                        y: middle + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 else
-                    fillNegRects.push({ x: left, y: middle, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillNegRects.push({
+                        x: left,
+                        y: middle,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
             }
             prevMACD = MACD;
             left += cW;
@@ -2109,7 +2647,7 @@ export class IndicatorPlotterOBV extends NamedObject {
         super(name);
     }
 
-  Draw(context) {
+    Draw(context) {
         let mgr = ChartManager.instance;
         let area = mgr.getArea(this.getAreaName());
         let timeline = mgr.getTimeline(this.getDataSourceName());
@@ -2161,12 +2699,18 @@ export class IndicatorPlotterOBV extends NamedObject {
                 if (start > first) {
                     v = out.execute(start - 1);
                     if (isNaN(v) === false)
-                        points.push({ "x": x - cW, "y": range.toY(v) });
+                        points.push({
+                            "x": x - cW,
+                            "y": range.toY(v)
+                        });
                 }
-                for (let i = start; i < last; i++ , x += cW) {
+                for (let i = start; i < last; i++, x += cW) {
                     v = out.execute(i);
                     if (isNaN(v) === false)
-                        points.push({ "x": x, "y": range.toY(v) });
+                        points.push({
+                            "x": x,
+                            "y": range.toY(v)
+                        });
                 }
                 if (points.length > 0) {
                     let color = out.getColor();
@@ -2180,7 +2724,7 @@ export class IndicatorPlotterOBV extends NamedObject {
         context.restore();
     }
     //成交量
-  drawVolumeStick(context, theme, ds, first, last, startX, cW, iW, range) {
+    drawVolumeStick(context, theme, ds, first, last, startX, cW, iW, range) {
         let dark = Util.isInstance(theme, themes.DarkTheme);
         let left = startX;
         let bottom = range.toY(0);
@@ -2193,22 +2737,52 @@ export class IndicatorPlotterOBV extends NamedObject {
             let iH = range.toHeight(data.volume);
             if (data.close > data.open) {
                 if (iH > 1 && iW > 1 && dark) {
-                    strokePosRects.push({ x: left + 0.5, y: top + 0.5, w: iW - 1, h: iH - 1 });
+                    strokePosRects.push({
+                        x: left + 0.5,
+                        y: top + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 } else {
-                    fillPosRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillPosRects.push({
+                        x: left,
+                        y: top,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
                 }
             } else if (data.close === data.open) {
                 if (i > 0 && data.close >= ds.getDataAt(i - 1).close) {
                     if (iH > 1 && iW > 1 && dark) {
-                        strokePosRects.push({ x: left + 0.5, y: top + 0.5, w: iW - 1, h: iH - 1 });
+                        strokePosRects.push({
+                            x: left + 0.5,
+                            y: top + 0.5,
+                            w: iW - 1,
+                            h: iH - 1
+                        });
                     } else {
-                        fillPosRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                        fillPosRects.push({
+                            x: left,
+                            y: top,
+                            w: Math.max(iW, 1),
+                            h: Math.max(iH, 1)
+                        });
                     }
                 } else {
-                    fillNegRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillNegRects.push({
+                        x: left,
+                        y: top,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
                 }
             } else {
-                fillNegRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                fillNegRects.push({
+                    x: left,
+                    y: top,
+                    w: Math.max(iW, 1),
+                    h: Math.max(iH, 1)
+                });
             }
             left += cW;
         }
@@ -2229,7 +2803,7 @@ export class IndicatorPlotterOBV extends NamedObject {
         }
     }
 
-  drawMACDStick(context, theme, output, first, last, startX, cW, iW, range) {
+    drawMACDStick(context, theme, output, first, last, startX, cW, iW, range) {
         let left = startX;
         let middle = range.toY(0);
         let strokePosRects = [];
@@ -2242,15 +2816,35 @@ export class IndicatorPlotterOBV extends NamedObject {
             if (MACD >= 0) {
                 let iH = range.toHeight(MACD);
                 if ((i === 0 || MACD >= prevMACD) && iH > 1 && iW > 1)
-                    strokePosRects.push({ x: left + 0.5, y: middle - iH + 0.5, w: iW - 1, h: iH - 1 });
+                    strokePosRects.push({
+                        x: left + 0.5,
+                        y: middle - iH + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 else
-                    fillPosRects.push({ x: left, y: middle - iH, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillPosRects.push({
+                        x: left,
+                        y: middle - iH,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
             } else {
                 let iH = range.toHeight(-MACD);
                 if ((i === 0 || MACD >= prevMACD) && iH > 1 && iW > 1)
-                    strokeNegRects.push({ x: left + 0.5, y: middle + 0.5, w: iW - 1, h: iH - 1 });
+                    strokeNegRects.push({
+                        x: left + 0.5,
+                        y: middle + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 else
-                    fillNegRects.push({ x: left, y: middle, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillNegRects.push({
+                        x: left,
+                        y: middle,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
             }
             prevMACD = MACD;
             left += cW;
@@ -2308,7 +2902,7 @@ export class IndicatorPlotterBOLL extends NamedObject {
         super(name);
     }
 
-  Draw(context) {
+    Draw(context) {
         let mgr = ChartManager.instance;
         let area = mgr.getArea(this.getAreaName());
         let timeline = mgr.getTimeline(this.getDataSourceName());
@@ -2360,12 +2954,18 @@ export class IndicatorPlotterBOLL extends NamedObject {
                 if (start > first) {
                     v = out.execute(start - 1);
                     if (isNaN(v) === false)
-                        points.push({ "x": x - cW, "y": range.toY(v) });
+                        points.push({
+                            "x": x - cW,
+                            "y": range.toY(v)
+                        });
                 }
-                for (let i = start; i < last; i++ , x += cW) {
+                for (let i = start; i < last; i++, x += cW) {
                     v = out.execute(i);
                     if (isNaN(v) === false)
-                        points.push({ "x": x, "y": range.toY(v) });
+                        points.push({
+                            "x": x,
+                            "y": range.toY(v)
+                        });
                 }
                 if (points.length > 0) {
                     let color = out.getColor();
@@ -2379,7 +2979,7 @@ export class IndicatorPlotterBOLL extends NamedObject {
         context.restore();
     }
     //成交量
-  drawVolumeStick(context, theme, ds, first, last, startX, cW, iW, range) {
+    drawVolumeStick(context, theme, ds, first, last, startX, cW, iW, range) {
         let dark = Util.isInstance(theme, themes.DarkTheme);
         let left = startX;
         let bottom = range.toY(0);
@@ -2392,22 +2992,52 @@ export class IndicatorPlotterBOLL extends NamedObject {
             let iH = range.toHeight(data.volume);
             if (data.close > data.open) {
                 if (iH > 1 && iW > 1 && dark) {
-                    strokePosRects.push({ x: left + 0.5, y: top + 0.5, w: iW - 1, h: iH - 1 });
+                    strokePosRects.push({
+                        x: left + 0.5,
+                        y: top + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 } else {
-                    fillPosRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillPosRects.push({
+                        x: left,
+                        y: top,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
                 }
             } else if (data.close === data.open) {
                 if (i > 0 && data.close >= ds.getDataAt(i - 1).close) {
                     if (iH > 1 && iW > 1 && dark) {
-                        strokePosRects.push({ x: left + 0.5, y: top + 0.5, w: iW - 1, h: iH - 1 });
+                        strokePosRects.push({
+                            x: left + 0.5,
+                            y: top + 0.5,
+                            w: iW - 1,
+                            h: iH - 1
+                        });
                     } else {
-                        fillPosRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                        fillPosRects.push({
+                            x: left,
+                            y: top,
+                            w: Math.max(iW, 1),
+                            h: Math.max(iH, 1)
+                        });
                     }
                 } else {
-                    fillNegRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillNegRects.push({
+                        x: left,
+                        y: top,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
                 }
             } else {
-                fillNegRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                fillNegRects.push({
+                    x: left,
+                    y: top,
+                    w: Math.max(iW, 1),
+                    h: Math.max(iH, 1)
+                });
             }
             left += cW;
         }
@@ -2428,7 +3058,7 @@ export class IndicatorPlotterBOLL extends NamedObject {
         }
     }
 
-  drawMACDStick(context, theme, output, first, last, startX, cW, iW, range) {
+    drawMACDStick(context, theme, output, first, last, startX, cW, iW, range) {
         let left = startX;
         let middle = range.toY(0);
         let strokePosRects = [];
@@ -2441,15 +3071,35 @@ export class IndicatorPlotterBOLL extends NamedObject {
             if (MACD >= 0) {
                 let iH = range.toHeight(MACD);
                 if ((i === 0 || MACD >= prevMACD) && iH > 1 && iW > 1)
-                    strokePosRects.push({ x: left + 0.5, y: middle - iH + 0.5, w: iW - 1, h: iH - 1 });
+                    strokePosRects.push({
+                        x: left + 0.5,
+                        y: middle - iH + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 else
-                    fillPosRects.push({ x: left, y: middle - iH, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillPosRects.push({
+                        x: left,
+                        y: middle - iH,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
             } else {
                 let iH = range.toHeight(-MACD);
                 if ((i === 0 || MACD >= prevMACD) && iH > 1 && iW > 1)
-                    strokeNegRects.push({ x: left + 0.5, y: middle + 0.5, w: iW - 1, h: iH - 1 });
+                    strokeNegRects.push({
+                        x: left + 0.5,
+                        y: middle + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 else
-                    fillNegRects.push({ x: left, y: middle, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillNegRects.push({
+                        x: left,
+                        y: middle,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
             }
             prevMACD = MACD;
             left += cW;
@@ -2507,7 +3157,7 @@ export class IndicatorPlotterSAR extends NamedObject {
         super(name);
     }
 
-  Draw(context) {
+    Draw(context) {
         let mgr = ChartManager.instance;
         let area = mgr.getArea(this.getAreaName());
         let timeline = mgr.getTimeline(this.getDataSourceName());
@@ -2559,12 +3209,18 @@ export class IndicatorPlotterSAR extends NamedObject {
                 if (start > first) {
                     v = out.execute(start - 1);
                     if (isNaN(v) === false)
-                        points.push({ "x": x - cW, "y": range.toY(v) });
+                        points.push({
+                            "x": x - cW,
+                            "y": range.toY(v)
+                        });
                 }
-                for (let i = start; i < last; i++ , x += cW) {
+                for (let i = start; i < last; i++, x += cW) {
                     v = out.execute(i);
                     if (isNaN(v) === false)
-                        points.push({ "x": x, "y": range.toY(v) });
+                        points.push({
+                            "x": x,
+                            "y": range.toY(v)
+                        });
                 }
                 if (points.length > 0) {
                     let color = out.getColor();
@@ -2578,7 +3234,7 @@ export class IndicatorPlotterSAR extends NamedObject {
         context.restore();
     }
     //成交量
-  drawVolumeStick(context, theme, ds, first, last, startX, cW, iW, range) {
+    drawVolumeStick(context, theme, ds, first, last, startX, cW, iW, range) {
         let dark = Util.isInstance(theme, themes.DarkTheme);
         let left = startX;
         let bottom = range.toY(0);
@@ -2591,22 +3247,52 @@ export class IndicatorPlotterSAR extends NamedObject {
             let iH = range.toHeight(data.volume);
             if (data.close > data.open) {
                 if (iH > 1 && iW > 1 && dark) {
-                    strokePosRects.push({ x: left + 0.5, y: top + 0.5, w: iW - 1, h: iH - 1 });
+                    strokePosRects.push({
+                        x: left + 0.5,
+                        y: top + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 } else {
-                    fillPosRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillPosRects.push({
+                        x: left,
+                        y: top,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
                 }
             } else if (data.close === data.open) {
                 if (i > 0 && data.close >= ds.getDataAt(i - 1).close) {
                     if (iH > 1 && iW > 1 && dark) {
-                        strokePosRects.push({ x: left + 0.5, y: top + 0.5, w: iW - 1, h: iH - 1 });
+                        strokePosRects.push({
+                            x: left + 0.5,
+                            y: top + 0.5,
+                            w: iW - 1,
+                            h: iH - 1
+                        });
                     } else {
-                        fillPosRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                        fillPosRects.push({
+                            x: left,
+                            y: top,
+                            w: Math.max(iW, 1),
+                            h: Math.max(iH, 1)
+                        });
                     }
                 } else {
-                    fillNegRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillNegRects.push({
+                        x: left,
+                        y: top,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
                 }
             } else {
-                fillNegRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                fillNegRects.push({
+                    x: left,
+                    y: top,
+                    w: Math.max(iW, 1),
+                    h: Math.max(iH, 1)
+                });
             }
             left += cW;
         }
@@ -2627,7 +3313,7 @@ export class IndicatorPlotterSAR extends NamedObject {
         }
     }
 
-  drawMACDStick(context, theme, output, first, last, startX, cW, iW, range) {
+    drawMACDStick(context, theme, output, first, last, startX, cW, iW, range) {
         let left = startX;
         let middle = range.toY(0);
         let strokePosRects = [];
@@ -2640,15 +3326,35 @@ export class IndicatorPlotterSAR extends NamedObject {
             if (MACD >= 0) {
                 let iH = range.toHeight(MACD);
                 if ((i === 0 || MACD >= prevMACD) && iH > 1 && iW > 1)
-                    strokePosRects.push({ x: left + 0.5, y: middle - iH + 0.5, w: iW - 1, h: iH - 1 });
+                    strokePosRects.push({
+                        x: left + 0.5,
+                        y: middle - iH + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 else
-                    fillPosRects.push({ x: left, y: middle - iH, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillPosRects.push({
+                        x: left,
+                        y: middle - iH,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
             } else {
                 let iH = range.toHeight(-MACD);
                 if ((i === 0 || MACD >= prevMACD) && iH > 1 && iW > 1)
-                    strokeNegRects.push({ x: left + 0.5, y: middle + 0.5, w: iW - 1, h: iH - 1 });
+                    strokeNegRects.push({
+                        x: left + 0.5,
+                        y: middle + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 else
-                    fillNegRects.push({ x: left, y: middle, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillNegRects.push({
+                        x: left,
+                        y: middle,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
             }
             prevMACD = MACD;
             left += cW;
@@ -2706,7 +3412,7 @@ export class IndicatorPlotterDMA extends NamedObject {
         super(name);
     }
 
-  Draw(context) {
+    Draw(context) {
         let mgr = ChartManager.instance;
         let area = mgr.getArea(this.getAreaName());
         let timeline = mgr.getTimeline(this.getDataSourceName());
@@ -2758,12 +3464,18 @@ export class IndicatorPlotterDMA extends NamedObject {
                 if (start > first) {
                     v = out.execute(start - 1);
                     if (isNaN(v) === false)
-                        points.push({ "x": x - cW, "y": range.toY(v) });
+                        points.push({
+                            "x": x - cW,
+                            "y": range.toY(v)
+                        });
                 }
-                for (let i = start; i < last; i++ , x += cW) {
+                for (let i = start; i < last; i++, x += cW) {
                     v = out.execute(i);
                     if (isNaN(v) === false)
-                        points.push({ "x": x, "y": range.toY(v) });
+                        points.push({
+                            "x": x,
+                            "y": range.toY(v)
+                        });
                 }
                 if (points.length > 0) {
                     let color = out.getColor();
@@ -2777,7 +3489,7 @@ export class IndicatorPlotterDMA extends NamedObject {
         context.restore();
     }
     //成交量
-  drawVolumeStick(context, theme, ds, first, last, startX, cW, iW, range) {
+    drawVolumeStick(context, theme, ds, first, last, startX, cW, iW, range) {
         let dark = Util.isInstance(theme, themes.DarkTheme);
         let left = startX;
         let bottom = range.toY(0);
@@ -2790,22 +3502,52 @@ export class IndicatorPlotterDMA extends NamedObject {
             let iH = range.toHeight(data.volume);
             if (data.close > data.open) {
                 if (iH > 1 && iW > 1 && dark) {
-                    strokePosRects.push({ x: left + 0.5, y: top + 0.5, w: iW - 1, h: iH - 1 });
+                    strokePosRects.push({
+                        x: left + 0.5,
+                        y: top + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 } else {
-                    fillPosRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillPosRects.push({
+                        x: left,
+                        y: top,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
                 }
             } else if (data.close === data.open) {
                 if (i > 0 && data.close >= ds.getDataAt(i - 1).close) {
                     if (iH > 1 && iW > 1 && dark) {
-                        strokePosRects.push({ x: left + 0.5, y: top + 0.5, w: iW - 1, h: iH - 1 });
+                        strokePosRects.push({
+                            x: left + 0.5,
+                            y: top + 0.5,
+                            w: iW - 1,
+                            h: iH - 1
+                        });
                     } else {
-                        fillPosRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                        fillPosRects.push({
+                            x: left,
+                            y: top,
+                            w: Math.max(iW, 1),
+                            h: Math.max(iH, 1)
+                        });
                     }
                 } else {
-                    fillNegRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillNegRects.push({
+                        x: left,
+                        y: top,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
                 }
             } else {
-                fillNegRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                fillNegRects.push({
+                    x: left,
+                    y: top,
+                    w: Math.max(iW, 1),
+                    h: Math.max(iH, 1)
+                });
             }
             left += cW;
         }
@@ -2826,7 +3568,7 @@ export class IndicatorPlotterDMA extends NamedObject {
         }
     }
 
-  drawMACDStick(context, theme, output, first, last, startX, cW, iW, range) {
+    drawMACDStick(context, theme, output, first, last, startX, cW, iW, range) {
         let left = startX;
         let middle = range.toY(0);
         let strokePosRects = [];
@@ -2839,15 +3581,35 @@ export class IndicatorPlotterDMA extends NamedObject {
             if (MACD >= 0) {
                 let iH = range.toHeight(MACD);
                 if ((i === 0 || MACD >= prevMACD) && iH > 1 && iW > 1)
-                    strokePosRects.push({ x: left + 0.5, y: middle - iH + 0.5, w: iW - 1, h: iH - 1 });
+                    strokePosRects.push({
+                        x: left + 0.5,
+                        y: middle - iH + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 else
-                    fillPosRects.push({ x: left, y: middle - iH, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillPosRects.push({
+                        x: left,
+                        y: middle - iH,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
             } else {
                 let iH = range.toHeight(-MACD);
                 if ((i === 0 || MACD >= prevMACD) && iH > 1 && iW > 1)
-                    strokeNegRects.push({ x: left + 0.5, y: middle + 0.5, w: iW - 1, h: iH - 1 });
+                    strokeNegRects.push({
+                        x: left + 0.5,
+                        y: middle + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 else
-                    fillNegRects.push({ x: left, y: middle, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillNegRects.push({
+                        x: left,
+                        y: middle,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
             }
             prevMACD = MACD;
             left += cW;
@@ -2905,7 +3667,7 @@ export class IndicatorPlotterTRIX extends NamedObject {
         super(name);
     }
 
-  Draw(context) {
+    Draw(context) {
         let mgr = ChartManager.instance;
         let area = mgr.getArea(this.getAreaName());
         let timeline = mgr.getTimeline(this.getDataSourceName());
@@ -2957,12 +3719,18 @@ export class IndicatorPlotterTRIX extends NamedObject {
                 if (start > first) {
                     v = out.execute(start - 1);
                     if (isNaN(v) === false)
-                        points.push({ "x": x - cW, "y": range.toY(v) });
+                        points.push({
+                            "x": x - cW,
+                            "y": range.toY(v)
+                        });
                 }
-                for (let i = start; i < last; i++ , x += cW) {
+                for (let i = start; i < last; i++, x += cW) {
                     v = out.execute(i);
                     if (isNaN(v) === false)
-                        points.push({ "x": x, "y": range.toY(v) });
+                        points.push({
+                            "x": x,
+                            "y": range.toY(v)
+                        });
                 }
                 if (points.length > 0) {
                     let color = out.getColor();
@@ -2976,7 +3744,7 @@ export class IndicatorPlotterTRIX extends NamedObject {
         context.restore();
     }
     //成交量
-  drawVolumeStick(context, theme, ds, first, last, startX, cW, iW, range) {
+    drawVolumeStick(context, theme, ds, first, last, startX, cW, iW, range) {
         let dark = Util.isInstance(theme, themes.DarkTheme);
         let left = startX;
         let bottom = range.toY(0);
@@ -2989,22 +3757,52 @@ export class IndicatorPlotterTRIX extends NamedObject {
             let iH = range.toHeight(data.volume);
             if (data.close > data.open) {
                 if (iH > 1 && iW > 1 && dark) {
-                    strokePosRects.push({ x: left + 0.5, y: top + 0.5, w: iW - 1, h: iH - 1 });
+                    strokePosRects.push({
+                        x: left + 0.5,
+                        y: top + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 } else {
-                    fillPosRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillPosRects.push({
+                        x: left,
+                        y: top,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
                 }
             } else if (data.close === data.open) {
                 if (i > 0 && data.close >= ds.getDataAt(i - 1).close) {
                     if (iH > 1 && iW > 1 && dark) {
-                        strokePosRects.push({ x: left + 0.5, y: top + 0.5, w: iW - 1, h: iH - 1 });
+                        strokePosRects.push({
+                            x: left + 0.5,
+                            y: top + 0.5,
+                            w: iW - 1,
+                            h: iH - 1
+                        });
                     } else {
-                        fillPosRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                        fillPosRects.push({
+                            x: left,
+                            y: top,
+                            w: Math.max(iW, 1),
+                            h: Math.max(iH, 1)
+                        });
                     }
                 } else {
-                    fillNegRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillNegRects.push({
+                        x: left,
+                        y: top,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
                 }
             } else {
-                fillNegRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                fillNegRects.push({
+                    x: left,
+                    y: top,
+                    w: Math.max(iW, 1),
+                    h: Math.max(iH, 1)
+                });
             }
             left += cW;
         }
@@ -3025,7 +3823,7 @@ export class IndicatorPlotterTRIX extends NamedObject {
         }
     }
 
-  drawMACDStick(context, theme, output, first, last, startX, cW, iW, range) {
+    drawMACDStick(context, theme, output, first, last, startX, cW, iW, range) {
         let left = startX;
         let middle = range.toY(0);
         let strokePosRects = [];
@@ -3038,15 +3836,35 @@ export class IndicatorPlotterTRIX extends NamedObject {
             if (MACD >= 0) {
                 let iH = range.toHeight(MACD);
                 if ((i === 0 || MACD >= prevMACD) && iH > 1 && iW > 1)
-                    strokePosRects.push({ x: left + 0.5, y: middle - iH + 0.5, w: iW - 1, h: iH - 1 });
+                    strokePosRects.push({
+                        x: left + 0.5,
+                        y: middle - iH + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 else
-                    fillPosRects.push({ x: left, y: middle - iH, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillPosRects.push({
+                        x: left,
+                        y: middle - iH,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
             } else {
                 let iH = range.toHeight(-MACD);
                 if ((i === 0 || MACD >= prevMACD) && iH > 1 && iW > 1)
-                    strokeNegRects.push({ x: left + 0.5, y: middle + 0.5, w: iW - 1, h: iH - 1 });
+                    strokeNegRects.push({
+                        x: left + 0.5,
+                        y: middle + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 else
-                    fillNegRects.push({ x: left, y: middle, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillNegRects.push({
+                        x: left,
+                        y: middle,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
             }
             prevMACD = MACD;
             left += cW;
@@ -3104,7 +3922,7 @@ export class IndicatorPlotterBRAR extends NamedObject {
         super(name);
     }
 
-  Draw(context) {
+    Draw(context) {
         let mgr = ChartManager.instance;
         let area = mgr.getArea(this.getAreaName());
         let timeline = mgr.getTimeline(this.getDataSourceName());
@@ -3156,12 +3974,18 @@ export class IndicatorPlotterBRAR extends NamedObject {
                 if (start > first) {
                     v = out.execute(start - 1);
                     if (isNaN(v) === false)
-                        points.push({ "x": x - cW, "y": range.toY(v) });
+                        points.push({
+                            "x": x - cW,
+                            "y": range.toY(v)
+                        });
                 }
-                for (let i = start; i < last; i++ , x += cW) {
+                for (let i = start; i < last; i++, x += cW) {
                     v = out.execute(i);
                     if (isNaN(v) === false)
-                        points.push({ "x": x, "y": range.toY(v) });
+                        points.push({
+                            "x": x,
+                            "y": range.toY(v)
+                        });
                 }
                 if (points.length > 0) {
                     let color = out.getColor();
@@ -3175,7 +3999,7 @@ export class IndicatorPlotterBRAR extends NamedObject {
         context.restore();
     }
     //成交量
-  drawVolumeStick(context, theme, ds, first, last, startX, cW, iW, range) {
+    drawVolumeStick(context, theme, ds, first, last, startX, cW, iW, range) {
         let dark = Util.isInstance(theme, themes.DarkTheme);
         let left = startX;
         let bottom = range.toY(0);
@@ -3188,22 +4012,52 @@ export class IndicatorPlotterBRAR extends NamedObject {
             let iH = range.toHeight(data.volume);
             if (data.close > data.open) {
                 if (iH > 1 && iW > 1 && dark) {
-                    strokePosRects.push({ x: left + 0.5, y: top + 0.5, w: iW - 1, h: iH - 1 });
+                    strokePosRects.push({
+                        x: left + 0.5,
+                        y: top + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 } else {
-                    fillPosRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillPosRects.push({
+                        x: left,
+                        y: top,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
                 }
             } else if (data.close === data.open) {
                 if (i > 0 && data.close >= ds.getDataAt(i - 1).close) {
                     if (iH > 1 && iW > 1 && dark) {
-                        strokePosRects.push({ x: left + 0.5, y: top + 0.5, w: iW - 1, h: iH - 1 });
+                        strokePosRects.push({
+                            x: left + 0.5,
+                            y: top + 0.5,
+                            w: iW - 1,
+                            h: iH - 1
+                        });
                     } else {
-                        fillPosRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                        fillPosRects.push({
+                            x: left,
+                            y: top,
+                            w: Math.max(iW, 1),
+                            h: Math.max(iH, 1)
+                        });
                     }
                 } else {
-                    fillNegRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillNegRects.push({
+                        x: left,
+                        y: top,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
                 }
             } else {
-                fillNegRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                fillNegRects.push({
+                    x: left,
+                    y: top,
+                    w: Math.max(iW, 1),
+                    h: Math.max(iH, 1)
+                });
             }
             left += cW;
         }
@@ -3224,7 +4078,7 @@ export class IndicatorPlotterBRAR extends NamedObject {
         }
     }
 
-  drawMACDStick(context, theme, output, first, last, startX, cW, iW, range) {
+    drawMACDStick(context, theme, output, first, last, startX, cW, iW, range) {
         let left = startX;
         let middle = range.toY(0);
         let strokePosRects = [];
@@ -3237,15 +4091,35 @@ export class IndicatorPlotterBRAR extends NamedObject {
             if (MACD >= 0) {
                 let iH = range.toHeight(MACD);
                 if ((i === 0 || MACD >= prevMACD) && iH > 1 && iW > 1)
-                    strokePosRects.push({ x: left + 0.5, y: middle - iH + 0.5, w: iW - 1, h: iH - 1 });
+                    strokePosRects.push({
+                        x: left + 0.5,
+                        y: middle - iH + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 else
-                    fillPosRects.push({ x: left, y: middle - iH, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillPosRects.push({
+                        x: left,
+                        y: middle - iH,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
             } else {
                 let iH = range.toHeight(-MACD);
                 if ((i === 0 || MACD >= prevMACD) && iH > 1 && iW > 1)
-                    strokeNegRects.push({ x: left + 0.5, y: middle + 0.5, w: iW - 1, h: iH - 1 });
+                    strokeNegRects.push({
+                        x: left + 0.5,
+                        y: middle + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 else
-                    fillNegRects.push({ x: left, y: middle, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillNegRects.push({
+                        x: left,
+                        y: middle,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
             }
             prevMACD = MACD;
             left += cW;
@@ -3303,7 +4177,7 @@ export class IndicatorPlotterVR extends NamedObject {
         super(name);
     }
 
-  Draw(context) {
+    Draw(context) {
         let mgr = ChartManager.instance;
         let area = mgr.getArea(this.getAreaName());
         let timeline = mgr.getTimeline(this.getDataSourceName());
@@ -3355,12 +4229,18 @@ export class IndicatorPlotterVR extends NamedObject {
                 if (start > first) {
                     v = out.execute(start - 1);
                     if (isNaN(v) === false)
-                        points.push({ "x": x - cW, "y": range.toY(v) });
+                        points.push({
+                            "x": x - cW,
+                            "y": range.toY(v)
+                        });
                 }
-                for (let i = start; i < last; i++ , x += cW) {
+                for (let i = start; i < last; i++, x += cW) {
                     v = out.execute(i);
                     if (isNaN(v) === false)
-                        points.push({ "x": x, "y": range.toY(v) });
+                        points.push({
+                            "x": x,
+                            "y": range.toY(v)
+                        });
                 }
                 if (points.length > 0) {
                     let color = out.getColor();
@@ -3374,7 +4254,7 @@ export class IndicatorPlotterVR extends NamedObject {
         context.restore();
     }
     //成交量
-  drawVolumeStick(context, theme, ds, first, last, startX, cW, iW, range) {
+    drawVolumeStick(context, theme, ds, first, last, startX, cW, iW, range) {
         let dark = Util.isInstance(theme, themes.DarkTheme);
         let left = startX;
         let bottom = range.toY(0);
@@ -3387,22 +4267,52 @@ export class IndicatorPlotterVR extends NamedObject {
             let iH = range.toHeight(data.volume);
             if (data.close > data.open) {
                 if (iH > 1 && iW > 1 && dark) {
-                    strokePosRects.push({ x: left + 0.5, y: top + 0.5, w: iW - 1, h: iH - 1 });
+                    strokePosRects.push({
+                        x: left + 0.5,
+                        y: top + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 } else {
-                    fillPosRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillPosRects.push({
+                        x: left,
+                        y: top,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
                 }
             } else if (data.close === data.open) {
                 if (i > 0 && data.close >= ds.getDataAt(i - 1).close) {
                     if (iH > 1 && iW > 1 && dark) {
-                        strokePosRects.push({ x: left + 0.5, y: top + 0.5, w: iW - 1, h: iH - 1 });
+                        strokePosRects.push({
+                            x: left + 0.5,
+                            y: top + 0.5,
+                            w: iW - 1,
+                            h: iH - 1
+                        });
                     } else {
-                        fillPosRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                        fillPosRects.push({
+                            x: left,
+                            y: top,
+                            w: Math.max(iW, 1),
+                            h: Math.max(iH, 1)
+                        });
                     }
                 } else {
-                    fillNegRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillNegRects.push({
+                        x: left,
+                        y: top,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
                 }
             } else {
-                fillNegRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                fillNegRects.push({
+                    x: left,
+                    y: top,
+                    w: Math.max(iW, 1),
+                    h: Math.max(iH, 1)
+                });
             }
             left += cW;
         }
@@ -3423,7 +4333,7 @@ export class IndicatorPlotterVR extends NamedObject {
         }
     }
 
-  drawMACDStick(context, theme, output, first, last, startX, cW, iW, range) {
+    drawMACDStick(context, theme, output, first, last, startX, cW, iW, range) {
         let left = startX;
         let middle = range.toY(0);
         let strokePosRects = [];
@@ -3436,15 +4346,35 @@ export class IndicatorPlotterVR extends NamedObject {
             if (MACD >= 0) {
                 let iH = range.toHeight(MACD);
                 if ((i === 0 || MACD >= prevMACD) && iH > 1 && iW > 1)
-                    strokePosRects.push({ x: left + 0.5, y: middle - iH + 0.5, w: iW - 1, h: iH - 1 });
+                    strokePosRects.push({
+                        x: left + 0.5,
+                        y: middle - iH + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 else
-                    fillPosRects.push({ x: left, y: middle - iH, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillPosRects.push({
+                        x: left,
+                        y: middle - iH,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
             } else {
                 let iH = range.toHeight(-MACD);
                 if ((i === 0 || MACD >= prevMACD) && iH > 1 && iW > 1)
-                    strokeNegRects.push({ x: left + 0.5, y: middle + 0.5, w: iW - 1, h: iH - 1 });
+                    strokeNegRects.push({
+                        x: left + 0.5,
+                        y: middle + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 else
-                    fillNegRects.push({ x: left, y: middle, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillNegRects.push({
+                        x: left,
+                        y: middle,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
             }
             prevMACD = MACD;
             left += cW;
@@ -3502,7 +4432,7 @@ export class IndicatorPlotterEMV extends NamedObject {
         super(name);
     }
 
-  Draw(context) {
+    Draw(context) {
         let mgr = ChartManager.instance;
         let area = mgr.getArea(this.getAreaName());
         let timeline = mgr.getTimeline(this.getDataSourceName());
@@ -3554,12 +4484,18 @@ export class IndicatorPlotterEMV extends NamedObject {
                 if (start > first) {
                     v = out.execute(start - 1);
                     if (isNaN(v) === false)
-                        points.push({ "x": x - cW, "y": range.toY(v) });
+                        points.push({
+                            "x": x - cW,
+                            "y": range.toY(v)
+                        });
                 }
-                for (let i = start; i < last; i++ , x += cW) {
+                for (let i = start; i < last; i++, x += cW) {
                     v = out.execute(i);
                     if (isNaN(v) === false)
-                        points.push({ "x": x, "y": range.toY(v) });
+                        points.push({
+                            "x": x,
+                            "y": range.toY(v)
+                        });
                 }
                 if (points.length > 0) {
                     let color = out.getColor();
@@ -3573,7 +4509,7 @@ export class IndicatorPlotterEMV extends NamedObject {
         context.restore();
     }
     //成交量
-  drawVolumeStick(context, theme, ds, first, last, startX, cW, iW, range) {
+    drawVolumeStick(context, theme, ds, first, last, startX, cW, iW, range) {
         let dark = Util.isInstance(theme, themes.DarkTheme);
         let left = startX;
         let bottom = range.toY(0);
@@ -3586,22 +4522,52 @@ export class IndicatorPlotterEMV extends NamedObject {
             let iH = range.toHeight(data.volume);
             if (data.close > data.open) {
                 if (iH > 1 && iW > 1 && dark) {
-                    strokePosRects.push({ x: left + 0.5, y: top + 0.5, w: iW - 1, h: iH - 1 });
+                    strokePosRects.push({
+                        x: left + 0.5,
+                        y: top + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 } else {
-                    fillPosRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillPosRects.push({
+                        x: left,
+                        y: top,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
                 }
             } else if (data.close === data.open) {
                 if (i > 0 && data.close >= ds.getDataAt(i - 1).close) {
                     if (iH > 1 && iW > 1 && dark) {
-                        strokePosRects.push({ x: left + 0.5, y: top + 0.5, w: iW - 1, h: iH - 1 });
+                        strokePosRects.push({
+                            x: left + 0.5,
+                            y: top + 0.5,
+                            w: iW - 1,
+                            h: iH - 1
+                        });
                     } else {
-                        fillPosRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                        fillPosRects.push({
+                            x: left,
+                            y: top,
+                            w: Math.max(iW, 1),
+                            h: Math.max(iH, 1)
+                        });
                     }
                 } else {
-                    fillNegRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillNegRects.push({
+                        x: left,
+                        y: top,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
                 }
             } else {
-                fillNegRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                fillNegRects.push({
+                    x: left,
+                    y: top,
+                    w: Math.max(iW, 1),
+                    h: Math.max(iH, 1)
+                });
             }
             left += cW;
         }
@@ -3622,7 +4588,7 @@ export class IndicatorPlotterEMV extends NamedObject {
         }
     }
 
-  drawMACDStick(context, theme, output, first, last, startX, cW, iW, range) {
+    drawMACDStick(context, theme, output, first, last, startX, cW, iW, range) {
         let left = startX;
         let middle = range.toY(0);
         let strokePosRects = [];
@@ -3635,15 +4601,35 @@ export class IndicatorPlotterEMV extends NamedObject {
             if (MACD >= 0) {
                 let iH = range.toHeight(MACD);
                 if ((i === 0 || MACD >= prevMACD) && iH > 1 && iW > 1)
-                    strokePosRects.push({ x: left + 0.5, y: middle - iH + 0.5, w: iW - 1, h: iH - 1 });
+                    strokePosRects.push({
+                        x: left + 0.5,
+                        y: middle - iH + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 else
-                    fillPosRects.push({ x: left, y: middle - iH, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillPosRects.push({
+                        x: left,
+                        y: middle - iH,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
             } else {
                 let iH = range.toHeight(-MACD);
                 if ((i === 0 || MACD >= prevMACD) && iH > 1 && iW > 1)
-                    strokeNegRects.push({ x: left + 0.5, y: middle + 0.5, w: iW - 1, h: iH - 1 });
+                    strokeNegRects.push({
+                        x: left + 0.5,
+                        y: middle + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 else
-                    fillNegRects.push({ x: left, y: middle, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillNegRects.push({
+                        x: left,
+                        y: middle,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
             }
             prevMACD = MACD;
             left += cW;
@@ -3701,7 +4687,7 @@ export class IndicatorPlotterWR extends NamedObject {
         super(name);
     }
 
-  Draw(context) {
+    Draw(context) {
         let mgr = ChartManager.instance;
         let area = mgr.getArea(this.getAreaName());
         let timeline = mgr.getTimeline(this.getDataSourceName());
@@ -3753,12 +4739,18 @@ export class IndicatorPlotterWR extends NamedObject {
                 if (start > first) {
                     v = out.execute(start - 1);
                     if (isNaN(v) === false)
-                        points.push({ "x": x - cW, "y": range.toY(v) });
+                        points.push({
+                            "x": x - cW,
+                            "y": range.toY(v)
+                        });
                 }
-                for (let i = start; i < last; i++ , x += cW) {
+                for (let i = start; i < last; i++, x += cW) {
                     v = out.execute(i);
                     if (isNaN(v) === false)
-                        points.push({ "x": x, "y": range.toY(v) });
+                        points.push({
+                            "x": x,
+                            "y": range.toY(v)
+                        });
                 }
                 if (points.length > 0) {
                     let color = out.getColor();
@@ -3772,7 +4764,7 @@ export class IndicatorPlotterWR extends NamedObject {
         context.restore();
     }
     //成交量
-  drawVolumeStick(context, theme, ds, first, last, startX, cW, iW, range) {
+    drawVolumeStick(context, theme, ds, first, last, startX, cW, iW, range) {
         let dark = Util.isInstance(theme, themes.DarkTheme);
         let left = startX;
         let bottom = range.toY(0);
@@ -3785,22 +4777,52 @@ export class IndicatorPlotterWR extends NamedObject {
             let iH = range.toHeight(data.volume);
             if (data.close > data.open) {
                 if (iH > 1 && iW > 1 && dark) {
-                    strokePosRects.push({ x: left + 0.5, y: top + 0.5, w: iW - 1, h: iH - 1 });
+                    strokePosRects.push({
+                        x: left + 0.5,
+                        y: top + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 } else {
-                    fillPosRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillPosRects.push({
+                        x: left,
+                        y: top,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
                 }
             } else if (data.close === data.open) {
                 if (i > 0 && data.close >= ds.getDataAt(i - 1).close) {
                     if (iH > 1 && iW > 1 && dark) {
-                        strokePosRects.push({ x: left + 0.5, y: top + 0.5, w: iW - 1, h: iH - 1 });
+                        strokePosRects.push({
+                            x: left + 0.5,
+                            y: top + 0.5,
+                            w: iW - 1,
+                            h: iH - 1
+                        });
                     } else {
-                        fillPosRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                        fillPosRects.push({
+                            x: left,
+                            y: top,
+                            w: Math.max(iW, 1),
+                            h: Math.max(iH, 1)
+                        });
                     }
                 } else {
-                    fillNegRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillNegRects.push({
+                        x: left,
+                        y: top,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
                 }
             } else {
-                fillNegRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                fillNegRects.push({
+                    x: left,
+                    y: top,
+                    w: Math.max(iW, 1),
+                    h: Math.max(iH, 1)
+                });
             }
             left += cW;
         }
@@ -3821,7 +4843,7 @@ export class IndicatorPlotterWR extends NamedObject {
         }
     }
 
-  drawMACDStick(context, theme, output, first, last, startX, cW, iW, range) {
+    drawMACDStick(context, theme, output, first, last, startX, cW, iW, range) {
         let left = startX;
         let middle = range.toY(0);
         let strokePosRects = [];
@@ -3834,15 +4856,35 @@ export class IndicatorPlotterWR extends NamedObject {
             if (MACD >= 0) {
                 let iH = range.toHeight(MACD);
                 if ((i === 0 || MACD >= prevMACD) && iH > 1 && iW > 1)
-                    strokePosRects.push({ x: left + 0.5, y: middle - iH + 0.5, w: iW - 1, h: iH - 1 });
+                    strokePosRects.push({
+                        x: left + 0.5,
+                        y: middle - iH + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 else
-                    fillPosRects.push({ x: left, y: middle - iH, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillPosRects.push({
+                        x: left,
+                        y: middle - iH,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
             } else {
                 let iH = range.toHeight(-MACD);
                 if ((i === 0 || MACD >= prevMACD) && iH > 1 && iW > 1)
-                    strokeNegRects.push({ x: left + 0.5, y: middle + 0.5, w: iW - 1, h: iH - 1 });
+                    strokeNegRects.push({
+                        x: left + 0.5,
+                        y: middle + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 else
-                    fillNegRects.push({ x: left, y: middle, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillNegRects.push({
+                        x: left,
+                        y: middle,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
             }
             prevMACD = MACD;
             left += cW;
@@ -3900,7 +4942,7 @@ export class IndicatorPlotterROC extends NamedObject {
         super(name);
     }
 
-  Draw(context) {
+    Draw(context) {
         let mgr = ChartManager.instance;
         let area = mgr.getArea(this.getAreaName());
         let timeline = mgr.getTimeline(this.getDataSourceName());
@@ -3952,12 +4994,18 @@ export class IndicatorPlotterROC extends NamedObject {
                 if (start > first) {
                     v = out.execute(start - 1);
                     if (isNaN(v) === false)
-                        points.push({ "x": x - cW, "y": range.toY(v) });
+                        points.push({
+                            "x": x - cW,
+                            "y": range.toY(v)
+                        });
                 }
-                for (let i = start; i < last; i++ , x += cW) {
+                for (let i = start; i < last; i++, x += cW) {
                     v = out.execute(i);
                     if (isNaN(v) === false)
-                        points.push({ "x": x, "y": range.toY(v) });
+                        points.push({
+                            "x": x,
+                            "y": range.toY(v)
+                        });
                 }
                 if (points.length > 0) {
                     let color = out.getColor();
@@ -3971,7 +5019,7 @@ export class IndicatorPlotterROC extends NamedObject {
         context.restore();
     }
     //成交量
-  drawVolumeStick(context, theme, ds, first, last, startX, cW, iW, range) {
+    drawVolumeStick(context, theme, ds, first, last, startX, cW, iW, range) {
         let dark = Util.isInstance(theme, themes.DarkTheme);
         let left = startX;
         let bottom = range.toY(0);
@@ -3984,22 +5032,52 @@ export class IndicatorPlotterROC extends NamedObject {
             let iH = range.toHeight(data.volume);
             if (data.close > data.open) {
                 if (iH > 1 && iW > 1 && dark) {
-                    strokePosRects.push({ x: left + 0.5, y: top + 0.5, w: iW - 1, h: iH - 1 });
+                    strokePosRects.push({
+                        x: left + 0.5,
+                        y: top + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 } else {
-                    fillPosRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillPosRects.push({
+                        x: left,
+                        y: top,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
                 }
             } else if (data.close === data.open) {
                 if (i > 0 && data.close >= ds.getDataAt(i - 1).close) {
                     if (iH > 1 && iW > 1 && dark) {
-                        strokePosRects.push({ x: left + 0.5, y: top + 0.5, w: iW - 1, h: iH - 1 });
+                        strokePosRects.push({
+                            x: left + 0.5,
+                            y: top + 0.5,
+                            w: iW - 1,
+                            h: iH - 1
+                        });
                     } else {
-                        fillPosRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                        fillPosRects.push({
+                            x: left,
+                            y: top,
+                            w: Math.max(iW, 1),
+                            h: Math.max(iH, 1)
+                        });
                     }
                 } else {
-                    fillNegRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillNegRects.push({
+                        x: left,
+                        y: top,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
                 }
             } else {
-                fillNegRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                fillNegRects.push({
+                    x: left,
+                    y: top,
+                    w: Math.max(iW, 1),
+                    h: Math.max(iH, 1)
+                });
             }
             left += cW;
         }
@@ -4020,7 +5098,7 @@ export class IndicatorPlotterROC extends NamedObject {
         }
     }
 
-  drawMACDStick(context, theme, output, first, last, startX, cW, iW, range) {
+    drawMACDStick(context, theme, output, first, last, startX, cW, iW, range) {
         let left = startX;
         let middle = range.toY(0);
         let strokePosRects = [];
@@ -4033,15 +5111,35 @@ export class IndicatorPlotterROC extends NamedObject {
             if (MACD >= 0) {
                 let iH = range.toHeight(MACD);
                 if ((i === 0 || MACD >= prevMACD) && iH > 1 && iW > 1)
-                    strokePosRects.push({ x: left + 0.5, y: middle - iH + 0.5, w: iW - 1, h: iH - 1 });
+                    strokePosRects.push({
+                        x: left + 0.5,
+                        y: middle - iH + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 else
-                    fillPosRects.push({ x: left, y: middle - iH, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillPosRects.push({
+                        x: left,
+                        y: middle - iH,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
             } else {
                 let iH = range.toHeight(-MACD);
                 if ((i === 0 || MACD >= prevMACD) && iH > 1 && iW > 1)
-                    strokeNegRects.push({ x: left + 0.5, y: middle + 0.5, w: iW - 1, h: iH - 1 });
+                    strokeNegRects.push({
+                        x: left + 0.5,
+                        y: middle + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 else
-                    fillNegRects.push({ x: left, y: middle, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillNegRects.push({
+                        x: left,
+                        y: middle,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
             }
             prevMACD = MACD;
             left += cW;
@@ -4099,7 +5197,7 @@ export class IndicatorPlotterMTM extends NamedObject {
         super(name);
     }
 
-  Draw(context) {
+    Draw(context) {
         let mgr = ChartManager.instance;
         let area = mgr.getArea(this.getAreaName());
         let timeline = mgr.getTimeline(this.getDataSourceName());
@@ -4151,12 +5249,18 @@ export class IndicatorPlotterMTM extends NamedObject {
                 if (start > first) {
                     v = out.execute(start - 1);
                     if (isNaN(v) === false)
-                        points.push({ "x": x - cW, "y": range.toY(v) });
+                        points.push({
+                            "x": x - cW,
+                            "y": range.toY(v)
+                        });
                 }
-                for (let i = start; i < last; i++ , x += cW) {
+                for (let i = start; i < last; i++, x += cW) {
                     v = out.execute(i);
                     if (isNaN(v) === false)
-                        points.push({ "x": x, "y": range.toY(v) });
+                        points.push({
+                            "x": x,
+                            "y": range.toY(v)
+                        });
                 }
                 if (points.length > 0) {
                     let color = out.getColor();
@@ -4170,7 +5274,7 @@ export class IndicatorPlotterMTM extends NamedObject {
         context.restore();
     }
     //成交量
-  drawVolumeStick(context, theme, ds, first, last, startX, cW, iW, range) {
+    drawVolumeStick(context, theme, ds, first, last, startX, cW, iW, range) {
         let dark = Util.isInstance(theme, themes.DarkTheme);
         let left = startX;
         let bottom = range.toY(0);
@@ -4183,22 +5287,52 @@ export class IndicatorPlotterMTM extends NamedObject {
             let iH = range.toHeight(data.volume);
             if (data.close > data.open) {
                 if (iH > 1 && iW > 1 && dark) {
-                    strokePosRects.push({ x: left + 0.5, y: top + 0.5, w: iW - 1, h: iH - 1 });
+                    strokePosRects.push({
+                        x: left + 0.5,
+                        y: top + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 } else {
-                    fillPosRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillPosRects.push({
+                        x: left,
+                        y: top,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
                 }
             } else if (data.close === data.open) {
                 if (i > 0 && data.close >= ds.getDataAt(i - 1).close) {
                     if (iH > 1 && iW > 1 && dark) {
-                        strokePosRects.push({ x: left + 0.5, y: top + 0.5, w: iW - 1, h: iH - 1 });
+                        strokePosRects.push({
+                            x: left + 0.5,
+                            y: top + 0.5,
+                            w: iW - 1,
+                            h: iH - 1
+                        });
                     } else {
-                        fillPosRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                        fillPosRects.push({
+                            x: left,
+                            y: top,
+                            w: Math.max(iW, 1),
+                            h: Math.max(iH, 1)
+                        });
                     }
                 } else {
-                    fillNegRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillNegRects.push({
+                        x: left,
+                        y: top,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
                 }
             } else {
-                fillNegRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                fillNegRects.push({
+                    x: left,
+                    y: top,
+                    w: Math.max(iW, 1),
+                    h: Math.max(iH, 1)
+                });
             }
             left += cW;
         }
@@ -4219,7 +5353,7 @@ export class IndicatorPlotterMTM extends NamedObject {
         }
     }
 
-  drawMACDStick(context, theme, output, first, last, startX, cW, iW, range) {
+    drawMACDStick(context, theme, output, first, last, startX, cW, iW, range) {
         let left = startX;
         let middle = range.toY(0);
         let strokePosRects = [];
@@ -4232,15 +5366,35 @@ export class IndicatorPlotterMTM extends NamedObject {
             if (MACD >= 0) {
                 let iH = range.toHeight(MACD);
                 if ((i === 0 || MACD >= prevMACD) && iH > 1 && iW > 1)
-                    strokePosRects.push({ x: left + 0.5, y: middle - iH + 0.5, w: iW - 1, h: iH - 1 });
+                    strokePosRects.push({
+                        x: left + 0.5,
+                        y: middle - iH + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 else
-                    fillPosRects.push({ x: left, y: middle - iH, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillPosRects.push({
+                        x: left,
+                        y: middle - iH,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
             } else {
                 let iH = range.toHeight(-MACD);
                 if ((i === 0 || MACD >= prevMACD) && iH > 1 && iW > 1)
-                    strokeNegRects.push({ x: left + 0.5, y: middle + 0.5, w: iW - 1, h: iH - 1 });
+                    strokeNegRects.push({
+                        x: left + 0.5,
+                        y: middle + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 else
-                    fillNegRects.push({ x: left, y: middle, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillNegRects.push({
+                        x: left,
+                        y: middle,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
             }
             prevMACD = MACD;
             left += cW;
@@ -4298,7 +5452,7 @@ export class IndicatorPlotterPSY extends NamedObject {
         super(name);
     }
 
-  Draw(context) {
+    Draw(context) {
         let mgr = ChartManager.instance;
         let area = mgr.getArea(this.getAreaName());
         let timeline = mgr.getTimeline(this.getDataSourceName());
@@ -4350,12 +5504,18 @@ export class IndicatorPlotterPSY extends NamedObject {
                 if (start > first) {
                     v = out.execute(start - 1);
                     if (isNaN(v) === false)
-                        points.push({ "x": x - cW, "y": range.toY(v) });
+                        points.push({
+                            "x": x - cW,
+                            "y": range.toY(v)
+                        });
                 }
-                for (let i = start; i < last; i++ , x += cW) {
+                for (let i = start; i < last; i++, x += cW) {
                     v = out.execute(i);
                     if (isNaN(v) === false)
-                        points.push({ "x": x, "y": range.toY(v) });
+                        points.push({
+                            "x": x,
+                            "y": range.toY(v)
+                        });
                 }
                 if (points.length > 0) {
                     let color = out.getColor();
@@ -4369,7 +5529,7 @@ export class IndicatorPlotterPSY extends NamedObject {
         context.restore();
     }
     //成交量
-  drawVolumeStick(context, theme, ds, first, last, startX, cW, iW, range) {
+    drawVolumeStick(context, theme, ds, first, last, startX, cW, iW, range) {
         let dark = Util.isInstance(theme, themes.DarkTheme);
         let left = startX;
         let bottom = range.toY(0);
@@ -4382,22 +5542,52 @@ export class IndicatorPlotterPSY extends NamedObject {
             let iH = range.toHeight(data.volume);
             if (data.close > data.open) {
                 if (iH > 1 && iW > 1 && dark) {
-                    strokePosRects.push({ x: left + 0.5, y: top + 0.5, w: iW - 1, h: iH - 1 });
+                    strokePosRects.push({
+                        x: left + 0.5,
+                        y: top + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 } else {
-                    fillPosRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillPosRects.push({
+                        x: left,
+                        y: top,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
                 }
             } else if (data.close === data.open) {
                 if (i > 0 && data.close >= ds.getDataAt(i - 1).close) {
                     if (iH > 1 && iW > 1 && dark) {
-                        strokePosRects.push({ x: left + 0.5, y: top + 0.5, w: iW - 1, h: iH - 1 });
+                        strokePosRects.push({
+                            x: left + 0.5,
+                            y: top + 0.5,
+                            w: iW - 1,
+                            h: iH - 1
+                        });
                     } else {
-                        fillPosRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                        fillPosRects.push({
+                            x: left,
+                            y: top,
+                            w: Math.max(iW, 1),
+                            h: Math.max(iH, 1)
+                        });
                     }
                 } else {
-                    fillNegRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillNegRects.push({
+                        x: left,
+                        y: top,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
                 }
             } else {
-                fillNegRects.push({ x: left, y: top, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                fillNegRects.push({
+                    x: left,
+                    y: top,
+                    w: Math.max(iW, 1),
+                    h: Math.max(iH, 1)
+                });
             }
             left += cW;
         }
@@ -4418,7 +5608,7 @@ export class IndicatorPlotterPSY extends NamedObject {
         }
     }
 
-  drawMACDStick(context, theme, output, first, last, startX, cW, iW, range) {
+    drawMACDStick(context, theme, output, first, last, startX, cW, iW, range) {
         let left = startX;
         let middle = range.toY(0);
         let strokePosRects = [];
@@ -4431,15 +5621,35 @@ export class IndicatorPlotterPSY extends NamedObject {
             if (MACD >= 0) {
                 let iH = range.toHeight(MACD);
                 if ((i === 0 || MACD >= prevMACD) && iH > 1 && iW > 1)
-                    strokePosRects.push({ x: left + 0.5, y: middle - iH + 0.5, w: iW - 1, h: iH - 1 });
+                    strokePosRects.push({
+                        x: left + 0.5,
+                        y: middle - iH + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 else
-                    fillPosRects.push({ x: left, y: middle - iH, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillPosRects.push({
+                        x: left,
+                        y: middle - iH,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
             } else {
                 let iH = range.toHeight(-MACD);
                 if ((i === 0 || MACD >= prevMACD) && iH > 1 && iW > 1)
-                    strokeNegRects.push({ x: left + 0.5, y: middle + 0.5, w: iW - 1, h: iH - 1 });
+                    strokeNegRects.push({
+                        x: left + 0.5,
+                        y: middle + 0.5,
+                        w: iW - 1,
+                        h: iH - 1
+                    });
                 else
-                    fillNegRects.push({ x: left, y: middle, w: Math.max(iW, 1), h: Math.max(iH, 1) });
+                    fillNegRects.push({
+                        x: left,
+                        y: middle,
+                        w: Math.max(iW, 1),
+                        h: Math.max(iH, 1)
+                    });
             }
             prevMACD = MACD;
             left += cW;
@@ -4509,6 +5719,7 @@ export class IndicatorInfoPlotter extends Plotter {
         context.textBaseline = "top";
         context.fillStyle = theme.getColor(themes.Theme.Color.Text4);
         let rect = {
+            close_x: area.getRight() - 5,
             x: area.getLeft() + 4,
             y: area.getTop() + 2,
             w: area.getWidth() - 8,
@@ -4554,6 +5765,7 @@ export class IndicatorInfoPlotter extends Plotter {
         //指标的默认参数
         if (!Plotter.drawString(context, title, rect))
             return;
+
         let selIndex = timeline.getSelectedIndex();
         if (selIndex < 0)
             return;
@@ -6252,7 +7464,12 @@ export class TimelinePlotter extends Plotter {
             }
             if (text.length > 0) {
                 let x = timeline.toItemCenter(i);
-                gridRects.push({ x: x, y: top, w: 1, h: 4 });
+                gridRects.push({
+                    x: x,
+                    y: top,
+                    w: 1,
+                    h: 4
+                });
                 context.fillText(text, x, middle);
             }
         }
@@ -6318,8 +7535,7 @@ export class RangePlotter extends NamedObject {
         if (range.getRange() === 0.0)
             return;
         let isMainRange = range.getNameObject().getCompAt(2) === "main";
-        if (isMainRange) {
-        } else {
+        if (isMainRange) {} else {
             if (!area.isChanged() && !range.isUpdated())
                 return;
         }
@@ -6337,8 +7553,18 @@ export class RangePlotter extends NamedObject {
         let gridRects = [];
         for (let n in gradations) {
             let y = range.toY(gradations[n]);
-            gridRects.push({ x: left, y: y, w: 6, h: 1 });
-            gridRects.push({ x: right - 6, y: y, w: 6, h: 1 });
+            gridRects.push({
+                x: left,
+                y: y,
+                w: 6,
+                h: 1
+            });
+            gridRects.push({
+                x: right - 6,
+                y: y,
+                w: 6,
+                h: 1
+            });
             context.fillText(Util.fromFloat(gradations[n], 2), center, y);
         }
         if (gridRects.length > 0) {
@@ -6599,8 +7825,18 @@ export class COrderGraphPlotter extends NamedObject {
         let gridRects = [];
         for (let n in gradations) {
             let y = range.toY(gradations[n]);
-            gridRects.push({ x: left, y: y, w: 6, h: 1 });
-            gridRects.push({ x: right - 6, y: y, w: 6, h: 1 });
+            gridRects.push({
+                x: left,
+                y: y,
+                w: 6,
+                h: 1
+            });
+            gridRects.push({
+                x: right - 6,
+                y: y,
+                w: 6,
+                h: 1
+            });
         }
         if (gridRects.length > 0) {
             let theme = mgr.getTheme(this.getFrameName());
@@ -6864,12 +8100,26 @@ export class RangeSelectionPlotter extends NamedObject {
             return;
         }
         let y = range.getSelectedPosition();
-        Plotter.createPolygon(context, [
-            { "x": area.getLeft(), "y": y },
-            { "x": area.getLeft() + 5, "y": y + 10 },
-            { "x": area.getRight() - 3, "y": y + 10 },
-            { "x": area.getRight() - 3, "y": y - 10 },
-            { "x": area.getLeft() + 5, "y": y - 10 }
+        Plotter.createPolygon(context, [{
+                "x": area.getLeft(),
+                "y": y
+            },
+            {
+                "x": area.getLeft() + 5,
+                "y": y + 10
+            },
+            {
+                "x": area.getRight() - 3,
+                "y": y + 10
+            },
+            {
+                "x": area.getRight() - 3,
+                "y": y - 10
+            },
+            {
+                "x": area.getLeft() + 5,
+                "y": y - 10
+            }
         ]);
         let theme = mgr.getTheme(this.getFrameName());
         context.fillStyle = theme.getColor(themes.Theme.Color.Background);
@@ -6969,29 +8219,47 @@ export class CToolPlotter extends NamedObject {
     drawFibRayLines(context, startPoint, endPoint) {
         for (let i = 0; i < this.fiboFansSequence.length; i++) {
             let stageY = startPoint.y + (100 - this.fiboFansSequence[i]) / 100 * (endPoint.y - startPoint.y);
-            let tempStartPt = { x: startPoint.x, y: startPoint.y };
-            let tempEndPt = { x: endPoint.x, y: stageY };
+            let tempStartPt = {
+                x: startPoint.x,
+                y: startPoint.y
+            };
+            let tempEndPt = {
+                x: endPoint.x,
+                y: stageY
+            };
             this.drawRayLines(context, tempStartPt, tempEndPt);
         }
     }
 
     drawRayLines(context, startPoint, endPoint) {
         this.getAreaPos();
-        let tempStartPt = { x: startPoint.x, y: startPoint.y };
-        let tempEndPt = { x: endPoint.x, y: endPoint.y };
+        let tempStartPt = {
+            x: startPoint.x,
+            y: startPoint.y
+        };
+        let tempEndPt = {
+            x: endPoint.x,
+            y: endPoint.y
+        };
         let crossPt = this.getRectCrossPt(this.areaPos, tempStartPt, tempEndPt);
         let tempCrossPt;
         if (endPoint.x === startPoint.x) {
             if (endPoint.y === startPoint.y) {
                 tempCrossPt = endPoint;
             } else {
-                tempCrossPt = endPoint.y > startPoint.y ? { x: crossPt[1].x, y: crossPt[1].y } : {
+                tempCrossPt = endPoint.y > startPoint.y ? {
+                    x: crossPt[1].x,
+                    y: crossPt[1].y
+                } : {
                     x: crossPt[0].x,
                     y: crossPt[0].y
                 };
             }
         } else {
-            tempCrossPt = endPoint.x > startPoint.x ? { x: crossPt[1].x, y: crossPt[1].y } : {
+            tempCrossPt = endPoint.x > startPoint.x ? {
+                x: crossPt[1].x,
+                y: crossPt[1].y
+            } : {
                 x: crossPt[0].x,
                 y: crossPt[0].y
             };
@@ -7132,7 +8400,10 @@ export class DrawArrowLinesPlotter extends CToolPlotter {
         this.toolObject = toolObject;
         this.arrowSizeRatio = 0.03;
         this.arrowSize = 4;
-        this.crossPt = { x: -1, y: -1 };
+        this.crossPt = {
+            x: -1,
+            y: -1
+        };
         this.ctrlPtsNum = 2;
         this.ctrlPts = [new Array(this.ctrlPtsNum), new Array(2)];
         this.getCtrlPts();
@@ -7144,8 +8415,14 @@ export class DrawArrowLinesPlotter extends CToolPlotter {
         this.crossPt.x = startPoint.x + (1 - this.arrowSize / len) * vectorA[0];
         this.crossPt.y = startPoint.y + (1 - this.arrowSize / len) * vectorA[1];
         let vectorAautho = [-vectorA[1], vectorA[0]];
-        let Aautho = { x: vectorAautho[0], y: vectorAautho[1] };
-        let origin = { x: 0, y: 0 };
+        let Aautho = {
+            x: vectorAautho[0],
+            y: vectorAautho[1]
+        };
+        let origin = {
+            x: 0,
+            y: 0
+        };
         vectorAautho[0] = this.arrowSize * Aautho.x / this.lenBetweenPts(Aautho, origin);
         vectorAautho[1] = this.arrowSize * Aautho.y / this.lenBetweenPts(Aautho, origin);
         let arrowEndPt = [this.crossPt.x + vectorAautho[0], this.crossPt.y + vectorAautho[1]];
@@ -7204,7 +8481,10 @@ export class DrawHoriRayLinesPlotter extends CToolPlotter {
         if (this.startPoint.x === this.endPoint.x) {
             Plotter.drawLine(context, this.startPoint.x, this.startPoint.y, this.areaPos.right, this.startPoint.y);
         } else {
-            let tempEndPt = { x: this.endPoint.x, y: this.startPoint.y };
+            let tempEndPt = {
+                x: this.endPoint.x,
+                y: this.startPoint.y
+            };
             this.drawRayLines(context, this.startPoint, tempEndPt);
         }
     }
@@ -7292,7 +8572,10 @@ export class ParallelLinesPlotter extends CToolPlotter {
         let vectorB = [];
         vectorB[0] = this.paraStartPoint.x - this.startPoint.x;
         vectorB[1] = this.paraStartPoint.y - this.startPoint.y;
-        this.paraEndPoint = { x: -1, y: -1 };
+        this.paraEndPoint = {
+            x: -1,
+            y: -1
+        };
         this.paraEndPoint.x = vectorA[0] + vectorB[0] + this.startPoint.x;
         this.paraEndPoint.y = vectorA[1] + vectorB[1] + this.startPoint.y;
     }
@@ -7373,9 +8656,18 @@ export class DrawTriParallelLinesPlotter extends ParallelLinesPlotter {
         let vectorB = [];
         vectorB[0] = this.paraStartPoint.x - this.startPoint.x;
         vectorB[1] = this.paraStartPoint.y - this.startPoint.y;
-        this.para1EndPoint = { x: -1, y: -1 };
-        this.para2EndPoint = { x: -1, y: -1 };
-        this.para2StartPoint = { x: -1, y: -1 };
+        this.para1EndPoint = {
+            x: -1,
+            y: -1
+        };
+        this.para2EndPoint = {
+            x: -1,
+            y: -1
+        };
+        this.para2StartPoint = {
+            x: -1,
+            y: -1
+        };
         this.para1EndPoint.x = vectorA[0] + vectorB[0] + this.startPoint.x;
         this.para1EndPoint.y = vectorA[1] + vectorB[1] + this.startPoint.y;
         this.para2StartPoint.x = this.startPoint.x - vectorB[0];
@@ -7548,4 +8840,3 @@ export class CDynamicLinePlotter extends NamedObject {
     }
 
 }
-
