@@ -315,8 +315,6 @@ export default {
             if (!this.klineParams.indicator[name].init){
                if (this.klineParams.indicator[name].show){
                     this.klineParams.indicator[name].show = false;
-                }else{
-                   this.klineParams.indicator[name].show = true;
                 }
                 this.$refs.callMethods.onIndicatorChange()
             }

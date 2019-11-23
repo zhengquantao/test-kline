@@ -289,7 +289,6 @@ export class Template {
         mgr.setPlotter(plotter.getName(), plotter);
         // plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
         // mgr.setPlotter(plotter.getName(), plotter);
-
         //已经初始化
         Kline.instance.indicator.KDJ.init = true;
     }
