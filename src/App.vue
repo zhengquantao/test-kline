@@ -139,6 +139,80 @@ export default {
         width: document.body.clientWidth - 68,
         height: document.body.clientHeight + 500,
         theme: "dark",
+        indicator: {
+      "VOLUME": {
+        "show": true,
+        "init": false
+      },
+      "MACD": {
+        "show": true,
+        "init": false
+      },
+      "KDJ": {
+        "show": true,
+        "init": true
+      },
+      "StochRSI": {
+        "show": true,
+        "init": false
+      },
+      "RSI": {
+        "show": true,
+        "init": false
+      },
+      "DMI": {
+        "show": true,
+        "init": false
+      },
+      "OBV":{
+        "show": true,
+        "init": false
+      },
+      "BOLL":{
+        "show": true,
+        "init": false
+      },
+      "SAR": {
+        "show": true,
+        "init": false
+      },
+      "DMA": {
+        "show": true,
+        "init": false
+      },
+      "TRIX": {
+        "show": true,
+        "init": false
+      },
+      "BRAR":{
+        "show": true,
+        "init": false
+      },
+      "VR": {
+        "show": true,
+        "init": false
+      },
+      "EMV": {
+        "show": true,
+        "init": false
+      },
+      "WR": {
+        "show": true,
+        "init": false
+      },
+      "ROC": {
+        "show": true,
+        "init": false
+      },
+      "MTM":{
+        "show": true,
+        "init": false
+      },
+      "PSY": {
+        "show": true,
+        "init": false
+      }
+    },
         language: "zh-cn",
         ranges: ["1w", "1d", "1h", "30m", "15m", "5m", "1m", "line"],
         symbol: "BTC",
@@ -236,7 +310,17 @@ export default {
             this.screenWidth - 68,
             this.screenHeight + 500
           );
-    }
+    },
+   value(name){
+            if (!this.klineParams.indicator[name].init){
+               if (this.klineParams.indicator[name].show){
+                    this.klineParams.indicator[name].show = false;
+                }else{
+                   this.klineParams.indicator[name].show = true;
+                }
+                this.$refs.callMethods.onIndicatorChange()
+            }
+   }
   },
   methods: {
     // requestDatas(url) {

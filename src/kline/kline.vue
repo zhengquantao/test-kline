@@ -15,7 +15,7 @@ const VueKline = {
         height: this.klineParams.height,
         theme: this.klineParams.theme,
         language: this.klineParams.language,
-
+        indicator: this.klineParams.indicator,
         ranges: this.klineParams.ranges,
           range:null,
         symbol: this.klineParams.symbol,
@@ -1373,8 +1373,13 @@ const VueKline = {
     onRequestData(param, callback) {
       let data = this.klineData;
       callback(data);
-    }
-  }
+    },
+      onIndicatorChange(){
+           this.kline.onIndicatorChange()
+      }
+
+  },
+
 };
 export default VueKline;
 </script>

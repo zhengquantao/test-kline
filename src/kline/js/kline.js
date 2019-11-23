@@ -77,6 +77,80 @@ export default class Kline {
       "1m": "01m",
       "line": "line"
     };
+    this.indicator = {
+      "VOLUME": {
+        "show": true,
+        "init": false
+      },
+      "MACD": {
+        "show": true,
+        "init": false
+      },
+      "KDJ": {
+        "show": true,
+        "init": true
+      },
+      "StochRSI": {
+        "show": true,
+        "init": false
+      },
+      "RSI": {
+        "show": true,
+        "init": false
+      },
+      "DMI": {
+        "show": true,
+        "init": false
+      },
+      "OBV":{
+        "show": true,
+        "init": false
+      },
+      "BOLL":{
+        "show": true,
+        "init": false
+      },
+      "SAR": {
+        "show": true,
+        "init": false
+      },
+      "DMA": {
+        "show": true,
+        "init": false
+      },
+      "TRIX": {
+        "show": true,
+        "init": false
+      },
+      "BRAR":{
+        "show": true,
+        "init": false
+      },
+      "VR": {
+        "show": true,
+        "init": false
+      },
+      "EMV": {
+        "show": true,
+        "init": false
+      },
+      "WR": {
+        "show": true,
+        "init": false
+      },
+      "ROC": {
+        "show": true,
+        "init": false
+      },
+      "MTM":{
+        "show": true,
+        "init": false
+      },
+      "PSY": {
+        "show": true,
+        "init": false
+      }
+    };
     //事件
     this.onResize = null;
     this.onLangChange = null;
@@ -170,6 +244,10 @@ export default class Kline {
   setDepthWidth(width) {
     this.depthWidth = width;
     ChartManager.instance.redraw('All', false);
+  }
+
+  onIndicatorChange(){
+    ChartManager.instance.getChart().addNewIndicator();
   }
 
   /*********************************************
