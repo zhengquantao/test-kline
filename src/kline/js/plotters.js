@@ -17,7 +17,6 @@ import * as data_providers from './data_providers'
 import * as data_sources from './data_sources'
 import * as ctools from './ctools'
 
-export let indicatorNameCoordinate = {};
 export class Plotter extends NamedObject {
 
     constructor(name) {
@@ -106,15 +105,6 @@ export class Plotter extends NamedObject {
     }
     
     static drawString(context, str, rect) {
-        let indicatorNameArr = ["VOLUME", "MACD", "KDJ", "StochRSI", "RSI", "DMI", "OBV", "BOLL", "SAR", "DMA", "TRIX", "BRAR", "VR", "EMV", "WR", "ROC", "MTM", "PSY"];
-        let reg=/[\(()][^\))]+[\))]$/;
-        let indicatorName = str.replace(reg, "");
-        if (indicatorNameArr.includes(indicatorName)){
-            indicatorNameCoordinate[indicatorName] = {
-                x:rect.close_x,
-                y:rect.y
-            }
-        }
         let w = context.measureText(str).width;
         if (rect.w < w) {
             return false;

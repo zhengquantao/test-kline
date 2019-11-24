@@ -7,13 +7,11 @@ import {
 import {
   ChartSettings
 } from './chart_settings'
-import * as plotters from './plotters'
 import $ from 'jquery'
 
 export default class Kline {
 
   constructor(option) {
-    this.indicatorNameCoordinate = plotters.indicatorNameCoordinate;
     //容器
     this.element = "#kline_container";
     this.chartMgr = null;
@@ -176,6 +174,7 @@ export default class Kline {
   /*********************************************
    * Methods
    *********************************************/
+  
   //绘图
   draw() {
     Kline.chartMgr = new ChartManager();
