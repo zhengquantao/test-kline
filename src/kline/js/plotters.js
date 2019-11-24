@@ -4658,6 +4658,7 @@ export class IndicatorInfoPlotterVOLUME extends Plotter {
             if (!Plotter.drawString(context, info, rect))
                 return;
         }
+
     }
 
 }

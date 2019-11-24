@@ -189,7 +189,7 @@ export class Chart {
     }
 
     addNewIndicator(){
-          //Template.createIndicatorChartCompsVOLUME('frame0.k0', 'VOLUME');
+          Template.createIndicatorChartCompsVOLUME('frame0.k0', 'VOLUME');
           Template.createIndicatorChartCompsMACD('frame0.k0', 'MACD');
           Template.createIndicatorChartCompsBOLL('frame0.k0', 'BOLL');
           Template.createIndicatorChartCompsKDJ('frame0.k0', 'KDJ');
