@@ -324,7 +324,7 @@ export default {
         this.klineParams.indicator[name].show = true;
         this.indicatorCounter--;
       }
-      this.$refs.callMethods.onIndicatorChange();
+      this.$refs.callMethods.onIndicatorChange(name);
       this.setSize();
       this.setSidebarSize();
       this.dialogVisible = false;

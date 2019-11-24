@@ -1038,8 +1038,10 @@ export class ChartManager {
     return true;
   }
 
+  //判断是否存在这个指标
   setIndicator(areaName, indicName) {
     let area = this.getArea(areaName);
+    console.log(area, areaName, indicName, '-------ffffffffff--------')
     if (area === null || area === undefined || area.getNameObject().getCompAt(2) === "main") {
       return false;
     }

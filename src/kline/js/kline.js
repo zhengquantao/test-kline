@@ -247,8 +247,8 @@ export default class Kline {
     ChartManager.instance.redraw('All', false);
   }
 
-  onIndicatorChange(){
-    ChartManager.instance.getChart().addNewIndicator();
+  onIndicatorChange(indic){
+    ChartManager.instance.getChart().addNewIndicator(indic);
   }
 
   /*********************************************
