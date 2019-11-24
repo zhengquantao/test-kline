@@ -17,7 +17,7 @@ const VueKline = {
         language: this.klineParams.language,
         indicator: this.klineParams.indicator,
         ranges: this.klineParams.ranges,
-          range:null,
+        range: null,
         symbol: this.klineParams.symbol,
         symbolName: this.klineParams.symbolName,
         limit: 1000,
@@ -28,7 +28,7 @@ const VueKline = {
         onRangeChange: this.onRangeChange
       },
       kline: null,
-        range:null,
+      range: null
     };
   },
   mounted() {
@@ -1366,20 +1366,18 @@ const VueKline = {
     },
 
     onRangeChange(range) {
-        this.$emit('refreshKlineData', range);
-        return range;
+      this.$emit("refreshKlineData", range);
+      return range;
     },
 
     onRequestData(param, callback) {
       let data = this.klineData;
       callback(data);
     },
-      onIndicatorChange(){
-           this.kline.onIndicatorChange()
-      }
-
-  },
-
+    onIndicatorChange() {
+      this.kline.onIndicatorChange();
+    }
+  }
 };
 export default VueKline;
 </script>

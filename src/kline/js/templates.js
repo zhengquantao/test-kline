@@ -10,11 +10,7 @@ import * as layouts from './layouts'
 import * as themes from './themes'
 import * as ranges from './ranges'
 import Kline from './kline'
-
-
-
 export class Template {
-
     static createCandlestickDataSource(dsAlias) {
         return new data_sources.MainDataSource(dsAlias);
     }
@@ -158,14 +154,14 @@ export class Template {
         }
         let plotter = new plotters.MainAreaBackgroundPlotter(areaName + ".background");
         mgr.setPlotter(plotter.getName(), plotter); // plotter.getName()
-        // plotter = new plotters.CGridPlotter(areaName + ".grid");
-        // mgr.setPlotter(plotter.getName(), plotter);
+        plotter = new plotters.CGridPlotter(areaName + ".grid");
+        mgr.setPlotter(plotter.getName(), plotter);
         //指标线
         plotter = new plotters.IndicatorPlotterVOLUME(areaName + ".secondary");
         mgr.setPlotter(plotter.getName(), plotter);
         //左上显示
-        // plotter = new plotters.IndicatorInfoPlotter(areaName + ".info");
-        // mgr.setPlotter(plotter.getName(), plotter);
+        plotter = new plotters.IndicatorInfoPlotter(areaName + ".info");
+        mgr.setPlotter(plotter.getName(), plotter);
         //游标显示
         plotter = new plotters.SelectionPlotter(areaName + ".selection");
         mgr.setPlotter(plotter.getName(), plotter);
@@ -175,8 +171,8 @@ export class Template {
         // 滑动的  和 底部指标名字
         plotter = new plotters.RangePlotter(areaName + "Range.main");
         mgr.setPlotter(plotter.getName(), plotter);
-        // plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
-        // mgr.setPlotter(plotter.getName(), plotter);
+        plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
+        mgr.setPlotter(plotter.getName(), plotter);
         //已经初始化
         Kline.instance.indicator.VOLUME.init = true;
     }
@@ -214,14 +210,14 @@ export class Template {
         }
         let plotter = new plotters.MainAreaBackgroundPlotter(areaName + ".background");
         mgr.setPlotter(plotter.getName(), plotter); // plotter.getName()
-        // plotter = new plotters.CGridPlotter(areaName + ".grid");
-        // mgr.setPlotter(plotter.getName(), plotter);
+        plotter = new plotters.CGridPlotter(areaName + ".grid");
+        mgr.setPlotter(plotter.getName(), plotter);
         //指标线
         plotter = new plotters.IndicatorPlotterVOLUME(areaName + ".secondary");
         mgr.setPlotter(plotter.getName(), plotter);
         //左上显示
-        // plotter = new plotters.IndicatorInfoPlotter(areaName + ".info");
-        // mgr.setPlotter(plotter.getName(), plotter);
+        plotter = new plotters.IndicatorInfoPlotter(areaName + ".info");
+        mgr.setPlotter(plotter.getName(), plotter);
         //游标显示
         plotter = new plotters.SelectionPlotter(areaName + ".selection");
         mgr.setPlotter(plotter.getName(), plotter);
@@ -231,8 +227,8 @@ export class Template {
         // 滑动的  和 底部指标名字
         plotter = new plotters.RangePlotter(areaName + "Range.main");
         mgr.setPlotter(plotter.getName(), plotter);
-        // plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
-        // mgr.setPlotter(plotter.getName(), plotter);
+        plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
+        mgr.setPlotter(plotter.getName(), plotter);
         //已经初始化
         Kline.instance.indicator.MACD.init = true;
     }
@@ -270,8 +266,8 @@ export class Template {
         }
         let plotter = new plotters.MainAreaBackgroundPlotter(areaName + ".background");
         mgr.setPlotter(plotter.getName(), plotter); // plotter.getName()
-        // plotter = new plotters.CGridPlotter(areaName + ".grid");
-        // mgr.setPlotter(plotter.getName(), plotter);
+        plotter = new plotters.CGridPlotter(areaName + ".grid");
+        mgr.setPlotter(plotter.getName(), plotter);
         //指标线
         plotter = new plotters.IndicatorPlotterKDJ(areaName + ".secondary");
         mgr.setPlotter(plotter.getName(), plotter);
@@ -287,8 +283,8 @@ export class Template {
         // 滑动的  和 底部指标名字
         plotter = new plotters.RangePlotter(areaName + "Range.main");
         mgr.setPlotter(plotter.getName(), plotter);
-        // plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
-        // mgr.setPlotter(plotter.getName(), plotter);
+        plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
+        mgr.setPlotter(plotter.getName(), plotter);
         //已经初始化
         Kline.instance.indicator.KDJ.init = true;
     }
@@ -326,8 +322,8 @@ export class Template {
         }
         let plotter = new plotters.MainAreaBackgroundPlotter(areaName + ".background");
         mgr.setPlotter(plotter.getName(), plotter); // plotter.getName()
-        // plotter = new plotters.CGridPlotter(areaName + ".grid");
-        // mgr.setPlotter(plotter.getName(), plotter);
+        plotter = new plotters.CGridPlotter(areaName + ".grid");
+        mgr.setPlotter(plotter.getName(), plotter);
         //指标线
         plotter = new plotters.IndicatorPlotterStochRSI(areaName + ".secondary");
         mgr.setPlotter(plotter.getName(), plotter);
@@ -343,8 +339,8 @@ export class Template {
         // 滑动的  和 底部指标名字
         plotter = new plotters.RangePlotter(areaName + "Range.main");
         mgr.setPlotter(plotter.getName(), plotter);
-        // plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
-        // mgr.setPlotter(plotter.getName(), plotter);
+        plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
+        mgr.setPlotter(plotter.getName(), plotter);
 
         //已经初始化
         Kline.instance.indicator.StochRSI.init = true;
@@ -383,8 +379,8 @@ export class Template {
         }
         let plotter = new plotters.MainAreaBackgroundPlotter(areaName + ".background");
         mgr.setPlotter(plotter.getName(), plotter); // plotter.getName()
-        // plotter = new plotters.CGridPlotter(areaName + ".grid");
-        // mgr.setPlotter(plotter.getName(), plotter);
+        plotter = new plotters.CGridPlotter(areaName + ".grid");
+        mgr.setPlotter(plotter.getName(), plotter);
         //指标线
         plotter = new plotters.IndicatorPlotterRSI(areaName + ".secondary");
         mgr.setPlotter(plotter.getName(), plotter);
@@ -400,8 +396,8 @@ export class Template {
         // 滑动的  和 底部指标名字
         plotter = new plotters.RangePlotter(areaName + "Range.main");
         mgr.setPlotter(plotter.getName(), plotter);
-        // plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
-        // mgr.setPlotter(plotter.getName(), plotter);
+        plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
+        mgr.setPlotter(plotter.getName(), plotter);
 
         //已经初始化
         Kline.instance.indicator.RSI.init = true;
@@ -441,8 +437,8 @@ export class Template {
         }
         let plotter = new plotters.MainAreaBackgroundPlotter(areaName + ".background");
         mgr.setPlotter(plotter.getName(), plotter); // plotter.getName()
-        // plotter = new plotters.CGridPlotter(areaName + ".grid");
-        // mgr.setPlotter(plotter.getName(), plotter);
+        plotter = new plotters.CGridPlotter(areaName + ".grid");
+        mgr.setPlotter(plotter.getName(), plotter);
         //指标线
         plotter = new plotters.IndicatorPlotterDMI(areaName + ".secondary");
         mgr.setPlotter(plotter.getName(), plotter);
@@ -458,8 +454,8 @@ export class Template {
         // 滑动的  和 底部指标名字
         plotter = new plotters.RangePlotter(areaName + "Range.main");
         mgr.setPlotter(plotter.getName(), plotter);
-        // plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
-        // mgr.setPlotter(plotter.getName(), plotter);
+        plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
+        mgr.setPlotter(plotter.getName(), plotter);
 
         //已经初始化
         Kline.instance.indicator.DMI.init = true;
@@ -498,8 +494,8 @@ export class Template {
         }
         let plotter = new plotters.MainAreaBackgroundPlotter(areaName + ".background");
         mgr.setPlotter(plotter.getName(), plotter); // plotter.getName()
-        // plotter = new plotters.CGridPlotter(areaName + ".grid");
-        // mgr.setPlotter(plotter.getName(), plotter);
+        plotter = new plotters.CGridPlotter(areaName + ".grid");
+        mgr.setPlotter(plotter.getName(), plotter);
         //指标线
         plotter = new plotters.IndicatorPlotterOBV(areaName + ".secondary");
         mgr.setPlotter(plotter.getName(), plotter);
@@ -515,8 +511,8 @@ export class Template {
         // 滑动的  和 底部指标名字
         plotter = new plotters.RangePlotter(areaName + "Range.main");
         mgr.setPlotter(plotter.getName(), plotter);
-        // plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
-        // mgr.setPlotter(plotter.getName(), plotter);
+        plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
+        mgr.setPlotter(plotter.getName(), plotter);
 
         //已经初始化
         Kline.instance.indicator.OBV.init = true;
@@ -556,8 +552,8 @@ export class Template {
         }
         let plotter = new plotters.MainAreaBackgroundPlotter(areaName + ".background");
         mgr.setPlotter(plotter.getName(), plotter); // plotter.getName()
-        // plotter = new plotters.CGridPlotter(areaName + ".grid");
-        // mgr.setPlotter(plotter.getName(), plotter);
+        plotter = new plotters.CGridPlotter(areaName + ".grid");
+        mgr.setPlotter(plotter.getName(), plotter);
         //指标线
         plotter = new plotters.IndicatorPlotterBOLL(areaName + ".secondary");
         mgr.setPlotter(plotter.getName(), plotter);
@@ -573,8 +569,8 @@ export class Template {
         // 滑动的  和 底部指标名字
         plotter = new plotters.RangePlotter(areaName + "Range.main");
         mgr.setPlotter(plotter.getName(), plotter);
-        // plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
-        // mgr.setPlotter(plotter.getName(), plotter);
+        plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
+        mgr.setPlotter(plotter.getName(), plotter);
 
         //已经初始化
         Kline.instance.indicator.BOLL.init = true;
@@ -614,8 +610,8 @@ export class Template {
         }
         let plotter = new plotters.MainAreaBackgroundPlotter(areaName + ".background");
         mgr.setPlotter(plotter.getName(), plotter); // plotter.getName()
-        // plotter = new plotters.CGridPlotter(areaName + ".grid");
-        // mgr.setPlotter(plotter.getName(), plotter);
+        plotter = new plotters.CGridPlotter(areaName + ".grid");
+        mgr.setPlotter(plotter.getName(), plotter);
         //指标线
         plotter = new plotters.IndicatorPlotterSAR(areaName + ".secondary");
         mgr.setPlotter(plotter.getName(), plotter);
@@ -631,8 +627,8 @@ export class Template {
         // 滑动的  和 底部指标名字
         plotter = new plotters.RangePlotter(areaName + "Range.main");
         mgr.setPlotter(plotter.getName(), plotter);
-        // plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
-        // mgr.setPlotter(plotter.getName(), plotter);
+        plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
+        mgr.setPlotter(plotter.getName(), plotter);
 
         //已经初始化
         Kline.instance.indicator.SAR.init = true;
@@ -672,8 +668,8 @@ export class Template {
         }
         let plotter = new plotters.MainAreaBackgroundPlotter(areaName + ".background");
         mgr.setPlotter(plotter.getName(), plotter); // plotter.getName()
-        // plotter = new plotters.CGridPlotter(areaName + ".grid");
-        // mgr.setPlotter(plotter.getName(), plotter);
+        plotter = new plotters.CGridPlotter(areaName + ".grid");
+        mgr.setPlotter(plotter.getName(), plotter);
         //指标线
         plotter = new plotters.IndicatorPlotterDMA(areaName + ".secondary");
         mgr.setPlotter(plotter.getName(), plotter);
@@ -689,8 +685,8 @@ export class Template {
         // 滑动的  和 底部指标名字
         plotter = new plotters.RangePlotter(areaName + "Range.main");
         mgr.setPlotter(plotter.getName(), plotter);
-        // plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
-        // mgr.setPlotter(plotter.getName(), plotter);
+        plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
+        mgr.setPlotter(plotter.getName(), plotter);
 
         //已经初始化
         Kline.instance.indicator.DMA.init = true;
@@ -730,8 +726,8 @@ export class Template {
         }
         let plotter = new plotters.MainAreaBackgroundPlotter(areaName + ".background");
         mgr.setPlotter(plotter.getName(), plotter); // plotter.getName()
-        // plotter = new plotters.CGridPlotter(areaName + ".grid");
-        // mgr.setPlotter(plotter.getName(), plotter);
+        plotter = new plotters.CGridPlotter(areaName + ".grid");
+        mgr.setPlotter(plotter.getName(), plotter);
         //指标线
         plotter = new plotters.IndicatorPlotterTRIX(areaName + ".secondary");
         mgr.setPlotter(plotter.getName(), plotter);
@@ -747,8 +743,8 @@ export class Template {
         // 滑动的  和 底部指标名字
         plotter = new plotters.RangePlotter(areaName + "Range.main");
         mgr.setPlotter(plotter.getName(), plotter);
-        // plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
-        // mgr.setPlotter(plotter.getName(), plotter);
+        plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
+        mgr.setPlotter(plotter.getName(), plotter);
 
         //已经初始化
         Kline.instance.indicator.TRIX.init = true;
@@ -788,8 +784,8 @@ export class Template {
         }
         let plotter = new plotters.MainAreaBackgroundPlotter(areaName + ".background");
         mgr.setPlotter(plotter.getName(), plotter); // plotter.getName()
-        // plotter = new plotters.CGridPlotter(areaName + ".grid");
-        // mgr.setPlotter(plotter.getName(), plotter);
+        plotter = new plotters.CGridPlotter(areaName + ".grid");
+        mgr.setPlotter(plotter.getName(), plotter);
         //指标线
         plotter = new plotters.IndicatorPlotterBRAR(areaName + ".secondary");
         mgr.setPlotter(plotter.getName(), plotter);
@@ -805,8 +801,8 @@ export class Template {
         // 滑动的  和 底部指标名字
         plotter = new plotters.RangePlotter(areaName + "Range.main");
         mgr.setPlotter(plotter.getName(), plotter);
-        // plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
-        // mgr.setPlotter(plotter.getName(), plotter);
+        plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
+        mgr.setPlotter(plotter.getName(), plotter);
 
         //已经初始化
         Kline.instance.indicator.BRAR.init = true;
@@ -846,8 +842,8 @@ export class Template {
         }
         let plotter = new plotters.MainAreaBackgroundPlotter(areaName + ".background");
         mgr.setPlotter(plotter.getName(), plotter); // plotter.getName()
-        // plotter = new plotters.CGridPlotter(areaName + ".grid");
-        // mgr.setPlotter(plotter.getName(), plotter);
+        plotter = new plotters.CGridPlotter(areaName + ".grid");
+        mgr.setPlotter(plotter.getName(), plotter);
         //指标线
         plotter = new plotters.IndicatorPlotterVR(areaName + ".secondary");
         mgr.setPlotter(plotter.getName(), plotter);
@@ -863,8 +859,8 @@ export class Template {
         // 滑动的  和 底部指标名字
         plotter = new plotters.RangePlotter(areaName + "Range.main");
         mgr.setPlotter(plotter.getName(), plotter);
-        // plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
-        // mgr.setPlotter(plotter.getName(), plotter);
+        plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
+        mgr.setPlotter(plotter.getName(), plotter);
 
         //已经初始化
         Kline.instance.indicator.VR.init = true;
@@ -904,8 +900,8 @@ export class Template {
         }
         let plotter = new plotters.MainAreaBackgroundPlotter(areaName + ".background");
         mgr.setPlotter(plotter.getName(), plotter); // plotter.getName()
-        // plotter = new plotters.CGridPlotter(areaName + ".grid");
-        // mgr.setPlotter(plotter.getName(), plotter);
+        plotter = new plotters.CGridPlotter(areaName + ".grid");
+        mgr.setPlotter(plotter.getName(), plotter);
         //指标线
         plotter = new plotters.IndicatorPlotterEMV(areaName + ".secondary");
         mgr.setPlotter(plotter.getName(), plotter);
@@ -921,8 +917,8 @@ export class Template {
         // 滑动的  和 底部指标名字
         plotter = new plotters.RangePlotter(areaName + "Range.main");
         mgr.setPlotter(plotter.getName(), plotter);
-        // plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
-        // mgr.setPlotter(plotter.getName(), plotter);
+        plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
+        mgr.setPlotter(plotter.getName(), plotter);
 
         //已经初始化
         Kline.instance.indicator.EMV.init = true;
@@ -962,8 +958,8 @@ export class Template {
         }
         let plotter = new plotters.MainAreaBackgroundPlotter(areaName + ".background");
         mgr.setPlotter(plotter.getName(), plotter); // plotter.getName()
-        // plotter = new plotters.CGridPlotter(areaName + ".grid");
-        // mgr.setPlotter(plotter.getName(), plotter);
+        plotter = new plotters.CGridPlotter(areaName + ".grid");
+        mgr.setPlotter(plotter.getName(), plotter);
         //指标线
         plotter = new plotters.IndicatorPlotterWR(areaName + ".secondary");
         mgr.setPlotter(plotter.getName(), plotter);
@@ -979,8 +975,8 @@ export class Template {
         // 滑动的  和 底部指标名字
         plotter = new plotters.RangePlotter(areaName + "Range.main");
         mgr.setPlotter(plotter.getName(), plotter);
-        // plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
-        // mgr.setPlotter(plotter.getName(), plotter);
+        plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
+        mgr.setPlotter(plotter.getName(), plotter);
 
         //已经初始化
         Kline.instance.indicator.WR.init = true;
@@ -1020,8 +1016,8 @@ export class Template {
         }
         let plotter = new plotters.MainAreaBackgroundPlotter(areaName + ".background");
         mgr.setPlotter(plotter.getName(), plotter); // plotter.getName()
-        // plotter = new plotters.CGridPlotter(areaName + ".grid");
-        // mgr.setPlotter(plotter.getName(), plotter);
+        plotter = new plotters.CGridPlotter(areaName + ".grid");
+        mgr.setPlotter(plotter.getName(), plotter);
         //指标线
         plotter = new plotters.IndicatorPlotterROC(areaName + ".secondary");
         mgr.setPlotter(plotter.getName(), plotter);
@@ -1037,8 +1033,8 @@ export class Template {
         // 滑动的  和 底部指标名字
         plotter = new plotters.RangePlotter(areaName + "Range.main");
         mgr.setPlotter(plotter.getName(), plotter);
-        // plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
-        // mgr.setPlotter(plotter.getName(), plotter);
+        plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
+        mgr.setPlotter(plotter.getName(), plotter);
 
         //已经初始化
         Kline.instance.indicator.ROC.init = true;
@@ -1078,8 +1074,8 @@ export class Template {
         }
         let plotter = new plotters.MainAreaBackgroundPlotter(areaName + ".background");
         mgr.setPlotter(plotter.getName(), plotter); // plotter.getName()
-        // plotter = new plotters.CGridPlotter(areaName + ".grid");
-        // mgr.setPlotter(plotter.getName(), plotter);
+        plotter = new plotters.CGridPlotter(areaName + ".grid");
+        mgr.setPlotter(plotter.getName(), plotter);
         //指标线
         plotter = new plotters.IndicatorPlotterMTM(areaName + ".secondary");
         mgr.setPlotter(plotter.getName(), plotter);
@@ -1095,8 +1091,8 @@ export class Template {
         // 滑动的  和 底部指标名字
         plotter = new plotters.RangePlotter(areaName + "Range.main");
         mgr.setPlotter(plotter.getName(), plotter);
-        // plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
-        // mgr.setPlotter(plotter.getName(), plotter);
+        plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
+        mgr.setPlotter(plotter.getName(), plotter);
 
 
         //已经初始化
@@ -1136,8 +1132,8 @@ export class Template {
         }
         let plotter = new plotters.MainAreaBackgroundPlotter(areaName + ".background");
         mgr.setPlotter(plotter.getName(), plotter); // plotter.getName()
-        // plotter = new plotters.CGridPlotter(areaName + ".grid");
-        // mgr.setPlotter(plotter.getName(), plotter);
+        plotter = new plotters.CGridPlotter(areaName + ".grid");
+        mgr.setPlotter(plotter.getName(), plotter);
         //指标线
         plotter = new plotters.IndicatorPlotterPSY(areaName + ".secondary");
         mgr.setPlotter(plotter.getName(), plotter);
@@ -1153,8 +1149,8 @@ export class Template {
         // 滑动的  和 底部指标名字
         plotter = new plotters.RangePlotter(areaName + "Range.main");
         mgr.setPlotter(plotter.getName(), plotter);
-        // plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
-        // mgr.setPlotter(plotter.getName(), plotter);
+        plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
+        mgr.setPlotter(plotter.getName(), plotter);
 
         //已经初始化
         Kline.instance.indicator.PSY.init = true;

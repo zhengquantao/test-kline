@@ -174,6 +174,7 @@ export default class Kline {
   /*********************************************
    * Methods
    *********************************************/
+  
   //绘图
   draw() {
     Kline.chartMgr = new ChartManager();

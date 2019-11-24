@@ -274,7 +274,9 @@ body {
     border-color: #fff;
     color: #393c40
 }
-
+#chart_show_indicator{
+    display: none;
+}
 .chart_container .chart_toolbar_button {
     border: 1px solid;
     cursor: pointer;

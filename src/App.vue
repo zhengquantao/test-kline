@@ -1,12 +1,7 @@
 <template>
   <div id="app" class="home">
     <div>
-      <Vue-kline
-        :klineParams="klineParams"
-        :klineData="klineData"
-        @refreshKlineData="refreshKlineData"
-        ref="callMethods"
-      ></Vue-kline>
+      <Vue-kline :klineParams="klineParams" :klineData="klineData" ref="callMethods"></Vue-kline>
       <div id="sidebarTheme">
         <div class="sidebar" ref="sidebar">
           <ul>
@@ -72,6 +67,7 @@
               @click="dialogVisible = true"
               @mouseenter="tipFlag='添加指标'"
               @mouseleave="tipFlag=false"
+              class="indicatorBtn"
             >
               <span class="icon iconfont klineplus"></span>
               <span class="tip" v-show="tipFlag=='添加指标'">添加指标</span>
@@ -100,19 +96,21 @@
     </div>
 
     <!-- 弹出框 -->
-    <el-dialog title="请选择需要添加的指标" :visible.sync="dialogVisible" width="25%">
-      <el-select v-model="value" filterable placeholder="请选择">
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        ></el-option>
-      </el-select>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-      </span>
+    <el-dialog title="指标" :visible.sync="dialogVisible" width="25%" style="min-width:350px;" center>
+      <el-table :data="options" style="width: 100%;height:250px;overflow:auto">
+        <el-table-column prop="value" label="指标名称"></el-table-column>
+        <el-table-column prop="switch" label="开关">
+          <template slot-scope="scope">
+            <el-button
+              size="mini"
+              type="success"
+              v-if="scope.row.switch===false"
+              @click="addIndicator(scope.row)"
+            >开启</el-button>
+            <el-button size="mini" type="danger" v-else @click="addIndicator(scope.row)">关闭</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
     </el-dialog>
   </div>
 </template>
@@ -127,92 +125,93 @@ export default {
   },
   data() {
     return {
-      h: 100,
-      w: 50,
-      meg: "first vue-cli test, welcome you coming",
+      meg: "Kline-view",
       flag: false,
       tipFlag: true,
       dialogVisible: false,
+      indicatorCounter: 0,
+      indicatorHeight: 150,
+      indicatorNameCoordinate: {},
       screenWidth: document.body.clientWidth,
       screenHeight: document.body.clientHeight,
       klineParams: {
-        width: document.body.clientWidth - 68,
-        height: document.body.clientHeight + 500,
+        width: document.body.clientWidth - 50,
+        height: document.body.clientHeight,
         theme: "dark",
         indicator: {
-      "VOLUME": {
-        "show": true,
-        "init": false
-      },
-      "MACD": {
-        "show": true,
-        "init": false
-      },
-      "KDJ": {
-        "show": true,
-        "init": true
-      },
-      "StochRSI": {
-        "show": true,
-        "init": false
-      },
-      "RSI": {
-        "show": true,
-        "init": false
-      },
-      "DMI": {
-        "show": true,
-        "init": false
-      },
-      "OBV":{
-        "show": true,
-        "init": false
-      },
-      "BOLL":{
-        "show": true,
-        "init": false
-      },
-      "SAR": {
-        "show": true,
-        "init": false
-      },
-      "DMA": {
-        "show": true,
-        "init": false
-      },
-      "TRIX": {
-        "show": true,
-        "init": false
-      },
-      "BRAR":{
-        "show": true,
-        "init": false
-      },
-      "VR": {
-        "show": true,
-        "init": false
-      },
-      "EMV": {
-        "show": true,
-        "init": false
-      },
-      "WR": {
-        "show": true,
-        "init": false
-      },
-      "ROC": {
-        "show": true,
-        "init": false
-      },
-      "MTM":{
-        "show": true,
-        "init": false
-      },
-      "PSY": {
-        "show": true,
-        "init": false
-      }
-    },
+          VOLUME: {
+            show: true,
+            init: false
+          },
+          MACD: {
+            show: true,
+            init: false
+          },
+          KDJ: {
+            show: true,
+            init: false
+          },
+          StochRSI: {
+            show: true,
+            init: false
+          },
+          RSI: {
+            show: true,
+            init: false
+          },
+          DMI: {
+            show: true,
+            init: false
+          },
+          OBV: {
+            show: true,
+            init: false
+          },
+          BOLL: {
+            show: true,
+            init: false
+          },
+          SAR: {
+            show: true,
+            init: false
+          },
+          DMA: {
+            show: true,
+            init: false
+          },
+          TRIX: {
+            show: true,
+            init: false
+          },
+          BRAR: {
+            show: true,
+            init: false
+          },
+          VR: {
+            show: true,
+            init: false
+          },
+          EMV: {
+            show: true,
+            init: false
+          },
+          WR: {
+            show: true,
+            init: false
+          },
+          ROC: {
+            show: true,
+            init: false
+          },
+          MTM: {
+            show: true,
+            init: false
+          },
+          PSY: {
+            show: true,
+            init: false
+          }
+        },
         language: "zh-cn",
         ranges: ["1w", "1d", "1h", "30m", "15m", "5m", "1m", "line"],
         symbol: "BTC",
@@ -225,75 +224,75 @@ export default {
       options: [
         {
           value: "VOLUME",
-          label: "VOLUME"
+          switch: false
         },
         {
           value: "MACD",
-          label: "MACD"
+          switch: false
         },
         {
           value: "KDJ",
-          label: "KDJ"
+          switch: false
         },
         {
           value: "StochRSI",
-          label: "StochRSI"
+          switch: false
         },
         {
           value: "RSI",
-          label: "RSI"
+          switch: false
         },
         {
           value: "DMI",
-          label: "DMI"
+          switch: false
         },
         {
           value: "OBV",
-          label: "OBV"
+          switch: false
         },
         {
           value: "BOLL",
-          label: "BOLL"
+          switch: false
         },
         {
           value: "SAR",
-          label: "SAR"
+          switch: false
         },
         {
           value: "DMA",
-          label: "DMA"
+          switch: false
         },
         {
           value: "TRIX",
-          label: "TRIX"
+          switch: false
         },
         {
           value: "BRAR",
-          label: "BRAR"
+          switch: false
         },
         {
           value: "VR",
-          label: "VR"
+          switch: false
         },
         {
           value: "EMV",
-          label: "EMV"
+          switch: false
         },
         {
           value: "WR",
-          label: "WR"
+          switch: false
         },
         {
           value: "ROC",
-          label: "ROC"
+          switch: false
         },
         {
           value: "MTM",
-          label: "MTM"
+          switch: false
         },
         {
           value: "PSY",
-          label: "PSY"
+          switch: false
         }
       ],
       value: ""
@@ -303,83 +302,45 @@ export default {
     flag(val) {
       val !== false
         ? this.$refs.callMethods.resize(
-            this.screenWidth - 68 - 280,
-            this.screenHeight + 500
+            this.screenWidth - 50 - 280,
+            this.screenHeight
           )
         : this.$refs.callMethods.resize(
-            this.screenWidth - 68,
-            this.screenHeight + 500
+            this.screenWidth - 50,
+            this.screenHeight
           );
-    },
-   value(name){
-            if (!this.klineParams.indicator[name].init){
-               if (this.klineParams.indicator[name].show){
-                    this.klineParams.indicator[name].show = false;
-                }
-                this.$refs.callMethods.onIndicatorChange()
-            }
-   }
+    }
   },
   methods: {
-    // requestDatas(url) {
-    //   this.$axios
-    //     .get("http://127.0.0.1:5000/test?name=" + url + ".json")
-    //     .then(ret => {
-    //       this.klineData = ret.data;
-    //       // if(!this.klineData.hasOwnProperty('data')){
-    //       //     this.klineData = ret.data;
-    //       // }else{
-    //       this.$refs.callMethods.kline.chartMgr
-    //         .getChart()
-    //         .updateDataAndDisplay(ret.data.data.lines);
-    //       // }
-
-    //       // if(this.load){
-    //       //      location.reload()
-    //       // }
-    //       // this.load = true
-    //     });
-    // },
-    refreshKlineData(option) {
-      // console.log(option);
-      if (option > 3600000) {
-        // 周, 日 (两年)
-        console.log("天-周 197");
-        const url = "ag1912";
-        // this.requestDatas(url);
-      } else if (option > 900000) {
-        // 1小时, 30分钟
-        console.log("1时--30分 198");
-        const url = "ag1910";
-        // this.requestDatas(url);
+    addIndicator(row) {
+      let name = row.value;
+      row.switch = !row.switch;
+      if (this.klineParams.indicator[name].show) {
+        // 显示
+        this.klineParams.indicator[name].show = false;
+        this.indicatorCounter++;
       } else {
-        // 15, 5, 1分钟
-        console.log("1-15分钟 941");
-        const url = "ag1911";
-        // this.requestDatas(url);
+        // 隐藏
+        this.klineParams.indicator[name].show = true;
+        this.indicatorCounter--;
       }
-    },
-    addIndicator() {
-      this.$prompt("请输入邮箱", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
-        inputErrorMessage: "邮箱格式不正确"
-      })
-        .then(({ value }) => {
-          this.$message({
-            type: "success",
-            message: "你的邮箱是: " + value
-          });
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "取消输入"
-          });
-        });
+      this.$refs.callMethods.onIndicatorChange();
+      this.setSize();
+      this.setSidebarSize();
+      this.dialogVisible = false;
     },
     setSize() {
+      this.flag !== false
+        ? this.$refs.callMethods.resize(
+            this.screenWidth - 50 - 280,
+            this.screenHeight + this.indicatorCounter * this.indicatorHeight
+          )
+        : this.$refs.callMethods.resize(
+            this.screenWidth - 50,
+            this.screenHeight + this.indicatorCounter * this.indicatorHeight
+          );
+    },
+    watchSize() {
       window.onresize = () => {
         return (() => {
           this.screenWidth = document.body.clientWidth;
@@ -387,24 +348,32 @@ export default {
           this.flag !== false
             ? this.$refs.callMethods.resize(
                 this.screenWidth - 50 - 280,
-                this.screenHeight + 500
+                this.screenHeight
               )
             : this.$refs.callMethods.resize(
                 this.screenWidth - 50,
-                this.screenHeight + 500
+                this.screenHeight
               );
         })();
       };
+    },
+    setSidebarSize() {
+      this.$refs.sidebar.style.height =
+        window.innerHeight +
+        this.indicatorCounter * this.indicatorHeight +
+        "px";
+      let arr = document.getElementsByClassName("content");
+      for (let i = 0; i < arr.length; i++) {
+        arr[i].style.height =
+          window.innerHeight +
+          this.indicatorCounter * this.indicatorHeight +
+          "px";
+      }
     }
   },
-  computed: {},
   mounted() {
-    this.setSize();
-    this.$refs.sidebar.style.height = window.innerHeight + 500 + "px";
-    let arr = document.getElementsByClassName("content");
-    for (let i = 0; i < arr.length; i++) {
-      arr[i].style.height = window.innerHeight + 500 + "px";
-    }
+    this.watchSize();
+    this.setSidebarSize();
   }
 };
 </script>
@@ -417,8 +386,23 @@ body {
   .el-popup-parent--hidden {
     overflow-y: auto;
   }
-  .el-select {
-    width: 100%;
+  .el-dialog {
+    min-width: 350px;
+  }
+  .el-dialog__body {
+    padding-top: 10px;
+  }
+  .el-table {
+    tr {
+      th:nth-child(2) {
+        text-align: right;
+        padding-right: 30px;
+      }
+      td:last-child {
+        text-align: right;
+        padding-right: 20px;
+      }
+    }
   }
 }
 .home {
@@ -441,6 +425,20 @@ body {
         line-height: 55px;
         position: relative;
         text-align: center;
+        &.indicatorBtn {
+          position: fixed !important;
+          right: 3px;
+          bottom: 10px;
+          background-color: #4395FF;
+          color: #fff;
+          width: 45px;
+          height: 45px;
+          line-height: 48px;
+          border-radius: 50%;
+          .icon{
+            color: #fff;
+          }
+        }
         .icon {
           font-size: 22px;
         }

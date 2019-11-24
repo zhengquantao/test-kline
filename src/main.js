@@ -6,6 +6,7 @@ import axios from 'axios'
 import '@/assets/my_font/iconfont.css'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+import '@/kline/css/scrollbar.css';
 
 Vue.use(ElementUI);
 Vue.prototype.$axios = axios;
