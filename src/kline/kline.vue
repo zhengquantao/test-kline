@@ -1374,8 +1374,8 @@ const VueKline = {
       let data = this.klineData;
       callback(data);
     },
-    onIndicatorChange() {
-      this.kline.onIndicatorChange();
+    onIndicatorChange(indicName) {
+      this.kline.onIndicatorChange(indicName);
     }
   }
 };

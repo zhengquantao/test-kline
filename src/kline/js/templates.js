@@ -123,8 +123,7 @@ export class Template {
 
     static createIndicatorChartCompsVOLUME(dsName, indicName) {
         let mgr = ChartManager.instance;
-        let isShow = Kline.instance.indicator.VOLUME.show;
-        let isInit = Kline.instance.indicator.VOLUME.init;
+        let isShow = Kline.instance.indicator.VOLUME;
         let tableLayout = mgr.getArea(dsName + ".charts");
         let areaName = dsName + ".indic" + tableLayout.getNextRowId();
         let rangeAreaName = areaName + "Range";
@@ -148,7 +147,7 @@ export class Template {
         tableLayout.addArea(rangeArea);
         let dp = new data_providers.IndicatorDataProvider(areaName + ".secondary");
         mgr.setDataProvider(dp.getName(), dp);
-        if (mgr.setIndicator(areaName, indicName) === isShow || isInit) {
+        if (mgr.setIndicator(areaName, indicName) === isShow) {
             mgr.removeIndicator(areaName);
             return;
         }
@@ -174,13 +173,12 @@ export class Template {
         plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
         mgr.setPlotter(plotter.getName(), plotter);
         //已经初始化
-        Kline.instance.indicator.VOLUME.init = true;
+        Kline.instance.status.VOLUME = areaName;
     }
 
     static createIndicatorChartCompsMACD(dsName, indicName) {
         let mgr = ChartManager.instance;
-        let isShow = Kline.instance.indicator.MACD.show;
-        let isInit = Kline.instance.indicator.MACD.init;
+        let isShow = Kline.instance.indicator.MACD;
         let tableLayout = mgr.getArea(dsName + ".charts");
         let areaName = dsName + ".indic" + tableLayout.getNextRowId();
         let rangeAreaName = areaName + "Range";
@@ -204,7 +202,7 @@ export class Template {
         tableLayout.addArea(rangeArea);
         let dp = new data_providers.IndicatorDataProvider(areaName + ".secondary");
         mgr.setDataProvider(dp.getName(), dp);
-        if (mgr.setIndicator(areaName, indicName) === isShow || isInit) {
+        if (mgr.setIndicator(areaName, indicName) === isShow) {
             mgr.removeIndicator(areaName);
             return;
         }
@@ -230,13 +228,12 @@ export class Template {
         plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
         mgr.setPlotter(plotter.getName(), plotter);
         //已经初始化
-        Kline.instance.indicator.MACD.init = true;
+        Kline.instance.status.MACD = areaName;
     }
 
     static createIndicatorChartCompsKDJ(dsName, indicName) {
         let mgr = ChartManager.instance;
-        let isShow = Kline.instance.indicator.KDJ.show;
-        let isInit = Kline.instance.indicator.KDJ.init;
+        let isShow = Kline.instance.indicator.KDJ;
         let tableLayout = mgr.getArea(dsName + ".charts");
         let areaName = dsName + ".indic" + tableLayout.getNextRowId();
         let rangeAreaName = areaName + "Range";
@@ -260,7 +257,7 @@ export class Template {
         tableLayout.addArea(rangeArea);
         let dp = new data_providers.IndicatorDataProvider(areaName + ".secondary");
         mgr.setDataProvider(dp.getName(), dp);
-        if (mgr.setIndicator(areaName, indicName) === isShow || isInit) {
+        if (mgr.setIndicator(areaName, indicName) === isShow) {
             mgr.removeIndicator(areaName);
             return;
         }
@@ -286,7 +283,7 @@ export class Template {
         plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
         mgr.setPlotter(plotter.getName(), plotter);
         //已经初始化
-        Kline.instance.indicator.KDJ.init = true;
+        Kline.instance.status.KDJ = areaName;
     }
 
     static createIndicatorChartCompsStochRSI(dsName, indicName) {
@@ -341,15 +338,13 @@ export class Template {
         mgr.setPlotter(plotter.getName(), plotter);
         plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
         mgr.setPlotter(plotter.getName(), plotter);
-
         //已经初始化
-        Kline.instance.indicator.StochRSI.init = true;
+        Kline.instance.status.StochRSI = areaName;
     }
 
     static createIndicatorChartCompsRSI(dsName, indicName) {
         let mgr = ChartManager.instance;
-        let isShow = Kline.instance.indicator.RSI.show;
-        let isInit = Kline.instance.indicator.RSI.init;
+        let isShow = Kline.instance.indicator.RSI;
         let tableLayout = mgr.getArea(dsName + ".charts");
         let areaName = dsName + ".indic" + tableLayout.getNextRowId();
         let rangeAreaName = areaName + "Range";
@@ -373,7 +368,7 @@ export class Template {
         tableLayout.addArea(rangeArea);
         let dp = new data_providers.IndicatorDataProvider(areaName + ".secondary");
         mgr.setDataProvider(dp.getName(), dp);
-        if (mgr.setIndicator(areaName, indicName) === isShow || isInit) {
+        if (mgr.setIndicator(areaName, indicName) === isShow) {
             mgr.removeIndicator(areaName);
             return;
         }
@@ -398,16 +393,14 @@ export class Template {
         mgr.setPlotter(plotter.getName(), plotter);
         plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
         mgr.setPlotter(plotter.getName(), plotter);
-
         //已经初始化
-        Kline.instance.indicator.RSI.init = true;
+        Kline.instance.status.RSI = areaName;
 
     }
 
     static createIndicatorChartCompsDMI(dsName, indicName) {
         let mgr = ChartManager.instance;
-        let isShow = Kline.instance.indicator.DMI.show;
-        let isInit = Kline.instance.indicator.DMI.init;
+        let isShow = Kline.instance.indicator.DMI;
         let tableLayout = mgr.getArea(dsName + ".charts");
         let areaName = dsName + ".indic" + tableLayout.getNextRowId();
         let rangeAreaName = areaName + "Range";
@@ -431,7 +424,7 @@ export class Template {
         tableLayout.addArea(rangeArea);
         let dp = new data_providers.IndicatorDataProvider(areaName + ".secondary");
         mgr.setDataProvider(dp.getName(), dp);
-        if (mgr.setIndicator(areaName, indicName) === isShow || isInit) {
+        if (mgr.setIndicator(areaName, indicName) === isShow) {
             mgr.removeIndicator(areaName);
             return;
         }
@@ -456,15 +449,13 @@ export class Template {
         mgr.setPlotter(plotter.getName(), plotter);
         plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
         mgr.setPlotter(plotter.getName(), plotter);
-
         //已经初始化
-        Kline.instance.indicator.DMI.init = true;
+        Kline.instance.status.DMI = areaName;
     }
 
     static createIndicatorChartCompsOBV(dsName, indicName) {
         let mgr = ChartManager.instance;
-        let isShow = Kline.instance.indicator.OBV.show;
-        let isInit = Kline.instance.indicator.OBV.init;
+        let isShow = Kline.instance.indicator.OBV;
         let tableLayout = mgr.getArea(dsName + ".charts");
         let areaName = dsName + ".indic" + tableLayout.getNextRowId();
         let rangeAreaName = areaName + "Range";
@@ -488,7 +479,7 @@ export class Template {
         tableLayout.addArea(rangeArea);
         let dp = new data_providers.IndicatorDataProvider(areaName + ".secondary");
         mgr.setDataProvider(dp.getName(), dp);
-        if (mgr.setIndicator(areaName, indicName) === isShow || isInit) {
+        if (mgr.setIndicator(areaName, indicName) === isShow) {
             mgr.removeIndicator(areaName);
             return;
         }
@@ -513,16 +504,14 @@ export class Template {
         mgr.setPlotter(plotter.getName(), plotter);
         plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
         mgr.setPlotter(plotter.getName(), plotter);
-
         //已经初始化
-        Kline.instance.indicator.OBV.init = true;
+        Kline.instance.status.OBV = areaName;
 
     }
 
     static createIndicatorChartCompsBOLL(dsName, indicName) {
         let mgr = ChartManager.instance;
-        let isShow = Kline.instance.indicator.BOLL.show;
-        let isInit = Kline.instance.indicator.BOLL.init;
+        let isShow = Kline.instance.indicator.BOLL;
         let tableLayout = mgr.getArea(dsName + ".charts");
         let areaName = dsName + ".indic" + tableLayout.getNextRowId();
         let rangeAreaName = areaName + "Range";
@@ -546,7 +535,7 @@ export class Template {
         tableLayout.addArea(rangeArea);
         let dp = new data_providers.IndicatorDataProvider(areaName + ".secondary");
         mgr.setDataProvider(dp.getName(), dp);
-        if (mgr.setIndicator(areaName, indicName) === isShow || isInit) {
+        if (mgr.setIndicator(areaName, indicName) === isShow) {
             mgr.removeIndicator(areaName);
             return;
         }
@@ -571,16 +560,14 @@ export class Template {
         mgr.setPlotter(plotter.getName(), plotter);
         plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
         mgr.setPlotter(plotter.getName(), plotter);
-
         //已经初始化
-        Kline.instance.indicator.BOLL.init = true;
+        Kline.instance.status.BOLL = areaName;
 
     }
 
     static createIndicatorChartCompsSAR(dsName, indicName) {
         let mgr = ChartManager.instance;
-        let isShow = Kline.instance.indicator.SAR.show;
-        let isInit = Kline.instance.indicator.SAR.init;
+        let isShow = Kline.instance.indicator.SAR;
         let tableLayout = mgr.getArea(dsName + ".charts");
         let areaName = dsName + ".indic" + tableLayout.getNextRowId();
         let rangeAreaName = areaName + "Range";
@@ -629,16 +616,14 @@ export class Template {
         mgr.setPlotter(plotter.getName(), plotter);
         plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
         mgr.setPlotter(plotter.getName(), plotter);
-
         //已经初始化
-        Kline.instance.indicator.SAR.init = true;
+        Kline.instance.status.SAR = areaName;
 
     }
 
     static createIndicatorChartCompsDMA(dsName, indicName) {
         let mgr = ChartManager.instance;
-        let isShow = Kline.instance.indicator.DMA.show;
-        let isInit = Kline.instance.indicator.DMA.init;
+        let isShow = Kline.instance.indicator.DMA;
         let tableLayout = mgr.getArea(dsName + ".charts");
         let areaName = dsName + ".indic" + tableLayout.getNextRowId();
         let rangeAreaName = areaName + "Range";
@@ -662,7 +647,7 @@ export class Template {
         tableLayout.addArea(rangeArea);
         let dp = new data_providers.IndicatorDataProvider(areaName + ".secondary");
         mgr.setDataProvider(dp.getName(), dp);
-        if (mgr.setIndicator(areaName, indicName) === isShow || isInit) {
+        if (mgr.setIndicator(areaName, indicName) === isShow) {
             mgr.removeIndicator(areaName);
             return;
         }
@@ -687,16 +672,14 @@ export class Template {
         mgr.setPlotter(plotter.getName(), plotter);
         plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
         mgr.setPlotter(plotter.getName(), plotter);
-
         //已经初始化
-        Kline.instance.indicator.DMA.init = true;
+        Kline.instance.status.DMA = areaName;
 
     }
 
     static createIndicatorChartCompsTRIX(dsName, indicName) {
         let mgr = ChartManager.instance;
-        let isShow = Kline.instance.indicator.TRIX.show;
-        let isInit = Kline.instance.indicator.TRIX.init;
+        let isShow = Kline.instance.indicator.TRIX;
         let tableLayout = mgr.getArea(dsName + ".charts");
         let areaName = dsName + ".indic" + tableLayout.getNextRowId();
         let rangeAreaName = areaName + "Range";
@@ -745,16 +728,14 @@ export class Template {
         mgr.setPlotter(plotter.getName(), plotter);
         plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
         mgr.setPlotter(plotter.getName(), plotter);
-
         //已经初始化
-        Kline.instance.indicator.TRIX.init = true;
+        Kline.instance.status.TRIX = areaName;
 
     }
 
     static createIndicatorChartCompsBRAR(dsName, indicName) {
         let mgr = ChartManager.instance;
-        let isShow = Kline.instance.indicator.BRAR.show;
-        let isInit = Kline.instance.indicator.BRAR.init;
+        let isShow = Kline.instance.indicator.BRAR;
         let tableLayout = mgr.getArea(dsName + ".charts");
         let areaName = dsName + ".indic" + tableLayout.getNextRowId();
         let rangeAreaName = areaName + "Range";
@@ -778,7 +759,7 @@ export class Template {
         tableLayout.addArea(rangeArea);
         let dp = new data_providers.IndicatorDataProvider(areaName + ".secondary");
         mgr.setDataProvider(dp.getName(), dp);
-        if (mgr.setIndicator(areaName, indicName) === isShow || isInit) {
+        if (mgr.setIndicator(areaName, indicName) === isShow) {
             mgr.removeIndicator(areaName);
             return;
         }
@@ -803,16 +784,14 @@ export class Template {
         mgr.setPlotter(plotter.getName(), plotter);
         plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
         mgr.setPlotter(plotter.getName(), plotter);
-
         //已经初始化
-        Kline.instance.indicator.BRAR.init = true;
+        Kline.instance.status.BRAR = areaName;
 
     }
 
     static createIndicatorChartCompsVR(dsName, indicName) {
         let mgr = ChartManager.instance;
-        let isShow = Kline.instance.indicator.VR.show;
-        let isInit = Kline.instance.indicator.VR.init;
+        let isShow = Kline.instance.indicator.VR;
         let tableLayout = mgr.getArea(dsName + ".charts");
         let areaName = dsName + ".indic" + tableLayout.getNextRowId();
         let rangeAreaName = areaName + "Range";
@@ -836,7 +815,7 @@ export class Template {
         tableLayout.addArea(rangeArea);
         let dp = new data_providers.IndicatorDataProvider(areaName + ".secondary");
         mgr.setDataProvider(dp.getName(), dp);
-        if (mgr.setIndicator(areaName, indicName) === isShow || isInit) {
+        if (mgr.setIndicator(areaName, indicName) === isShow) {
             mgr.removeIndicator(areaName);
             return;
         }
@@ -861,16 +840,14 @@ export class Template {
         mgr.setPlotter(plotter.getName(), plotter);
         plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
         mgr.setPlotter(plotter.getName(), plotter);
-
         //已经初始化
-        Kline.instance.indicator.VR.init = true;
+        Kline.instance.status.VR = areaName;
 
     }
 
     static createIndicatorChartCompsEMV(dsName, indicName) {
         let mgr = ChartManager.instance;
-        let isShow = Kline.instance.indicator.EMV.show;
-        let isInit = Kline.instance.indicator.EMV.init;
+        let isShow = Kline.instance.indicator.EMV;
         let tableLayout = mgr.getArea(dsName + ".charts");
         let areaName = dsName + ".indic" + tableLayout.getNextRowId();
         let rangeAreaName = areaName + "Range";
@@ -894,7 +871,7 @@ export class Template {
         tableLayout.addArea(rangeArea);
         let dp = new data_providers.IndicatorDataProvider(areaName + ".secondary");
         mgr.setDataProvider(dp.getName(), dp);
-        if (mgr.setIndicator(areaName, indicName) === isShow || isInit) {
+        if (mgr.setIndicator(areaName, indicName) === isShow) {
             mgr.removeIndicator(areaName);
             return;
         }
@@ -919,16 +896,14 @@ export class Template {
         mgr.setPlotter(plotter.getName(), plotter);
         plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
         mgr.setPlotter(plotter.getName(), plotter);
-
         //已经初始化
-        Kline.instance.indicator.EMV.init = true;
+        Kline.instance.status.EMV = areaName;
 
     }
 
     static createIndicatorChartCompsWR(dsName, indicName) {
         let mgr = ChartManager.instance;
-        let isShow = Kline.instance.indicator.WR.show;
-        let isInit = Kline.instance.indicator.WR.init;
+        let isShow = Kline.instance.indicator.WR;
         let tableLayout = mgr.getArea(dsName + ".charts");
         let areaName = dsName + ".indic" + tableLayout.getNextRowId();
         let rangeAreaName = areaName + "Range";
@@ -952,7 +927,7 @@ export class Template {
         tableLayout.addArea(rangeArea);
         let dp = new data_providers.IndicatorDataProvider(areaName + ".secondary");
         mgr.setDataProvider(dp.getName(), dp);
-        if (mgr.setIndicator(areaName, indicName) === isShow || isInit) {
+        if (mgr.setIndicator(areaName, indicName) === isShow) {
             mgr.removeIndicator(areaName);
             return;
         }
@@ -977,16 +952,14 @@ export class Template {
         mgr.setPlotter(plotter.getName(), plotter);
         plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
         mgr.setPlotter(plotter.getName(), plotter);
-
         //已经初始化
-        Kline.instance.indicator.WR.init = true;
+        Kline.instance.status.WR = areaName;
 
     }
 
     static createIndicatorChartCompsROC(dsName, indicName) {
         let mgr = ChartManager.instance;
-        let isShow = Kline.instance.indicator.ROC.show;
-        let isInit = Kline.instance.indicator.ROC.init;
+        let isShow = Kline.instance.indicator.ROC;
         let tableLayout = mgr.getArea(dsName + ".charts");
         let areaName = dsName + ".indic" + tableLayout.getNextRowId();
         let rangeAreaName = areaName + "Range";
@@ -1010,7 +983,7 @@ export class Template {
         tableLayout.addArea(rangeArea);
         let dp = new data_providers.IndicatorDataProvider(areaName + ".secondary");
         mgr.setDataProvider(dp.getName(), dp);
-        if (mgr.setIndicator(areaName, indicName) === isShow || isInit) {
+        if (mgr.setIndicator(areaName, indicName) === isShow) {
             mgr.removeIndicator(areaName);
             return;
         }
@@ -1035,16 +1008,13 @@ export class Template {
         mgr.setPlotter(plotter.getName(), plotter);
         plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
         mgr.setPlotter(plotter.getName(), plotter);
-
         //已经初始化
-        Kline.instance.indicator.ROC.init = true;
-
+        Kline.instance.status.ROC = areaName;
     }
 
     static createIndicatorChartCompsMTM(dsName, indicName) {
         let mgr = ChartManager.instance;
-        let isShow = Kline.instance.indicator.MTM.show;
-        let isInit = Kline.instance.indicator.MTM.init;
+        let isShow = Kline.instance.indicator.MTM;
         let tableLayout = mgr.getArea(dsName + ".charts");
         let areaName = dsName + ".indic" + tableLayout.getNextRowId();
         let rangeAreaName = areaName + "Range";
@@ -1068,7 +1038,7 @@ export class Template {
         tableLayout.addArea(rangeArea);
         let dp = new data_providers.IndicatorDataProvider(areaName + ".secondary");
         mgr.setDataProvider(dp.getName(), dp);
-        if (mgr.setIndicator(areaName, indicName) === isShow || isInit) {
+        if (mgr.setIndicator(areaName, indicName) === isShow) {
             mgr.removeIndicator(areaName);
             return;
         }
@@ -1093,16 +1063,13 @@ export class Template {
         mgr.setPlotter(plotter.getName(), plotter);
         plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
         mgr.setPlotter(plotter.getName(), plotter);
-
-
         //已经初始化
-        Kline.instance.indicator.MTM.init = true;
+        Kline.instance.status.MTM = areaName;
     }
 
     static createIndicatorChartCompsPSY(dsName, indicName) {
         let mgr = ChartManager.instance;
-        let isShow = Kline.instance.indicator.PSY.show;
-         let isInit = Kline.instance.indicator.PSY.init;
+        let isShow = Kline.instance.indicator.PSY;
         let tableLayout = mgr.getArea(dsName + ".charts");
         let areaName = dsName + ".indic" + tableLayout.getNextRowId();
         let rangeAreaName = areaName + "Range";
@@ -1126,7 +1093,7 @@ export class Template {
         tableLayout.addArea(rangeArea);
         let dp = new data_providers.IndicatorDataProvider(areaName + ".secondary");
         mgr.setDataProvider(dp.getName(), dp);
-        if (mgr.setIndicator(areaName, indicName) === isShow || isInit) {
+        if (mgr.setIndicator(areaName, indicName) === isShow) {
             mgr.removeIndicator(areaName);
             return;
         }
@@ -1151,9 +1118,8 @@ export class Template {
         mgr.setPlotter(plotter.getName(), plotter);
         plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
         mgr.setPlotter(plotter.getName(), plotter);
-
         //已经初始化
-        Kline.instance.indicator.PSY.init = true;
+        Kline.instance.status.PSY = areaName;
 
     }
 
