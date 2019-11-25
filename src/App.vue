@@ -130,7 +130,7 @@ export default {
       tipFlag: true,
       dialogVisible: false,
       indicatorCounter: 0,
-      indicatorHeight: 150,
+      indicatorHeight: 165,
       indicatorNameCoordinate: {},
       screenWidth: document.body.clientWidth,
       screenHeight: document.body.clientHeight,
@@ -303,11 +303,11 @@ export default {
       val !== false
         ? this.$refs.callMethods.resize(
             this.screenWidth - 50 - 280,
-            this.screenHeight
+            this.screenHeight+this.indicatorCounter * this.indicatorHeight
           )
         : this.$refs.callMethods.resize(
             this.screenWidth - 50,
-            this.screenHeight
+            this.screenHeight+this.indicatorCounter * this.indicatorHeight
           );
     }
   },
@@ -348,11 +348,11 @@ export default {
           this.flag !== false
             ? this.$refs.callMethods.resize(
                 this.screenWidth - 50 - 280,
-                this.screenHeight
+                this.screenHeight+this.indicatorCounter * this.indicatorHeight
               )
             : this.$refs.callMethods.resize(
                 this.screenWidth - 50,
-                this.screenHeight
+                this.screenHeight+this.indicatorCounter * this.indicatorHeight
               );
         })();
       };
@@ -388,19 +388,20 @@ body {
   }
   .el-dialog {
     min-width: 350px;
+    border-radius: 10px;
   }
-  .el-dialog__body {
-    padding-top: 10px;
+  .el-dialog--center .el-dialog__body{
+    padding: 0px 20px 20px;
   }
   .el-table {
     tr {
       th:nth-child(2) {
         text-align: right;
-        padding-right: 30px;
+        padding-right: 20px;
       }
       td:last-child {
         text-align: right;
-        padding-right: 20px;
+        padding-right: 10px;
       }
     }
   }
