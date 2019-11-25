@@ -44,7 +44,7 @@ export default class Kline {
     //时间范围
     this.ranges = ["1w", "1d", "1h", "30m", "15m", "5m", "1m", "line"];
     this.depthWidth = 100;
-
+    this.switchIndic=Control.switchIndic;
     this.periodMap = {
       "01w": 7 * 86400 * 1000,
       "03d": 3 * 86400 * 1000,
@@ -619,14 +619,14 @@ export default class Kline {
             top: '0',
             bottom: '0',
             width: '100%',
-            height: '100%',
+            // height: '100%',
             zIndex: '10000'
           });
 
           Control.onSize();
           $('html,body').css({
             width: '100%',
-            height: '100%',
+            // height: '100%',
             overflow: 'hidden'
           });
         } else {

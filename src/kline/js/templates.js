@@ -703,7 +703,7 @@ export class Template {
         tableLayout.addArea(rangeArea);
         let dp = new data_providers.IndicatorDataProvider(areaName + ".secondary");
         mgr.setDataProvider(dp.getName(), dp);
-        if (mgr.setIndicator(areaName, indicName) === isShow || isInit) {
+        if (mgr.setIndicator(areaName, indicName) === isShow) {
             mgr.removeIndicator(areaName);
             return;
         }
