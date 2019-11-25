@@ -446,6 +446,7 @@ body {
 }
 
 .chart_container #chart_updated_time {
+    display: none;
     float: right;
     padding-top: 6px;
     margin-right:10px;
@@ -461,7 +462,7 @@ body {
 
 .chart_container #chart_show_depth{
     float:right;
-    margin-right:30px;
+    margin-right:10px;
 }
 
 #chart_toolpanel {

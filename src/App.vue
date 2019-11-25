@@ -94,9 +94,14 @@
         </div>
       </div>
     </div>
-
     <!-- 弹出框 -->
     <el-dialog title="指标" :visible.sync="dialogVisible" width="25%" style="min-width:350px;" center>
+      <div style="text-align:center;padding:10px 0">
+        <el-button-group>
+          <el-button size="small" type="primary" @click="openAllIndicator">全部打开</el-button>
+          <el-button size="small" type="primary" @click="closeAllIndicator">全部关闭</el-button>
+        </el-button-group>
+      </div>
       <el-table :data="options" style="width: 100%;height:250px;overflow:auto">
         <el-table-column prop="value" label="指标名称"></el-table-column>
         <el-table-column prop="switch" label="开关">
@@ -142,18 +147,18 @@ export default {
           VOLUME: true,
           MACD: true,
           KDJ: true,
-          StochRSI:true,
+          StochRSI: true,
           RSI: true,
           DMI: true,
           OBV: true,
           BOLL: true,
           SAR: true,
           DMA: true,
-          TRIX:true,
+          TRIX: true,
           BRAR: true,
           VR: true,
           EMV: true,
-          WR:true,
+          WR: true,
           ROC: true,
           MTM: true,
           PSY: true
@@ -249,15 +254,39 @@ export default {
       val !== false
         ? this.$refs.callMethods.resize(
             this.screenWidth - 50 - 280,
-            this.screenHeight+this.indicatorCounter * this.indicatorHeight
+            this.screenHeight + this.indicatorCounter * this.indicatorHeight
           )
         : this.$refs.callMethods.resize(
             this.screenWidth - 50,
-            this.screenHeight+this.indicatorCounter * this.indicatorHeight
+            this.screenHeight + this.indicatorCounter * this.indicatorHeight
           );
     }
   },
   methods: {
+    closeAllIndicator() {
+      this.$refs.callMethods.kline.switchIndic("off");
+      this.indicatorCounter=0;
+      this.options.forEach((item)=>{
+        item.switch=false;
+      })
+      this.setSize();
+      this.setSidebarSize();
+      this.dialogVisible = false;
+    },
+    openAllIndicator(){
+      this.$refs.callMethods.kline.switchIndic("on");
+      this.options.forEach((item)=>{
+        item.switch=true;
+      })
+      for(let i in this.klineParams.indicator){
+        this.klineParams.indicator[i]=false;
+        this.$refs.callMethods.onIndicatorChange(i);
+      }
+      this.indicatorCounter=this.options.length;
+      this.setSize();
+      this.setSidebarSize();
+      this.dialogVisible = false;
+    },
     addIndicator(row) {
       let name = row.value;
       row.switch = !row.switch;
@@ -294,11 +323,11 @@ export default {
           this.flag !== false
             ? this.$refs.callMethods.resize(
                 this.screenWidth - 50 - 280,
-                this.screenHeight+this.indicatorCounter * this.indicatorHeight
+                this.screenHeight + this.indicatorCounter * this.indicatorHeight
               )
             : this.$refs.callMethods.resize(
                 this.screenWidth - 50,
-                this.screenHeight+this.indicatorCounter * this.indicatorHeight
+                this.screenHeight + this.indicatorCounter * this.indicatorHeight
               );
         })();
       };
@@ -336,7 +365,7 @@ body {
     min-width: 350px;
     border-radius: 10px;
   }
-  .el-dialog--center .el-dialog__body{
+  .el-dialog--center .el-dialog__body {
     padding: 0px 20px 20px;
   }
   .el-table {
@@ -376,13 +405,13 @@ body {
           position: fixed !important;
           right: 3px;
           bottom: 10px;
-          background-color: #4395FF;
+          background-color: #4395ff;
           color: #fff;
           width: 45px;
           height: 45px;
           line-height: 48px;
           border-radius: 50%;
-          .icon{
+          .icon {
             color: #fff;
           }
         }
