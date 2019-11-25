@@ -1041,7 +1041,6 @@ export class ChartManager {
   //判断是否存在这个指标
   setIndicator(areaName, indicName) {
     let area = this.getArea(areaName);
-    console.log(area, areaName, indicName, '-------ffffffffff--------')
     if (area === null || area === undefined || area.getNameObject().getCompAt(2) === "main") {
       return false;
     }
@@ -1100,11 +1099,13 @@ export class ChartManager {
     if (rangeArea === undefined)
       return;
     let tableLayout = this.getArea(area.getDataSourceName() + ".charts");
+
     if (tableLayout === undefined)
       return;
     tableLayout.removeArea(area);
     this.removeArea(areaName);
     tableLayout.removeArea(rangeArea);
+    // 删除右边块
     this.removeArea(rangeAreaName);
     for (let n in this._dataProviders) {
       if (this._dataProviders[n].getAreaName() === areaName)

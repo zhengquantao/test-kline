@@ -422,8 +422,9 @@ export class ChartAreaGroup extends ChartArea {
         let i, cnt = this._areas.length;
         for (i = 0; i < cnt; i++) {
             if (area === this._areas[i]) {
-                this._areas.splice(i);
-                this.setChanged(true);
+                //注意删除
+                this._areas.splice(i, 2);
+                this.setChanged(false);
                 break;
             }
         }

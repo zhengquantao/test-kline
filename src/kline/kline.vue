@@ -34,6 +34,7 @@ const VueKline = {
   mounted() {
     this.kline = new Kline(this.cfg);
     this.kline.draw();
+    this.kline.onIndicatorChange("");
   },
   render() {
     return (

@@ -10,6 +10,7 @@ import * as layouts from './layouts'
 import * as themes from './themes'
 import * as ranges from './ranges'
 import Kline from './kline'
+import row from "element-ui/packages/row/src/row";
 export class Template {
     static createCandlestickDataSource(dsAlias) {
         return new data_sources.MainDataSource(dsAlias);
@@ -117,8 +118,6 @@ export class Template {
         mgr.setPlotter(plotter.getName(), plotter);
         plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
         mgr.setPlotter(plotter.getName(), plotter);
-
-
     }
 
     static createIndicatorChartCompsVOLUME(dsName, indicName) {
@@ -181,6 +180,7 @@ export class Template {
         let isShow = Kline.instance.indicator.MACD;
         let tableLayout = mgr.getArea(dsName + ".charts");
         let areaName = dsName + ".indic" + tableLayout.getNextRowId();
+        console.log(areaName)
         let rangeAreaName = areaName + "Range";
         let area = new areas.IndicatorArea(areaName);
         mgr.setArea(areaName, area);

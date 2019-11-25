@@ -444,7 +444,8 @@ export class Control {
         if ($(this).attr('name') === value)
           $(this).addClass('selected');
       });
-      $('#chart_tabbar')[0].style.display = 'block';
+      // 显示下指标列表
+      //$('#chart_tabbar')[0].style.display = 'block';
     } else if (name === 'off') {
       $('#chart_show_indicator').removeClass('selected');
       ChartManager.instance.getChart().setIndicator(2, 'NONE');
