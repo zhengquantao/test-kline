@@ -143,7 +143,6 @@ export class Chart {
     }
 
     setIndicator(index, indicName) {
-        console.log(index, indicName, '----------')
         if (indicName === 'NONE') {
             /*
             let index = 2;
@@ -160,7 +159,7 @@ export class Chart {
             if (Template.displayVolume === false)
                 index = 1;
             */
-            let index = 2;
+            let index = 1;
             let areaName = ChartManager.instance.getIndicatorAreaName('frame0.k0', index);
             if (areaName === '') {
               Template.createIndicatorChartComps('frame0.k0', indicName);
@@ -190,61 +189,154 @@ export class Chart {
     }
 
     addNewIndicator(indic){
-        let status = Kline.instance.indicator;
+        let indicatorStatus = Kline.instance.indicator;
+        let status = Kline.instance.status;
         if(indic === "VOLUME"){
+            if (indicatorStatus.VOLUME === false){
+                Template.createIndicatorChartCompsVOLUME('frame0.k0', 'VOLUME');
+            }else{
+                let areaName = status.VOLUME;
+                ChartManager.instance.removeIndicator(areaName);
+            }
 
-            Template.createIndicatorChartCompsVOLUME('frame0.k0', 'VOLUME');
         }
         else if(indic === "MACD"){
-            Template.createIndicatorChartCompsMACD('frame0.k0', 'MACD');
+            if(indicatorStatus.MACD === false){
+                 Template.createIndicatorChartCompsMACD('frame0.k0', 'MACD');
+            }else{
+                let areaName = status.MACD;
+                ChartManager.instance.removeIndicator(areaName)
+            }
         }
         else if(indic === "BOLL") {
-            Template.createIndicatorChartCompsBOLL('frame0.k0', 'BOLL');
+            if(indicatorStatus.BOLL === false){
+                Template.createIndicatorChartCompsBOLL('frame0.k0', 'BOLL');
+            }else{
+                let areaName = status.BOLL;
+                ChartManager.instance.removeIndicator(areaName)
+            }
         }
         else if(indic === "KDJ"){
-            Template.createIndicatorChartCompsKDJ('frame0.k0', 'KDJ');
+            if(indicatorStatus.KDJ === false){
+                Template.createIndicatorChartCompsKDJ('frame0.k0', 'KDJ');
+            }else{
+                let areaName = status.KDJ;
+                ChartManager.instance.removeIndicator(areaName)
+            }
         }
         else if(indic === "StochRSI"){
-            Template.createIndicatorChartCompsStochRSI('frame0.k0', 'StochRSI');
+            if(indicatorStatus.StochRSI === false){
+                 Template.createIndicatorChartCompsStochRSI('frame0.k0', 'StochRSI');
+            }else{
+                let areaName = status.StochRSI;
+                ChartManager.instance.removeIndicator(areaName)
+            }
         }
         else if(indic === "RSI"){
-            Template.createIndicatorChartCompsRSI('frame0.k0', 'RSI');
+            if(indicatorStatus.RSI === false){
+                Template.createIndicatorChartCompsRSI('frame0.k0', 'RSI');
+            }else{
+                let areaName = status.RSI;
+                ChartManager.instance.removeIndicator(areaName)
+            }
         }
         else if(indic === "DMI"){
-            Template.createIndicatorChartCompsDMI('frame0.k0', 'DMI');
+            if(indicatorStatus.DMI === false){
+                Template.createIndicatorChartCompsDMI('frame0.k0', 'DMI');
+            }else{
+                let areaName = status.DMI;
+                ChartManager.instance.removeIndicator(areaName)
+            }
         }
         else if(indic === "OBV"){
-            Template.createIndicatorChartCompsOBV('frame0.k0', 'OBV');
+            if(indicatorStatus.OBV === false){
+                 Template.createIndicatorChartCompsOBV('frame0.k0', 'OBV');
+            }else{
+                  let areaName = status.OBV;
+                  ChartManager.instance.removeIndicator(areaName)
+            }
         }
-        else if(indic === "BOLL"){
-            Template.createIndicatorChartCompsBOLL('frame0.k0', 'BOLL');
+        else if(indic === "SAR"){
+            if(indicatorStatus.SAR === false){
+                 Template.createIndicatorChartCompsSAR('frame0.k0', 'SAR');
+            }else{
+                let areaName = status.SAR;
+                ChartManager.instance.removeIndicator(areaName)
+            }
         }
         else if(indic === "DMA"){
-            Template.createIndicatorChartCompsDMA('frame0.k0', 'DMA');
+            if(indicatorStatus.DMA === false){
+                Template.createIndicatorChartCompsDMA('frame0.k0', 'DMA');
+            }else{
+                let areaName = status.DMA;
+                ChartManager.instance.removeIndicator(areaName)
+            }
         }
         if(indic === "TRIX"){
-            Template.createIndicatorChartCompsTRIX('frame0.k0', 'TRIX');
+            if(indicatorStatus.TRIX === false){
+                 Template.createIndicatorChartCompsTRIX('frame0.k0', 'TRIX');
+            }else{
+                let areaName = status.TRIX;
+                ChartManager.instance.removeIndicator(areaName)
+            }
         }
         else if(indic === "BRAR"){
-            Template.createIndicatorChartCompsBRAR('frame0.k0', 'BRAR');
+            if(indicatorStatus.BRAR === false){
+                Template.createIndicatorChartCompsBRAR('frame0.k0', 'BRAR');
+            }else{
+                 let areaName = status.BRAR;
+                ChartManager.instance.removeIndicator(areaName)
+            }
         }
         else if(indic === "VR"){
-            Template.createIndicatorChartCompsVR('frame0.k0', 'VR');
+            if(indicatorStatus.VR === false){
+                Template.createIndicatorChartCompsVR('frame0.k0', 'VR');
+            }else{
+                let areaName = status.VR;
+                ChartManager.instance.removeIndicator(areaName)
+            }
         }
         else if(indic === "EMV"){
-              Template.createIndicatorChartCompsEMV('frame0.k0', 'EMV');
+            if(indicatorStatus.EMV === false){
+                Template.createIndicatorChartCompsEMV('frame0.k0', 'EMV');
+            }else{
+                let areaName = status.EMV;
+                ChartManager.instance.removeIndicator(areaName)
+            }
         }
         else if(indic === "WR"){
-            Template.createIndicatorChartCompsWR('frame0.k0', 'WR');
+            if(indicatorStatus.WR === false){
+                Template.createIndicatorChartCompsWR('frame0.k0', 'WR');
+            }else{
+                let areaName = status.WR;
+                ChartManager.instance.removeIndicator(areaName)
+            }
+
         }
         else if(indic === "ROC"){
-            Template.createIndicatorChartCompsROC('frame0.k0', 'ROC');
+            if(indicatorStatus.ROC === false){
+                 Template.createIndicatorChartCompsROC('frame0.k0', 'ROC');
+            }else{
+                let areaName = status.ROC;
+                ChartManager.instance.removeIndicator(areaName)
+            }
+
         }
         else if(indic === "MTM"){
-            Template.createIndicatorChartCompsMTM('frame0.k0', 'MTM');
+            if(indicatorStatus.MTM === false){
+                 Template.createIndicatorChartCompsMTM('frame0.k0', 'MTM');
+            }else{
+                let areaName = status.MTM;
+                ChartManager.instance.removeIndicator(areaName)
+            }
         }
         else if(indic === "PSY"){
-             Template.createIndicatorChartCompsPSY('frame0.k0', 'PSY');
+            if(indicatorStatus.PSY === false){
+                Template.createIndicatorChartCompsPSY('frame0.k0', 'PSY');
+            }else{
+                let areaName = status.PSY;
+                ChartManager.instance.removeIndicator(areaName)
+            }
         }
         ChartManager.instance.redraw('All', true);
     }

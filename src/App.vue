@@ -139,78 +139,24 @@ export default {
         height: document.body.clientHeight,
         theme: "dark",
         indicator: {
-          VOLUME: {
-            show: true,
-            init: false
-          },
-          MACD: {
-            show: true,
-            init: false
-          },
-          KDJ: {
-            show: true,
-            init: false
-          },
-          StochRSI: {
-            show: true,
-            init: false
-          },
-          RSI: {
-            show: true,
-            init: false
-          },
-          DMI: {
-            show: true,
-            init: false
-          },
-          OBV: {
-            show: true,
-            init: false
-          },
-          BOLL: {
-            show: true,
-            init: false
-          },
-          SAR: {
-            show: true,
-            init: false
-          },
-          DMA: {
-            show: true,
-            init: false
-          },
-          TRIX: {
-            show: true,
-            init: false
-          },
-          BRAR: {
-            show: true,
-            init: false
-          },
-          VR: {
-            show: true,
-            init: false
-          },
-          EMV: {
-            show: true,
-            init: false
-          },
-          WR: {
-            show: true,
-            init: false
-          },
-          ROC: {
-            show: true,
-            init: false
-          },
-          MTM: {
-            show: true,
-            init: false
-          },
-          PSY: {
-            show: true,
-            init: false
-          }
+          VOLUME: true,
+          MACD: true,
+          KDJ: true,
+          StochRSI:true,
+          RSI: true,
+          DMI: true,
+          OBV: true,
+          BOLL: true,
+          SAR: true,
+          DMA: true,
+          TRIX:true,
+          BRAR: true,
+          VR: true,
+          EMV: true,
+          WR:true,
+          ROC: true,
+          MTM: true,
+          PSY: true
         },
         language: "zh-cn",
         ranges: ["1w", "1d", "1h", "30m", "15m", "5m", "1m", "line"],
@@ -315,13 +261,13 @@ export default {
     addIndicator(row) {
       let name = row.value;
       row.switch = !row.switch;
-      if (this.klineParams.indicator[name].show) {
+      if (this.klineParams.indicator[name]) {
         // 显示
-        this.klineParams.indicator[name].show = false;
+        this.klineParams.indicator[name] = false;
         this.indicatorCounter++;
       } else {
         // 隐藏
-        this.klineParams.indicator[name].show = true;
+        this.klineParams.indicator[name] = true;
         this.indicatorCounter--;
       }
       this.$refs.callMethods.onIndicatorChange(name);

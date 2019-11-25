@@ -77,80 +77,47 @@ export default class Kline {
       "1m": "01m",
       "line": "line"
     };
+    //指标控制开关
     this.indicator = {
-      "VOLUME": {
-        "show": true,
-        "init": false
-      },
-      "MACD": {
-        "show": true,
-        "init": false
-      },
-      "KDJ": {
-        "show": true,
-        "init": true
-      },
-      "StochRSI": {
-        "show": true,
-        "init": false
-      },
-      "RSI": {
-        "show": true,
-        "init": false
-      },
-      "DMI": {
-        "show": true,
-        "init": false
-      },
-      "OBV":{
-        "show": true,
-        "init": false
-      },
-      "BOLL":{
-        "show": true,
-        "init": false
-      },
-      "SAR": {
-        "show": true,
-        "init": false
-      },
-      "DMA": {
-        "show": true,
-        "init": false
-      },
-      "TRIX": {
-        "show": true,
-        "init": false
-      },
-      "BRAR":{
-        "show": true,
-        "init": false
-      },
-      "VR": {
-        "show": true,
-        "init": false
-      },
-      "EMV": {
-        "show": true,
-        "init": false
-      },
-      "WR": {
-        "show": true,
-        "init": false
-      },
-      "ROC": {
-        "show": true,
-        "init": false
-      },
-      "MTM":{
-        "show": true,
-        "init": false
-      },
-      "PSY": {
-        "show": true,
-        "init": false
-      }
-    };
+          VOLUME: true,
+          MACD: true,
+          KDJ: true,
+          StochRSI:true,
+          RSI: true,
+          DMI: true,
+          OBV: true,
+          BOLL: true,
+          SAR: true,
+          DMA: true,
+          TRIX:true,
+          BRAR: true,
+          VR: true,
+          EMV: true,
+          WR:true,
+          ROC: true,
+          MTM: true,
+          PSY: true
+        };
+    this.status = {
+          VOLUME: null,
+          MACD: null,
+          KDJ: null,
+          StochRSI:null,
+          RSI: null,
+          DMI: null,
+          OBV: null,
+          BOLL: null,
+          SAR: null,
+          DMA: null,
+          TRIX: null,
+          BRAR: null,
+          VR: null,
+          EMV: null,
+          WR: null,
+          ROC: null,
+          MTM: null,
+          PSY: null
+        };
     //事件
     this.onResize = null;
     this.onLangChange = null;
