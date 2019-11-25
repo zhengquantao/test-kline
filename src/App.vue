@@ -264,17 +264,19 @@ export default {
   },
   methods: {
     closeAllIndicator() {
-      this.$refs.callMethods.kline.switchIndic("off");
       this.indicatorCounter=0;
       this.options.forEach((item)=>{
         item.switch=false;
       })
+      for(let i in this.klineParams.indicator){
+        this.klineParams.indicator[i]=true;
+        this.$refs.callMethods.onIndicatorChange(i);
+      }
       this.setSize();
       this.setSidebarSize();
       this.dialogVisible = false;
     },
     openAllIndicator(){
-      this.$refs.callMethods.kline.switchIndic("on");
       this.options.forEach((item)=>{
         item.switch=true;
       })
