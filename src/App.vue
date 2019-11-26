@@ -133,6 +133,7 @@ export default {
       meg: "Kline-view",
       flag: false,
       tipFlag: true,
+      allFlag:true,
       dialogVisible: false,
       indicatorCounter: 0,
       indicatorHeight: 165,
@@ -175,7 +176,7 @@ export default {
       options: [
         {
           value: "VOLUME",
-          switch: false
+          switch: true
         },
         {
           value: "MACD",
@@ -275,8 +276,11 @@ export default {
       this.setSize();
       this.setSidebarSize();
       this.dialogVisible = false;
+      this.allFlag=true;
     },
     openAllIndicator(){
+      if(!this.allFlag) return this.dialogVisible = false;
+      this.closeAllIndicator();
       this.options.forEach((item)=>{
         item.switch=true;
       })
@@ -288,23 +292,33 @@ export default {
       this.setSize();
       this.setSidebarSize();
       this.dialogVisible = false;
+      this.allFlag=false;
     },
     addIndicator(row) {
       let name = row.value;
       row.switch = !row.switch;
       if (this.klineParams.indicator[name]) {
+        for(let i in this.klineParams.indicator){
+          if(!this.klineParams.indicator[i]){
+            this.indicatorCounter++;
+            break;
+          }
+        }
         // 显示
         this.klineParams.indicator[name] = false;
-        this.indicatorCounter++;
       } else {
         // 隐藏
         this.klineParams.indicator[name] = true;
-        this.indicatorCounter--;
+        this.indicatorCounter===0?this.indicatorCounter:this.indicatorCounter--;
       }
       this.$refs.callMethods.onIndicatorChange(name);
       this.setSize();
       this.setSidebarSize();
       this.dialogVisible = false;
+    },
+    initIndicator(){
+      this.klineParams.indicator['VOLUME']=false;
+      this.$refs.callMethods.onIndicatorChange('VOLUME');
     },
     setSize() {
       this.flag !== false
@@ -351,6 +365,7 @@ export default {
   mounted() {
     this.watchSize();
     this.setSidebarSize();
+    this.initIndicator();
   }
 };
 </script>

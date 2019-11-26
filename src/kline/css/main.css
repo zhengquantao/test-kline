@@ -876,16 +876,16 @@ body {
 
 .chart_container.dark input,
 .chart_container.dark button {
-    background-color: #151515;
-    border-color: #333;
-    color: #ccc
+    background-color: #000;
+    color: #ccc;
+    border: 1px solid rgba(255, 255, 255, 0.5);
 }
 
 .chart_container.light input,
 .chart_container.light button {
-    background-color: #ddd;
-    border-color: #ddd;
-    color: #222
+    background-color: #f8f8f8;
+    color: #222;
+    border: 1px solid rgba(0, 0, 0, 0.3);
 }
 
 .chart_BoxSize {
@@ -929,6 +929,7 @@ body {
 
 .chart_container .symbol-title{
     display: inline-block;
+    /* display: none; */
     float: left;
     line-height: 29px;
     padding:0 10px;

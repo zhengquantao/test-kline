@@ -44,7 +44,6 @@ export default class Kline {
     //时间范围
     this.ranges = ["1w", "1d", "1h", "30m", "15m", "5m", "1m", "line"];
     this.depthWidth = 100;
-    this.switchIndic=Control.switchIndic;
     this.periodMap = {
       "01w": 7 * 86400 * 1000,
       "03d": 3 * 86400 * 1000,
@@ -470,14 +469,14 @@ export default class Kline {
         }
       });
       // 技术指标的开启与关闭
-      $('#chart_enable_indicator li a').click(function () {
-        $('#chart_enable_indicator a').removeClass('selected');
-        if ($(this).attr('name') === 'on') {
-          Control.switchIndic('on');
-        } else if ($(this).attr('name') === 'off') {
-          Control.switchIndic('off');
-        }
-      });
+      // $('#chart_enable_indicator li a').click(function () {
+      //   $('#chart_enable_indicator a').removeClass('selected');
+      //   if ($(this).attr('name') === 'on') {
+      //     Control.switchIndic('on');
+      //   } else if ($(this).attr('name') === 'off') {
+      //     Control.switchIndic('off');
+      //   }
+      // });
       // 语言切换
       $('#chart_language_setting_div li a').click(function () {
 

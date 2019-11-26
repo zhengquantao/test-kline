@@ -289,7 +289,8 @@ export class Control {
     let dlgSettings = $("#chart_parameter_settings");
     dlgSettings.css({
       left: (chartWidth - dlgSettings.width()) >> 1,
-      top: (height - dlgSettings.height()) >> 1
+      // top: (height - dlgSettings.height()) >> 1
+      top: (window.innerHeight-dlgSettings.height())/2
     });
     let dlgLoading = $("#chart_loading");
     dlgLoading.css({
@@ -318,26 +319,26 @@ export class Control {
     showIndicNW += dropDownSettingsW;
     showToolsNW += dropDownSettingsW;
     selectThemeNW += dropDownSettingsW;
-    if (chartWidth < periodsHorzNW) {
+    if (chartWidth< periodsHorzNW+60) {
       domElemCache.append(periodsHorz);
     } else {
       periodsVert.after(periodsHorz);
     }
-    if (chartWidth < showIndicNW) {
-      domElemCache.append(showIndic);
-      rowIndic.style.display = "";
-    } else {
-      dropDownSettings.before(showIndic);
-      rowIndic.style.display = "none";
-    }
-    if (chartWidth < showToolsNW) {
+    // if (chartWidth < showIndicNW) {
+    //   domElemCache.append(showIndic);
+    //   rowIndic.style.display = "";
+    // } else {
+    //   dropDownSettings.before(showIndic);
+    //   rowIndic.style.display = "none";
+    // }
+    if (chartWidth < showToolsNW+60) {
       domElemCache.append(showTools);
       rowTools.style.display = "";
     } else {
       dropDownSettings.before(showTools);
       rowTools.style.display = "none";
     }
-    if (chartWidth < selectThemeNW) {
+    if (chartWidth < selectThemeNW+50) {
       domElemCache.append(selectTheme);
       rowTheme.style.display = "";
     } else {
@@ -372,12 +373,14 @@ export class Control {
     $(".marketName_ a").attr('class', name);
 
     if (name === 'dark') {
+      $('body').css('backgroundColor', '#131722');
       $(".trade_container").addClass("dark").removeClass("light");
       ChartManager.instance.setThemeName('frame0', 'Dark');
       let tmp = ChartSettings.get();
       tmp.theme = 'Dark';
       ChartSettings.save();
     } else if (name === 'light') {
+      $('body').css('backgroundColor', '#fff');
       $(".trade_container").addClass("light").removeClass("dark");
       ChartManager.instance.setThemeName('frame0', 'Light');
       let tmp = ChartSettings.get();

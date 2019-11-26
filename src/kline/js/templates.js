@@ -180,7 +180,6 @@ export class Template {
         let isShow = Kline.instance.indicator.MACD;
         let tableLayout = mgr.getArea(dsName + ".charts");
         let areaName = dsName + ".indic" + tableLayout.getNextRowId();
-        console.log(areaName)
         let rangeAreaName = areaName + "Range";
         let area = new areas.IndicatorArea(areaName);
         mgr.setArea(areaName, area);
