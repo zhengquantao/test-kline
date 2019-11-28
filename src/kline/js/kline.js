@@ -213,8 +213,12 @@ export default class Kline {
     ChartManager.instance.redraw('All', false);
   }
 
-  onIndicatorChange(indic){
+  onIndicatorChange(indic) {
     ChartManager.instance.getChart().addNewIndicator(indic);
+  }
+
+  onTransactionInfo(data) {
+    ChartManager.instance.getChart().setTransactionInfo(data);
   }
 
   /*********************************************

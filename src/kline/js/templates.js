@@ -119,7 +119,6 @@ export class Template {
         plotter = new plotters.RangeSelectionPlotter(areaName + "Range.selection");
         mgr.setPlotter(plotter.getName(), plotter);
     }
-
     static createIndicatorChartCompsVOLUME(dsName, indicName) {
         let mgr = ChartManager.instance;
         let isShow = Kline.instance.indicator.VOLUME;

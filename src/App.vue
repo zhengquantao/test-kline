@@ -360,12 +360,21 @@ export default {
           this.indicatorCounter * this.indicatorHeight +
           "px";
       }
+    },
+    initTransactionInfo(){
+       this.$refs.callMethods.onTransactionInfo({
+         time:"2019-11-28",
+         type:"买入",
+         price:9527,
+         volume:100
+       });
     }
   },
   mounted() {
     this.watchSize();
     this.setSidebarSize();
     this.initIndicator();
+    this.initTransactionInfo();
   }
 };
 </script>

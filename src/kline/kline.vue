@@ -1202,6 +1202,9 @@ const VueKline = {
     },
     onIndicatorChange(indicName) {
       this.kline.onIndicatorChange(indicName)
+    },
+    onTransactionInfo(data) {
+      this.kline.onTransactionInfo(data)
     }
   }
 }

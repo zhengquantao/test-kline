@@ -172,7 +172,9 @@ export class Chart {
         }
         ChartManager.instance.redraw('All', true);
     }
-
+    setTransactionInfo(data) {
+        console.log(data)
+    }
     addNewIndicator(indic){
         let indicatorStatus = Kline.instance.indicator;
         let status = Kline.instance.status;
